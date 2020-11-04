@@ -1,0 +1,3 @@
+include ':serialize'
+include ':app'
+rootProject.name = "Serialize"
