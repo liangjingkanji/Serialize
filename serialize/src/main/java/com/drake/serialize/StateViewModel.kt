@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize
 
-import android.app.Application
-import com.tencent.mmkv.MMKV
-import com.tencent.mmkv.MMKVLogLevel
+import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.ViewModel
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone)
-    }
-}
+/**
+ * 继承这个类可以快速创建具备SaveInstance功能的ViewModel
+ */
+open class StateViewModel(var stateHandle: SavedStateHandle) : ViewModel()

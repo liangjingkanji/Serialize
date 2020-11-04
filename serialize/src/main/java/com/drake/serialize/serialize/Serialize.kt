@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.drake.serialize
+package com.drake.serialize.serialize
 
 import android.os.Parcelable
 import com.tencent.mmkv.MMKV
@@ -24,13 +24,10 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 //<editor-fold desc="写入">
-fun serialize(vararg params: Pair<String, Any?>) = serialize(null, null, *params)
+fun serialize(vararg params: Pair<String, Any?>) = serialize(null, *params)
 
-fun serialize(mode: Int?, cryptKey: String?, vararg params: Pair<String, Any?>) {
-    val serialize = when {
-        mode != null && cryptKey != null -> MMKV.defaultMMKV(mode, cryptKey)
-        else -> MMKV.defaultMMKV()
-    }
+fun serialize(kv: MMKV? = null, vararg params: Pair<String, Any?>) {
+    val serialize = kv ?: MMKV.defaultMMKV()
     params.forEach {
         when (val value = it.second) {
             null -> serialize.remove(it.first)
@@ -41,38 +38,35 @@ fun serialize(mode: Int?, cryptKey: String?, vararg params: Pair<String, Any?>) 
     }
 }
 //</editor-fold>
-//</editor-fold>
 
 //<editor-fold desc="读取">
-inline fun <reified T> deserialize(name: String, mode: Int? = null, cryptKey: String? = null): T {
-    val serialize = when {
-        mode != null && cryptKey != null -> MMKV.defaultMMKV(mode, cryptKey)
-        else -> MMKV.defaultMMKV()
-    }
+inline fun <reified T> deserialize(name: String, kv: MMKV? = null): T {
+    val serialize = kv ?: MMKV.defaultMMKV()
     return when {
-               Parcelable::class.java.isAssignableFrom(T::class.java) -> serialize.decodeParcelable(name, T::class.java as Class<Parcelable>) as? T
-               else -> serialize.decode<T>(name)
-           } ?: null as T
+        Parcelable::class.java.isAssignableFrom(T::class.java) -> {
+            serialize.decodeParcelable(name, T::class.java as Class<Parcelable>) as? T
+        }
+        else -> serialize.decode<T>(name)
+    } ?: null as T
 }
 
 inline fun <reified T> deserialize(
     name: String,
     defValue: T?,
-    mode: Int? = null,
-    cryptKey: String? = null
+    kv: MMKV? = null
 ): T {
-    val serialize = when {
-        mode != null && cryptKey != null -> MMKV.defaultMMKV(mode, cryptKey)
-        else -> MMKV.defaultMMKV()
-    }
+    val serialize = kv ?: MMKV.defaultMMKV()
+
     return when {
-               Parcelable::class.java.isAssignableFrom(T::class.java) -> serialize.decodeParcelable(name, T::class.java as Class<Parcelable>, defValue as Parcelable) as? T
+               Parcelable::class.java.isAssignableFrom(T::class.java) -> {
+                   serialize.decodeParcelable(name, T::class.java as Class<Parcelable>, defValue as Parcelable) as? T
+               }
                else -> serialize.decode(name, defValue)
            } ?: null as T
 }
-
 //</editor-fold>
 
+//<editor-fold desc="对象">
 fun MMKV.encode(name: String, obj: Any?) {
     if (obj == null) {
         remove(name)
@@ -96,6 +90,7 @@ inline fun <reified T> MMKV.decode(name: String): T? {
         val obj = objInput.readObject()
         obj as? T
     } catch (e: Exception) {
+        e.printStackTrace()
         null
     }
 }
@@ -111,3 +106,4 @@ inline fun <reified T> MMKV.decode(name: String, defValue: T): T {
         defValue
     }
 }
+//</editor-fold>

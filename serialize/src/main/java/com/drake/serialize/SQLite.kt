@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize
 
-import android.app.Application
-import com.tencent.mmkv.MMKV
-import com.tencent.mmkv.MMKVLogLevel
+import android.database.Cursor
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone)
+/**
+ * 方便迭代Cursor, 针对数据库的便携函数
+ */
+fun Cursor.foreach(block: Cursor.() -> Unit) {
+    if (count == 0) {
+        close()
+        return
     }
+    moveToFirst()
+    do {
+        block()
+    } while (moveToNext())
+    close()
 }

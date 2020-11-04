@@ -14,19 +14,26 @@
  * limitations under the License.
  */
 
-package com.drake.serialize
+package com.drake.serialize.delegate
 
-import org.junit.Assert.assertEquals
-import org.junit.Test
+import kotlin.properties.ReadOnlyProperty
+import kotlin.reflect.KProperty
 
 /**
- * Example local unit test, which will execute on the development machine (host).
- *
- * See [testing documentation](http://d.android.com/tools/testing).
+ * 延迟初始化
+ * 等效于[lazy], 但是可以获取委托字段属性
  */
-class ExampleUnitTest {
-    @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+@Suppress("UNCHECKED_CAST")
+fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V) = object : ReadOnlyProperty<T, V> {
+    @Volatile
+    private var value: V? = null
+    override fun getValue(thisRef: T, property: KProperty<*>): V {
+
+        return synchronized(this) {
+            if (value == null) {
+                value = block(thisRef, property)
+                value as V
+            } else value as V
+        }
     }
 }

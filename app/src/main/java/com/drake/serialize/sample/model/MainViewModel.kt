@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize.sample.model
 
-import android.app.Application
-import com.tencent.mmkv.MMKV
-import com.tencent.mmkv.MMKVLogLevel
+import androidx.lifecycle.ViewModel
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone)
-    }
+class MainViewModel : ViewModel() {
+    var name = "MainViewModel"
 }

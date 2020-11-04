@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize.sample.model
 
-import android.app.Application
-import com.tencent.mmkv.MMKV
-import com.tencent.mmkv.MMKVLogLevel
+import androidx.lifecycle.SavedStateHandle
+import com.drake.serialize.StateViewModel
+import com.drake.serialize.state
 
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone)
-    }
+class MainStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
+    var name: String by state()
 }

@@ -1,0 +1,196 @@
+:root > * {
+    --md-code-fg-color:                #A9B7C6;
+    --md-code-bg-color:                #2b2b2b;
+    --md-code-hl-color:                #214283;
+    --md-code-hl-number-color:         #82AAFF;
+    --md-code-hl-special-color:        #A9B7C6;
+    --md-code-hl-function-color:       #FFE64C;
+    --md-code-hl-constant-color:       hsla(250, 70%, 64%, 1);
+    --md-code-hl-keyword-color:        #CC7832;
+    --md-code-hl-string-color:         #6A8759;
+    --md-code-hl-name-color:           var(--md-code-fg-color);
+    --md-code-hl-operator-color:       #A9B7C6;
+    --md-code-hl-punctuation-color:    #A9B7C6;
+    --md-code-hl-comment-color:        #787878;
+    --md-code-hl-generic-color:        #A9B7C6;
+    --md-code-hl-variable-color:       #A9B7C6;
+
+    --md-typeset-color: #333333;
+    --drake-highlight:  #d63200;
+    --drake-accent: #e95f59;
+    --drake-highlight-opacity:  #d6320022;
+    --md-admonition-fg-color: #333333;
+}
+
+[data-md-color-scheme="drake"] {
+    --md-primary-fg-color:          hsla(0, 0%, 100%, 1);
+    --md-primary-fg-color--light:   hsla(0, 0%, 100%, 0.7);
+    --md-primary-fg-color--dark:    hsla(0, 0%, 0%, 0.07);
+    --md-primary-bg-color:          hsla(0, 0%, 0%, 0.87);
+    --md-primary-bg-color--light:   hsla(0, 0%, 0%, 0.54);
+    --md-accent-fg-color:           #d63200;
+    --md-accent-fg-color--light:    #d63200;
+    --md-accent-fg-color--dark:     #d63200;
+    --md-typeset-a-color:           #d63200 !important;
+}
+
+/*字体渲染*/
+@font-face{
+    font-family: 'Plex Mono';
+    src: url('https://gitlab.com/liangjingkanji/fonts/-/raw/master/fonts/output/PlexMono.otf') format('embedded-opentype'),
+    font-weight: normal;
+    font-style: normal;
+}
+body, input {
+    font-family: "Plex Mono", -apple-system, Helvetica, Arial, sans-serif;
+}
+pre, code, kbd {
+    font-family: "Plex Mono", SFMono-Regular, Consolas, Menlo, monospace;
+}
+* {
+    -webkit-font-feature-settings: "liga" on, "calt" on;
+    -webkit-font-smoothing: subpixel-antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/*布局*/
+.md-grid {
+    max-width: 150em !important;
+}
+
+/*表格*/
+.md-typeset__table {
+    display: block;
+    padding: 0 .8rem;
+    margin: 1em 0;
+}
+table tr:nth-child(2n), thead {
+    background-color: #fafafa;
+}
+.md-typeset table:not([class]) {
+    border-collapse: collapse;
+    border-spacing: 0px;
+    width: 100%;
+    break-inside: auto;
+    text-align: left;
+    display: table;
+    box-shadow:none;
+}
+.md-typeset table:not([class]) th {
+    border: 1px solid #dfe2e5;
+    background-color: #f2f2f2;
+    padding: 6px 13px;
+    font-weight: bold;
+    color: var(--md-typeset-color);
+}
+.md-typeset table:not([class]) td {
+    border: 1px solid #dfe2e5;
+}
+
+/*引用*/
+.md-typeset blockquote {
+    color: inherit;
+    padding: 10px 16px;
+    background-color: #fdefee;
+    position: relative;
+    border-left: none;
+    margin: 2em 0;
+}
+.md-typeset blockquote p {
+    margin: 0 0 !important;
+}
+.md-typeset blockquote:before {
+    display: block;
+    position: absolute;
+    content: '';
+    width: 4px;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background-color:var(--drake-accent);
+    border-radius: 4px;
+}
+
+/*字间距*/
+.md-typeset {
+    line-height: 1.8;
+    font-size: 12px;
+}
+.md-typeset pre {
+    line-height: 1.4;
+}
+
+/*标签*/
+.md-typeset .tabbed-set>label {
+    border-bottom: 2px solid transparent;
+    color: var(--md-typeset-color);
+    line-height: 1.3;
+    margin-bottom: .8em;
+    font-weight:normal;
+}
+.md-typeset .tabbed-set>input:checked+label {
+    font-weight:500;
+    line-height: 1.3;
+    margin-bottom: .8em;
+}
+
+/*侧边导航*/
+.md-nav__item .md-nav__link--active {
+    color: var(--drake-highlight);
+    font-weight:500;
+}
+.md-nav__title[for="__drawer"] {
+    display: none;
+}
+div .md-source__fact {
+    display: none;
+}
+.md-source__icon+.md-source__repository {
+    margin-left: -1em;
+    padding-left: 0;
+    font-weight: 500;
+}
+.md-nav__link {
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+/*代码块*/
+.md-typeset code {
+    font-size: inherit;
+    border-radius: 2px !important;
+    border: none !important;
+}
+.md-typeset pre>code {
+    padding: 0.8em 0.8em;
+}
+
+/*代码片段*/
+p code, article > code, li > code, td > code, th > code, a > code {
+    background-color: rgb(0,0,0,0) !important;
+    color: var(--drake-highlight) !important;
+    padding: 0 2px !important;
+}
+
+img {
+    border-radius: 2px;
+    margin: 4px 0;
+}
+
+/*链接*/
+.md-content a {
+    color: var(--drake-highlight) !important;
+    text-decoration: underline;
+    margin: 0 2px;
+}
+
+/*编辑按钮*/
+.md-typeset .md-content__button {
+    color: var(--md-default-fg-color--lighter) !important;
+}
+
+/*标题*/
+h1, h2, h3, h4, h5, h6, .md-header-nav__title {
+    font-weight: bold !important;
+    color: #273849;
+}
