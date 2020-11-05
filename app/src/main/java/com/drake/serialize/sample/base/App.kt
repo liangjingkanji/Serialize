@@ -24,6 +24,6 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone)
+        MMKV.initialize(this, MMKVLogLevel.LevelNone) // [this]也可以是路径字符串, [LevelNone] 即不输出日志
     }
 }

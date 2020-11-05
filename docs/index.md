@@ -1,3 +1,17 @@
+### 初始化
+
+内部使用的MMKV所以需要初始化一下
+
+```kotlin
+class App : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        MMKV.initialize(this, MMKVLogLevel.LevelNone) // LevelNone即关闭日志
+    }
+}
+```
+
 ### 创建序列化字段
 
 ```kotlin
