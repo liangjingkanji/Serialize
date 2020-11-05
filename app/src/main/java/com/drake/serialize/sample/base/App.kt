@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize.sample.base
 
 import android.app.Application
 import com.tencent.mmkv.MMKV

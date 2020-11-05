@@ -36,7 +36,7 @@ markdown_extensions:
 
 
 nav:
-  - 序列化: serialize.md
+  - 序列化: index.md
   - 组件参数: parameters.md
   - 自动恢复数据: stateInstance.md
   - 常用意图: intent.md
