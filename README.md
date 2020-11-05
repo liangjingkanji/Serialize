@@ -1,6 +1,3 @@
-## BRV
-
-
 <p align="center"><img src="https://i.loli.net/2020/11/05/kH4udPFocxtVC76.gif" width="200"/></p>
 
 <p align="center"><strong>标准序列化工具</strong></p>
