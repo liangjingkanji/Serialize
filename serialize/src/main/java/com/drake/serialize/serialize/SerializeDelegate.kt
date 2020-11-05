@@ -26,7 +26,7 @@ import kotlin.reflect.KProperty
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
  * @param kv MMKV实例
  */
-inline fun <reified T> serialize(
+inline fun <reified T> serial(
     default: T? = null,
     name: String? = null,
     kv: MMKV? = null

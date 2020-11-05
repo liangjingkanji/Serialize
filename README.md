@@ -7,7 +7,7 @@
 
 <p align="center"><a href="http://liangjingkanji.github.io/Serialize/">使用文档</a></p>
 
-<p align="center"><img src="https://i.loli.net/2020/11/05/UIfk7MrPoazpunZ.jpg" width="350"/></p>
+<p align="center"><img src="https://i.imgur.com/VBsC3Ra.jpg" width="350"/></p>
 
 <p align="center">
 <a href="https://jitpack.io/#liangjingkanji/Serialize"><img src="https://jitpack.io/v/liangjingkanji/Serialize.svg"/></a>
@@ -35,7 +35,7 @@ allprojects {
 在 module 的 build.gradle 添加依赖
 
 ```groovy
-implementation 'com.github.liangjingkanji:Serialize:1.0.0'
+implementation 'com.github.liangjingkanji:Serialize:1.0.1'
 ```
 
 <br>

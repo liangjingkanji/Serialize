@@ -15,9 +15,9 @@ class App : Application() {
 ### 创建序列化字段
 
 ```kotlin
-private var name: String? by serialize()
-private var model: ModelSerializable by serialize()
-private var simple: String by serialize("默认值", "自定义键名")
+private var name: String? by serial()
+private var model: ModelSerializable by serial()
+private var simple: String by serial("默认值", "自定义键名")
 ```
 
 之后这个字段读写都会自动读取和写入自本地

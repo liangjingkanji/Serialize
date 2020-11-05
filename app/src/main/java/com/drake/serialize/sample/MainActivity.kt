@@ -24,6 +24,7 @@ import com.drake.serialize.sample.model.MainViewModel
 import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable
 import com.drake.serialize.serialize.deserialize
+import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialize
 import com.drake.serialize.state
 import com.hulab.debugkit.dev
@@ -31,9 +32,9 @@ import com.hulab.debugkit.dev
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private var name: String by serialize()
-    private var model: ModelSerializable by serialize()
-    private var simple: String by serialize("默认值", "自定义键名")
+    private var name: String by serial()
+    private var model: ModelSerializable by serial()
+    private var simple: String by serial("默认值", "自定义键名")
     private val stateModel: MainViewModel by state()
 
     override fun onCreate(savedInstanceState: Bundle?) {
