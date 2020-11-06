@@ -16,7 +16,7 @@
 
 package com.drake.serialize.delegate
 
-import kotlin.properties.ReadOnlyProperty
+import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
@@ -24,7 +24,7 @@ import kotlin.reflect.KProperty
  * 等效于[lazy], 但是可以获取委托字段属性
  */
 @Suppress("UNCHECKED_CAST")
-fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V) = object : ReadOnlyProperty<T, V> {
+fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V) = object : ReadWriteProperty<T, V> {
     @Volatile
     private var value: V? = null
     override fun getValue(thisRef: T, property: KProperty<*>): V {
@@ -35,5 +35,9 @@ fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V) = object : ReadOnlyProperty
                 value as V
             } else value as V
         }
+    }
+
+    override fun setValue(thisRef: T, property: KProperty<*>, value: V) {
+        this.value = value
     }
 }
