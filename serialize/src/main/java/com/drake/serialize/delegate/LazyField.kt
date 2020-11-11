@@ -21,6 +21,7 @@ import kotlin.reflect.KProperty
 
 /**
  * 延迟初始化
+ * 线程安全
  * 等效于[lazy], 但是可以获取委托字段属性
  */
 @Suppress("UNCHECKED_CAST")

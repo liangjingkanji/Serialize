@@ -16,7 +16,7 @@ class App : Application() {
 
 ```kotlin
 private var name: String? by serial()
-private var model: ModelSerializable by serial()
+private var model: ModelSerializable by serialLazy() // 懒加载
 private var simple: String by serial("默认值", "自定义键名")
 ```
 

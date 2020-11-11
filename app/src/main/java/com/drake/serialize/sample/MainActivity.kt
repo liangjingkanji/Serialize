@@ -23,9 +23,8 @@ import com.drake.serialize.intent.openActivity
 import com.drake.serialize.sample.model.MainViewModel
 import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable
-import com.drake.serialize.serialize.deserialize
 import com.drake.serialize.serialize.serial
-import com.drake.serialize.serialize.serialize
+import com.drake.serialize.serialize.serialLazy
 import com.drake.serialize.state
 import com.hulab.debugkit.dev
 
@@ -33,30 +32,25 @@ import com.hulab.debugkit.dev
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
     private var name: String by serial()
-    private var model: ModelSerializable by serial()
+    private var model: ModelSerializable by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
     private val stateModel: MainViewModel by state()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val list: List<String>? = listOf<String>()
-
         dev {
             function {
                 stateModel.name = "吴彦祖"
-
-                serialize("name" to "吴彦祖")
-                val name: String = deserialize("name")
             }
             function {
-                Log.d("日志", "(MainActivity.kt:36)    stateModel.name = ${stateModel.name}")
+                Log.d("日志", "stateModel.name = ${stateModel.name}")
             }
             function("写") {
-                name = "drake"
+                model = ModelSerializable()
             }
             function("读") {
-                Log.d("日志", "(MainActivity.kt:28)    name = ${name}")
+                Log.d("日志", "name = ${model}")
             }
             function("打开界面") {
                 openActivity<TestActivity>(
