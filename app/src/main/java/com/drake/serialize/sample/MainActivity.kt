@@ -20,7 +20,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.drake.serialize.intent.openActivity
-import com.drake.serialize.sample.model.MainViewModel
+import com.drake.serialize.sample.model.MainStateViewModel
 import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable
 import com.drake.serialize.serialize.serial
@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private var name: String by serial()
     private var model: ModelSerializable by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
-    private val stateModel: MainViewModel by state()
+    private val stateModel: MainStateViewModel by state()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
