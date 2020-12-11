@@ -25,4 +25,4 @@ private val age:Int by bundle()
 
 > 类型错误或者读取失败会返回Null, 即使基本类型也是如此(除非指定默认值)
 
-假设写入的List\<String\>,  读取的是List\<Int\>, 也会返回一个正常的集合对象, 但是`get[]`时候会导致抛出`ClassCastException`类型转换异常(官方也是如此)
+假设写入的`List<String>`,  读取的是`List<Int>`, 也会返回一个正常的集合对象, 但是`get[]`时候会导致抛出`ClassCastException`类型转换异常(官方也是如此)

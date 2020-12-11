@@ -20,47 +20,32 @@ package com.drake.serialize
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.lifecycle.*
-import com.drake.serialize.delegate.lazyField
+import androidx.lifecycle.SavedStateViewModelFactory
+import androidx.lifecycle.ViewModelProvider
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
- * 快速创建LiveData的观察者
- */
-fun <M> LifecycleOwner.observe(liveData: LiveData<M>?, block: M?.() -> Unit) {
-    liveData?.observe(this, { it.block() })
-}
-
-/**
- * 返回当前组件指定的ViewModel
- */
-inline fun <reified V : ViewModel> ViewModelStoreOwner?.model() = lazyField {
-    if (this != null) {
-        ViewModelProvider(this).get(V::class.java)
-    } else null as V
-}
-
-/**
  * 返回当前组件指定的SavedViewModel
+ * 要求数据类型为StateViewModel的子集
  */
-inline fun <reified V : StateViewModel> FragmentActivity?.state() = lazyField {
+inline fun <reified V : StateViewModel> FragmentActivity?.stateModels() = lazy {
     if (this != null) {
         ViewModelProvider(this, SavedStateViewModelFactory(application, this)).get(V::class.java)
     } else null as V
 }
 
-inline fun <reified V : StateViewModel> Fragment?.state() = lazyField {
+inline fun <reified V : StateViewModel> Fragment?.stateModels() = lazy {
     if (this != null) {
-        ViewModelProvider(
-            this,
-            SavedStateViewModelFactory(requireActivity().application, this)
-        ).get(V::class.java)
+        ViewModelProvider(this, SavedStateViewModelFactory(requireActivity().application, this)).get(V::class.java)
     } else null as V
 }
 
 
-inline fun <reified V> StateViewModel?.state(
+/**
+ * 自动根据生命周期使用[FragmentActivity.onSaveInstanceState]
+ */
+inline fun <reified V> StateViewModel?.stateHandle(
     defValue: V? = null,
     name: String? = null
 ) = object : ReadWriteProperty<StateViewModel, V> {

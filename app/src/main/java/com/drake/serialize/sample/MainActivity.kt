@@ -18,15 +18,17 @@ package com.drake.serialize.sample
 
 import android.os.Bundle
 import android.util.Log
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import com.drake.debugkit.dev
 import com.drake.serialize.intent.openActivity
 import com.drake.serialize.sample.model.MainStateViewModel
+import com.drake.serialize.sample.model.MainViewModel
 import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable
 import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialLazy
-import com.drake.serialize.state
-import com.hulab.debugkit.dev
+import com.drake.serialize.stateModels
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -34,7 +36,8 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private var name: String by serial()
     private var model: ModelSerializable by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
-    private val stateModel: MainStateViewModel by state()
+    private val stateModel: MainStateViewModel by stateModels()
+    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

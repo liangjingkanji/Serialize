@@ -17,7 +17,7 @@ class MainViewModel : ViewModel() {
 2) 创建字段
 
 ```kotlin
-private val model: MainViewModel by model()
+private val model: MainViewModel by viewModels()
 ```
 
 3) 使用
@@ -37,14 +37,14 @@ ViewModel可以扩展支持自动`onSaveInstance`, 让应用意外销毁也可�
 
 ```kotlin
 class MainStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
-    var name: String by state()
+    var name: String by stateModels()
 }
 ```
 
 2) 创建字段
 
 ```kotlin
-private val model: MainStateViewModel by state()
+private val model: MainStateViewModel by stateHandle()
 ```
 
 3) 使用

@@ -18,8 +18,8 @@ package com.drake.serialize.sample.model
 
 import androidx.lifecycle.SavedStateHandle
 import com.drake.serialize.StateViewModel
-import com.drake.serialize.state
+import com.drake.serialize.stateHandle
 
 class MainStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
-    var name: String by state()
+    var name: String by stateHandle()
 }
