@@ -14,23 +14,20 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-
-    <!--辅助颜色-->
-    <color name="divider">#339e9e9e</color>
-    <color name="windowBackground">#fafafa</color>
-
-    <!--字体颜色-->
-    <color name="textColor">#333333</color>
-    <color name="textDescription">#999999</color>
-
-    <!--基本颜色-->
-    <color name="white">#FFFFFF</color>
-    <color name="orange">#F44336</color>
-    <color name="black">#000000</color>
-</resources>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/activity_transfer"
+        android:title="Activity传递数据" />
+    <item
+        android:id="@+id/fragment_transfer"
+        android:title="Fragment传递数据" />
+    <item
+        android:id="@+id/serialize"
+        android:title="读写本地数据" />
+    <item
+        android:id="@+id/view_model"
+        android:title="配置变更恢复数据" />
+    <item
+        android:id="@+id/state_view_model"
+        android:title="意外销毁恢复数据" />
+</menu>

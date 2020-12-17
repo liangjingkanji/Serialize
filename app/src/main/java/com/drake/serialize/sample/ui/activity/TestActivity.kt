@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize.sample.ui.activity
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.drake.serialize.intent.bundle
 import com.drake.serialize.intent.bundleLazy
+import com.drake.serialize.sample.R
 import com.drake.serialize.sample.model.Model
 import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable

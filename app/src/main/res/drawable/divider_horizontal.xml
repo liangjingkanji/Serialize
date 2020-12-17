@@ -1,4 +1,4 @@
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (C) 2018 Drake, Inc.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
@@ -14,8 +14,7 @@
   ~ limitations under the License.
   -->
 
-<resources>
-    <string name="app_name">Serialize</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-</resources>
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/divider" />
+    <size android:height="1px" />
+</shape>

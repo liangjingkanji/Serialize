@@ -14,21 +14,17 @@
  * limitations under the License.
  */
 
-package com.drake.serialize.sample
+package com.drake.serialize.sample.ui.activity
 
 import android.os.Bundle
-import android.util.Log
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.drake.debugkit.dev
-import com.drake.serialize.intent.openActivity
+import com.drake.serialize.sample.R
 import com.drake.serialize.sample.model.MainStateViewModel
-import com.drake.serialize.sample.model.MainViewModel
-import com.drake.serialize.sample.model.ModelParcelable
 import com.drake.serialize.sample.model.ModelSerializable
 import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialLazy
 import com.drake.serialize.stateModels
+import com.drake.statusbar.immersive
 
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
@@ -37,33 +33,21 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private var model: ModelSerializable by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
     private val stateModel: MainStateViewModel by stateModels()
-    private val viewModel: MainViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // setSupportActionBar(toolbar)
+        immersive(darkMode = true)
 
-        dev {
-            function {
-                stateModel.name = "吴彦祖"
-            }
-            function {
-                Log.d("日志", "stateModel.name = ${stateModel.name}")
-            }
-            function("写") {
-                model = ModelSerializable()
-            }
-            function("读") {
-                Log.d("日志", "name = ${model}")
-            }
-            function("打开界面") {
-                openActivity<TestActivity>(
-                    "parcelize" to ModelParcelable(),
-                    "parcelizeList" to listOf(ModelParcelable()),
-                    "serialize" to ModelSerializable(),
-                    "serializeList" to listOf(ModelSerializable()),
-                    "intArray" to intArrayOf(1, 3, 4),
-                )
-            }
-        }
+
+        // toolbar.setupWithNavController(
+        //     nav.findNavController(),
+        //     AppBarConfiguration(nav_view.menu, drawer)
+        // )
+        // val actionBarDrawerToggle =
+        //     ActionBarDrawerToggle(this, drawer, toolbar, R.string.app_name, R.string.app_name)
+        // drawer.addDrawerListener(actionBarDrawerToggle)
+        // actionBarDrawerToggle.syncState()
+        // nav_view.setupWithNavController(nav.findNavController())
     }
 }
