@@ -2,7 +2,7 @@
 
 <p align="center"><strong>标准序列化工具</strong></p>
 
-<p align="center"><a href="http://liangjingkanji.github.io/Serialize/">使用文档</a></p>
+<p align="center"><a href="http://liangjingkanji.github.io/Serialize/">使用文档</a> | <a href="https://coding-pages-bucket-3558162-8706000-16646-587724-1252757332.cos-website.ap-shanghai.myqcloud.com/">备用访问</a></p>
 
 <p align="center"><img src="https://i.imgur.com/VBsC3Ra.jpg" width="350"/></p>
 
