@@ -17,13 +17,11 @@
 package com.drake.serialize.sample.base
 
 import android.app.Application
-import com.tencent.mmkv.MMKV
-import com.tencent.mmkv.MMKVLogLevel
 
 class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone) // [this]也可以是路径字符串, [LevelNone] 即不输出日志
+        // MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1是设置路径路径字符串, [LevelNone] 即不输出日志
     }
 }

@@ -1,17 +1,3 @@
-### 初始化
-
-内部使用的MMKV所以需要初始化一下
-
-```kotlin
-class App : Application() {
-
-    override fun onCreate() {
-        super.onCreate()
-        MMKV.initialize(this, MMKVLogLevel.LevelNone) // LevelNone即关闭日志
-    }
-}
-```
-
 ### 创建序列化字段
 
 ```kotlin
@@ -48,4 +34,18 @@ serialize("name" to "吴彦祖") // 写
 
 val name:String = deserialize("name") // 读
 val nameB:String = deserialize("name", "默认值") // 假设读取失败返回默认值
+```
+
+### 指定存储目录/日志等级
+
+如果需要自定义目录或者日志输出等级, 使用MMKV进行初始化(可选操作).
+
+```kotlin
+class App : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1是设置路径路径字符串, [LevelNone] 即不输出日志
+    }
+}
 ```
