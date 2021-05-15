@@ -38,7 +38,7 @@ inline fun <reified V> serial(
         val className = thisRef?.javaClass?.name
         var adjustKey = name ?: property.name
         if (className != null) adjustKey = "${className}.${adjustKey}"
-        serialize(kv, adjustKey to value)
+        kv.serialize(adjustKey to value)
     }
 
     override fun getValue(thisRef: Any?, property: KProperty<*>): V {
@@ -46,9 +46,9 @@ inline fun <reified V> serial(
         var adjustKey = name ?: property.name
         if (className != null) adjustKey = "${className}.${adjustKey}"
         return if (default == null) {
-            deserialize(adjustKey, kv)
+            kv.deserialize(adjustKey)
         } else {
-            deserialize<V>(adjustKey, default, kv)
+            kv.deserialize<V>(adjustKey, default)
         }
     }
 }
@@ -79,9 +79,9 @@ inline fun <reified V> serialLazy(
                     var adjustKey = name ?: property.name
                     if (className != null) adjustKey = "${className}.${adjustKey}"
                     if (default == null) {
-                        deserialize(adjustKey, kv)
+                        kv.deserialize(adjustKey)
                     } else {
-                        deserialize<V>(adjustKey, default, kv)
+                        kv.deserialize<V>(adjustKey, default)
                     }
                 }
                 value as V
@@ -94,6 +94,6 @@ inline fun <reified V> serialLazy(
         val className = thisRef?.javaClass?.name
         var adjustKey = name ?: property.name
         if (className != null) adjustKey = "${className}.${adjustKey}"
-        serialize(kv, adjustKey to value)
+        kv.serialize(adjustKey to value)
     }
 }

@@ -24,10 +24,11 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 //<editor-fold desc="写入">
-fun serialize(vararg params: Pair<String, Any?>) = serialize(null, *params)
+fun serialize(vararg params: Pair<String, Any?>) = null.serialize(*params)
 
-fun serialize(kv: MMKV? = null, vararg params: Pair<String, Any?>) {
-    val serialize = kv ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
+fun MMKV?.serialize(vararg params: Pair<String, Any?>) {
+    val serialize =
+        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
     params.forEach {
         when (val value = it.second) {
             null -> serialize.remove(it.first)
@@ -40,8 +41,14 @@ fun serialize(kv: MMKV? = null, vararg params: Pair<String, Any?>) {
 //</editor-fold>
 
 //<editor-fold desc="读取">
-inline fun <reified T> deserialize(name: String, kv: MMKV? = null): T {
-    val serialize = kv ?: MMKV.defaultMMKV()  ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
+
+inline fun <reified T> deserialize(name: String): T = null.deserialize(name)
+
+inline fun <reified T> deserialize(name: String, defValue: T?): T = null.deserialize(name, defValue)
+
+inline fun <reified T> MMKV?.deserialize(name: String): T {
+    val serialize =
+        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
     return when {
         Parcelable::class.java.isAssignableFrom(T::class.java) -> {
             serialize.decodeParcelable(name, T::class.java as Class<Parcelable>) as? T
@@ -50,19 +57,16 @@ inline fun <reified T> deserialize(name: String, kv: MMKV? = null): T {
     } ?: null as T
 }
 
-inline fun <reified T> deserialize(
-    name: String,
-    defValue: T?,
-    kv: MMKV? = null
-): T {
-    val serialize = kv ?: MMKV.defaultMMKV()  ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
+inline fun <reified T> MMKV?.deserialize(name: String, defValue: T?): T {
+    val serialize =
+        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
 
     return when {
-               Parcelable::class.java.isAssignableFrom(T::class.java) -> {
-                   serialize.decodeParcelable(name, T::class.java as Class<Parcelable>, defValue as Parcelable) as? T
-               }
-               else -> serialize.decode(name, defValue)
-           } ?: null as T
+        Parcelable::class.java.isAssignableFrom(T::class.java) -> {
+            serialize.decodeParcelable(name, T::class.java as Class<Parcelable>, defValue as Parcelable) as? T
+        }
+        else -> serialize.decode(name, defValue)
+    } ?: null as T
 }
 //</editor-fold>
 
