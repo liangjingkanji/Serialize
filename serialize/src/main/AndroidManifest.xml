@@ -4,11 +4,10 @@
 
     <application>
         <provider
-            android:name=".InitContentProvider"
-            android:authorities="com.drake.serialize.init"
+            android:name="com.drake.serialize.InitContentProvider"
+            android:authorities="${applicationId}.drake.serializeInit"
             android:enabled="true"
             android:exported="false"
             android:multiprocess="true" />
     </application>
-
 </manifest>

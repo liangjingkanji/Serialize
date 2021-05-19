@@ -27,7 +27,7 @@ import java.io.ObjectOutputStream
 fun serialize(vararg params: Pair<String, Any?>) = serialize(null, *params)
 
 fun serialize(kv: MMKV? = null, vararg params: Pair<String, Any?>) {
-    val serialize = kv ?: MMKV.defaultMMKV()
+    val serialize = kv ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
     params.forEach {
         when (val value = it.second) {
             null -> serialize.remove(it.first)
@@ -41,7 +41,7 @@ fun serialize(kv: MMKV? = null, vararg params: Pair<String, Any?>) {
 
 //<editor-fold desc="读取">
 inline fun <reified T> deserialize(name: String, kv: MMKV? = null): T {
-    val serialize = kv ?: MMKV.defaultMMKV()
+    val serialize = kv ?: MMKV.defaultMMKV()  ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
     return when {
         Parcelable::class.java.isAssignableFrom(T::class.java) -> {
             serialize.decodeParcelable(name, T::class.java as Class<Parcelable>) as? T
@@ -55,7 +55,7 @@ inline fun <reified T> deserialize(
     defValue: T?,
     kv: MMKV? = null
 ): T {
-    val serialize = kv ?: MMKV.defaultMMKV()
+    val serialize = kv ?: MMKV.defaultMMKV()  ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
 
     return when {
                Parcelable::class.java.isAssignableFrom(T::class.java) -> {
