@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-package com.drake.serialize
+package com.drake.serialize.utils
+
+import android.database.Cursor
 
 /**
- * 如果为空字符串将返回null
+ * 方便迭代Cursor, 针对数据库的便携函数
  */
-fun String?.orNull(): String? {
-    return if (this == null || this.isBlank()) null else this
-}
-
-/**
- * 如果集合为空返回null
- */
-fun List<Any?>?.orNull(): List<Any?>? {
-    return if (this == null || this.isEmpty()) null else this
+fun Cursor.foreach(block: Cursor.() -> Unit) {
+    if (count == 0) {
+        close()
+        return
+    }
+    moveToFirst()
+    do {
+        block()
+    } while (moveToNext())
+    close()
 }

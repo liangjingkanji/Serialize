@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.drake.serialize
+package com.drake.serialize.model
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel

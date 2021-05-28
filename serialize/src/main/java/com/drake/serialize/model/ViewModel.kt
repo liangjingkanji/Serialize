@@ -16,7 +16,7 @@
 
 @file:Suppress("CAST_NEVER_SUCCEEDS")
 
-package com.drake.serialize
+package com.drake.serialize.model
 
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity

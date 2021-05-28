@@ -1,4 +1,4 @@
-package com.drake.serialize
+package com.drake.serialize.init
 
 import android.content.ContentProvider
 import android.content.ContentValues
@@ -7,7 +7,7 @@ import android.net.Uri
 import com.tencent.mmkv.MMKV
 import com.tencent.mmkv.MMKVLogLevel
 
-class InitContentProvider : ContentProvider() {
+internal class InitContentProvider : ContentProvider() {
     override fun onCreate(): Boolean {
         MMKV.initialize(context ?: return false, MMKVLogLevel.LevelNone)
         return false
