@@ -17,6 +17,7 @@ plugins {
     id 'com.android.library'
     id 'kotlin-android'
     id 'com.github.dcendents.android-maven'
+    id 'org.jetbrains.dokka'
 }
 
 group = 'com.github.liangjingkanji'
@@ -46,6 +47,11 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    dokkaHtml {
+        outputDirectory.set(file("$rootDir/docs/api"))
+        suppressInheritedMembers.set(true)
+        moduleName.set("Serialize")
     }
 }
 
