@@ -40,4 +40,5 @@ nav:
   - 组件参数: parameters.md
   - 自动恢复数据: stateInstance.md
   - 常用意图: intent.md
+  - 更新日志: updates.md
   - 3.x文档: api/index.html
