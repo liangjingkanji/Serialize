@@ -37,8 +37,8 @@ markdown_extensions:
 
 nav:
   - 序列化: index.md
-  - 组件参数: parameters.md
+  - 界面传递参数: params.md
   - 自动恢复数据: stateInstance.md
-  - 常用意图: intent.md
+  - 常用Intent: intent.md
   - 更新日志: updates.md
-  - 3.x文档: api/index.html
+  - 1.x文档: api/index.html

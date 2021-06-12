@@ -1,4 +1,9 @@
-ViewModel属于JetPack中在配置变更时始终返回保持不变的对象实例
+ViewModel是Android JetPack组件库中的组件之一. 在AndroidSDK中自带其组件. 
+
+配合本框架可以方便的读取使用. 继承不同的类可以实现不同的功能
+
+1. ViewModel: 在配置变更时恢复数据. 配置变更即为切换横竖屏/夜间模式等
+1. StateViewModel: 在意外销毁(包含配置变更)时恢复数据. 意外销毁即内存不足/修改权限情况下应用会重建组件
 
 ## ViewModel
 
@@ -33,7 +38,7 @@ Log.d("日志", "name = ${model.name}")
 
 ## StateViewModel
 
-ViewModel可以扩展支持自动`onSaveInstance`, 让应用意外销毁也可以保存/恢复数据
+ViewModel可以扩展来自动`onSaveInstance`, 让应用意外销毁也可以保存/恢复数据
 
 ```kotlin
 class MainStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
