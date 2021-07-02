@@ -36,26 +36,44 @@
 }
 
 /*字体渲染*/
-@font-face{
-    font-family: 'JetBrains Mono';
-    src: local('JetBrains Mono'),
-         url('https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/webfonts/JetBrainsMono-Regular.woff2') format('woff2'),
-         url('https://raw.githubusercontent.com/JetBrains/JetBrainsMono/master/fonts/ttf/JetBrainsMono-Regular.ttf') format('truetype');
+@font-face {
+    font-family: 'Iosevka';
+    src: local('Iosevka Medium'),
+         url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/iosevka/iosevka-medium.woff2') format('woff2');
+    font-display: swap;
     font-weight: normal;
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Iosevka';
+    src: local('Iosevka-bold'),
+         url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/iosevka/iosevka-medium.woff2') format('woff2');
+    font-display: swap;
+    font-weight: bold;
     font-style: normal;
 }
 @font-face{
     font-family: 'HYZhengYuan';
     src: local('HYZhengYuan'),
          url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/HYZhengYuan.ttf') format('truetype');
+    font-display: swap;
     font-weight: normal;
+    font-style: normal;
+}
+@font-face{
+    font-family: 'HYZhengYuan';
+    src: local('HYZhengYuan-75W'),
+         url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/HYZhengYuan.ttf') format('truetype');
+    font-display: swap;
+    font-weight: bold;
     font-style: normal;
 }
 * {
     -webkit-font-feature-settings: "liga" on, "calt" on;
     -webkit-font-smoothing: subpixel-antialiased;
+    -moz-osx-font-smoothing: auto;
     text-rendering: optimizeLegibility;
-    font-family: 'JetBrains Mono', "HYZhengYuan" !important;
+    font-family: 'Iosevka', "HYZhengYuan" !important;
 }
 
 /*布局*/
@@ -250,7 +268,7 @@ h2:after {
 
 /*头部*/
 .md-ellipsis {
-    font-weight: bolder;
+    font-weight: bold;
 }
 
 /*折叠块*/
