@@ -18,7 +18,7 @@
 
 简化项目中的序列化
 
-- 创建自动映射到本地磁盘的字段(使用MVVK用于取代SharePreference)
+- 创建自动映射到本地磁盘的字段(内部使用[MMKV](https://github.com/Tencent/MMKV))
 - 快速打开Activity
 - 创建自动注入Activity/Fragment参数的字段
 - 创建意外销毁自动保存/恢复的字段(ViewModel)
