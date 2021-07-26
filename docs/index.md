@@ -6,7 +6,8 @@
 ### 创建序列化字段
 
 序列化字段即读写会自动映射到本地磁盘的字段(或者称为自动序列化字段)
-> 框架内部使用腾讯的[MMKV](https://github.com/Tencent/MMKV)实现, 因为其比SharePreference/SQLite速度快多, 可以有效解决ANR
+> 框架内部使用腾讯的[MMKV](https://github.com/Tencent/MMKV)实现, 因为其比SharePreference/SQLite速度快多, 可以有效解决ANR.
+> 关系型/列表数据/大体积数据还是推荐使用数据库完成
 
 ```kotlin
 private var name: String by serial()
@@ -23,12 +24,17 @@ name = "吴彦祖" // 写入到本地磁盘
 Log.d("日志", "name = ${name}") // 读取自本地磁盘
 ```
 
-动态键名, 即键名包含变量)
+动态键名, 即键名包含变量
 
 ```kotlin
 private var userId :String by serialLazy()
 private var newMessage :Boolean by serial(name = "new_message_$userId")
 ```
+
+> 不同类创建同名的序列化字段在本地磁盘中属于不同数据, 实际存储使用的名称为: `"${全类名}.${你指定的键名}"` <br>
+> 比如`com.drake.serialize.sample.MainActivity.name`
+
+
 
 ## 支持类型
 基本上支持任何类型, 故非关系型数据推荐直接使用Serialize而不是数据库存储
@@ -62,7 +68,7 @@ private var model: ModelSerializable by serialLazy() // 懒加载
 
 
 
-## 通过函数序列化
+## 使用函数读写
 直接通过函数手动存储键值. 无需创建字段.
 
 ```kotlin
@@ -70,6 +76,30 @@ serialize("name" to "吴彦祖") // 写
 
 val name:String = deserialize("name") // 读
 val nameB:String = deserialize("name", "默认值") // 假设读取失败返回默认值
+```
+
+## 数据类
+
+每个应用可能都存在存储应用配置的本地数据, 这里非常推荐使用Serialize. 关系型数据/列表数据/大体积数据还是推荐使用数据库完成
+
+由于每个类拥有的`序列化字段`并不是共用同一份数据. 那么当我们想要在任何地方访问本地同一数据则应当使用以下方式
+
+1. 创建`object`单例类
+2. 使用函数序列化(上面已介绍)
+
+<br>
+创建单例类
+
+```kotlin
+object AppConfig {
+   var isFirstLaunch:String? by serial()
+}
+```
+
+使用
+
+```kotlin
+AppConfig.isFirstLaunch
 ```
 
 ## 指定存储目录/日志等级
