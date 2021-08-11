@@ -127,3 +127,23 @@ AppConfig.isFirstLaunch
     MMKV.mmkvWithID("User").serialize("name" to "吴彦祖")
     MMKV.mmkvWithID("User").deserialize("name")
     ```
+
+## 清除数据
+
+清除数据有两种方法
+
+1. 字段清除很简单, 赋值为null即可
+    ```kotlin
+    private var userId :String by serialLazy()
+    userId = null
+
+    // 为创建字段也可以赋值为null清除
+    serialize("model" to null)
+    ```
+
+
+2. 使用你指定的MMKV实例删除, 假设你未指定过MMKV实例即为`MMKV.defaultMMKV()`
+    ```kotlin
+    MMKV.defaultMMKV()?.remove("指定删除的字段名")
+    MMKV.defaultMMKV()?.clearAll()
+    ```
