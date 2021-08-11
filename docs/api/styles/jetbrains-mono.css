@@ -8,8 +8,8 @@
 }
 @font-face {
     font-family: 'Iosevka';
-    src: local('Iosevka-bold'),
-         url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/iosevka/iosevka-medium.woff2') format('woff2');
+    src: local('Iosevka Bold'),
+         url('https://raw.githubusercontent.com/liangjingkanji/liangjingkanji/master/font/iosevka/iosevka-bold.woff2') format('woff2');
     font-display: swap;
     font-weight: bold;
     font-style: normal;
