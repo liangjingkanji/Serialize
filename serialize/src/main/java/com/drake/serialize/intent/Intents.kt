@@ -33,7 +33,7 @@ import java.io.Serializable
 // <editor-fold desc="跳转">
 
 inline fun <reified T : Activity> Context.openActivity(vararg params: Pair<String, Any?>) {
-    val intent = createIntent<T>(*params)
+    val intent = intentOf<T>(*params)
     if (this !is Activity) intent.newTask()
     startActivity(intent)
 }
@@ -45,7 +45,7 @@ inline fun <reified T : Activity> Fragment.openActivity(vararg params: Pair<Stri
 inline fun <reified T : Activity> Activity.openActivityForResult(
     requestCode: Int,
     vararg params: Pair<String, Any?>
-) = startActivityForResult(createIntent<T>(*params), requestCode)
+) = startActivityForResult(intentOf<T>(*params), requestCode)
 
 
 inline fun <reified T : Activity> Fragment.openActivityForResult(
@@ -55,10 +55,10 @@ inline fun <reified T : Activity> Fragment.openActivityForResult(
 
 
 inline fun <reified T : Service> Context.startService(vararg params: Pair<String, Any?>) =
-    startService(createIntent<T>(*params))
+    startService(intentOf<T>(*params))
 
 inline fun <reified T : Service> Context.stopService(vararg params: Pair<String, Any?>) =
-    stopService(createIntent<T>(*params))
+    stopService(intentOf<T>(*params))
 
 inline fun <reified T : Service> Fragment.startService(vararg params: Pair<String, Any?>) =
     context?.startService<T>(*params)
@@ -143,25 +143,35 @@ fun Intent.singleTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TO
 
 
 // <editor-fold desc="意图">
+
+@Deprecated("规范命名", ReplaceWith("intentOf"))
 inline fun <reified T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent =
-    createIntent<T>(*params)
+    intentOf<T>(*params)
 
-
-inline fun <reified T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent =
-    context?.createIntent<T>(*params) ?: Intent()
-
-fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T {
-    arguments = bundleOf(*params)
-    return this
+inline fun <reified T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent {
+    val intent = Intent(this, T::class.java)
+    if (params.isNotEmpty()) intent.withArguments(params)
+    return intent
 }
 
-/**
- * 创建意图
- */
+@Deprecated("规范命名", ReplaceWith("intentOf"))
+inline fun <reified T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent =
+    context?.intentOf<T>(*params) ?: Intent()
+
+inline fun <reified T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent =
+    context?.intentOf<T>(*params) ?: Intent()
+
+
+@Deprecated("规范命名", ReplaceWith("intentOf"))
 inline fun <reified T> Context.createIntent(vararg params: Pair<String, Any?>): Intent {
     val intent = Intent(this, T::class.java)
     if (params.isNotEmpty()) intent.withArguments(params)
     return intent
+}
+
+fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T {
+    arguments = bundleOf(*params)
+    return this
 }
 
 /**
