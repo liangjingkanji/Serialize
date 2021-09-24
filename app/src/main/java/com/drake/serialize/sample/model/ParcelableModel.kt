@@ -17,7 +17,7 @@
 package com.drake.serialize.sample.model
 
 import android.os.Parcelable
-import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-data class ModelParcelable(var name: String = "ModelParcelable") : Parcelable
+/** 使用Android自带的[Parcelable]进行序列化传递 */
+@kotlinx.parcelize.Parcelize
+data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable

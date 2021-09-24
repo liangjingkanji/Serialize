@@ -16,5 +16,5 @@
 
 package com.drake.serialize.sample.model
 
-
+/** 数据模型 */
 data class Model(var name: String = "Model")

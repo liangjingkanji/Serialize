@@ -22,28 +22,29 @@ import androidx.appcompat.app.AppCompatActivity
 import com.drake.serialize.intent.bundle
 import com.drake.serialize.intent.bundleLazy
 import com.drake.serialize.sample.model.Model
-import com.drake.serialize.sample.model.ModelParcelable
-import com.drake.serialize.sample.model.ModelSerializable
+import com.drake.serialize.sample.model.ParcelableModel
+import com.drake.serialize.sample.model.SerializableModel
 
 class TestActivity : AppCompatActivity(R.layout.activity_test) {
 
-    private val parcelize: ModelParcelable? by bundle()
-    private val parcelizeList: ArrayList<ModelParcelable>? by bundle()
-    private val serialize: ModelSerializable? by bundle()
-    private val serializeList: ArrayList<ModelSerializable>? by bundle()
+    /** Fragment也是这样接受数据 */
+    private val parcelize: ParcelableModel? by bundle()
+    private val parcelizeList: ArrayList<ParcelableModel>? by bundle()
+    private val serialize: SerializableModel? by bundle()
+    private val serializeList: ArrayList<SerializableModel>? by bundle()
     private val intArray: IntArray? by bundle()
     private val modelList: List<Model>? by bundle()
     private val model: Model? by bundleLazy { Model("延迟初始化默认值") }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val serialize: ModelSerializable? by bundle()
-        Log.d("日志", "(TestActivity.kt:27)    parcelize = ${parcelize}")
-        Log.d("日志", "(TestActivity.kt:28)    parcelizeList = ${parcelizeList}")
-        Log.d("日志", "(TestActivity.kt:29)    serialize = ${serialize}")
-        Log.d("日志", "(TestActivity.kt:30)    serializeList = ${serializeList}")
-        Log.d("日志", "(TestActivity.kt:30)    intArrayOf = ${intArray?.get(0)}")
-        Log.d("日志", "(TestActivity.kt:30)    modelList = ${modelList?.get(0)}")
-        Log.d("日志", "(TestActivity.kt:30)    model = ${model}")
+        val serialize: SerializableModel? by bundle()
+        Log.d("日志", "parcelize = $parcelize")
+        Log.d("日志", "parcelizeList = $parcelizeList")
+        Log.d("日志", "serialize = $serialize")
+        Log.d("日志", "serializeList = $serializeList")
+        Log.d("日志", "intArrayOf = ${intArray?.get(0)}")
+        Log.d("日志", "modelList = ${modelList?.get(0)}")
+        Log.d("日志", "model = $model")
     }
 }

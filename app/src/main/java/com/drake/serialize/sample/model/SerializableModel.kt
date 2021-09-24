@@ -18,4 +18,5 @@ package com.drake.serialize.sample.model
 
 import java.io.Serializable
 
-data class ModelSerializable(var name: String = "ModelSerializable") : Serializable
+/** 使用Java自带的[Serializable]进行序列化传递 */
+data class SerializableModel(var name: String = "ModelSerializable") : Serializable

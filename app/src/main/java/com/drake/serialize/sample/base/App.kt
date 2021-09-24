@@ -22,6 +22,7 @@ class App : Application() {
 
     override fun onCreate() {
         super.onCreate()
+        // 可选的初始化配置
         // MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1是设置路径路径字符串, [LevelNone] 即不输出日志
     }
 }

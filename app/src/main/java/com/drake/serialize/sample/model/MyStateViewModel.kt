@@ -19,6 +19,7 @@ import androidx.lifecycle.SavedStateHandle
 import com.drake.serialize.model.StateViewModel
 import com.drake.serialize.model.stateHandle
 
-class MainStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
-    var name: String by stateHandle()
+/** 支持意外销毁自动恢复数据 */
+class MyStateViewModel(stateHandle: SavedStateHandle) : StateViewModel(stateHandle) {
+    var name: String by stateHandle() // 使用[stateHandle]的字段才会自动恢复
 }

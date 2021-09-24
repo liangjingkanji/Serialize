@@ -17,6 +17,7 @@ plugins {
     id 'com.android.application'
     id 'kotlin-android'
     id 'kotlin-parcelize'
+    id 'kotlin-kapt'
 }
 
 android {
@@ -38,6 +39,8 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
+    buildFeatures.dataBinding = true
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -61,5 +64,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'com.github.liangjingkanji:debugkit:1.2.10' // 调试工具
+    implementation 'com.github.liangjingkanji:debugkit:1.2.11' // 调试工具
+    implementation 'com.github.liangjingkanji:Tooltip:1.1.3'
 }
