@@ -38,9 +38,10 @@ inline fun <reified T : Activity> Context.openActivity(vararg params: Pair<Strin
     startActivity(intent)
 }
 
-inline fun <reified T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>) =
-    context?.openActivity<T>(*params)
-
+inline fun <reified T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>) {
+    val intent = intentOf<T>(*params)
+    startActivity(intent)
+}
 
 inline fun <reified T : Activity> Activity.openActivityForResult(
     requestCode: Int,
@@ -51,7 +52,7 @@ inline fun <reified T : Activity> Activity.openActivityForResult(
 inline fun <reified T : Activity> Fragment.openActivityForResult(
     requestCode: Int,
     vararg params: Pair<String, Any?>
-) = activity?.openActivityForResult<T>(requestCode, *params)
+) = startActivityForResult(intentOf<T>(*params), requestCode)
 
 
 inline fun <reified T : Service> Context.startService(vararg params: Pair<String, Any?>) =
