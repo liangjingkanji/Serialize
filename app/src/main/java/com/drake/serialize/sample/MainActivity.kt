@@ -17,6 +17,7 @@
 package com.drake.serialize.sample
 
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -36,7 +37,7 @@ import com.drake.tooltip.toast
 class MainActivity : AppCompatActivity() {
 
     private var name: String by serial()
-    private var model: SerializableModel by serialLazy()
+    private var model: SerializableModel? by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
     private val stateModel: MyStateViewModel by stateModels()
     private val viewModel: MyViewModel by viewModels()
@@ -63,9 +64,27 @@ class MainActivity : AppCompatActivity() {
             )
             // MyFragment().withArguments("parcelize" to ParcelableModel()) // Fragment传递数据
         }
+
         binding.cardConfig.setOnClickListener {
-            Log.d("日志", "(MainActivity.kt:60)    isFirstLaunch = ${AppConfig.isFirstLaunch}")
+            Log.d("日志", "isFirstLaunch = ${AppConfig.isFirstLaunch}")
             AppConfig.isFirstLaunch = false
+        }
+
+        // 读取100w次
+        binding.cardBigRead.setOnClickListener {
+            val startTime = SystemClock.elapsedRealtime()
+            repeat(1000000) {
+                val name = model?.name ?: toast("本地没有数据可读, 请先写入")
+            }
+            binding.tvBigReadTime.text = "${(SystemClock.elapsedRealtime() - startTime)}ms"
+        }
+        // 写入100w次
+        binding.cardBigWrite.setOnClickListener {
+            val startTime = SystemClock.elapsedRealtime()
+            repeat(1000000) {
+                model = SerializableModel("第${it}次")
+            }
+            binding.tvBigWriteTime.text = "${(SystemClock.elapsedRealtime() - startTime)}ms"
         }
     }
 }

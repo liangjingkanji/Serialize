@@ -25,13 +25,12 @@
         android:padding="20dp"
         tools:context=".MainActivity">
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/cardWriteField"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:cardCornerRadius="8dp"
-            app:cardUseCompatPadding="true"
+            android:background="@drawable/bg_card_shadow"
+            android:gravity="center"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toLeftOf="@id/cardReadField"
@@ -45,16 +44,15 @@
                 android:textSize="32dp"
                 android:textStyle="bold" />
 
-        </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
-        <androidx.cardview.widget.CardView
+        <androidx.appcompat.widget.LinearLayoutCompat
             android:id="@+id/cardReadField"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginLeft="20dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:cardCornerRadius="8dp"
-            app:cardUseCompatPadding="true"
+            android:background="@drawable/bg_card_shadow"
+            android:gravity="center"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintLeft_toRightOf="@id/cardWriteField"
             app:layout_constraintRight_toRightOf="parent"
@@ -68,7 +66,7 @@
                 android:textSize="32dp"
                 android:textStyle="bold" />
 
-        </androidx.cardview.widget.CardView>
+        </androidx.appcompat.widget.LinearLayoutCompat>
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="0dp"
@@ -80,77 +78,128 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toBottomOf="@id/cardWriteField">
 
-            <androidx.cardview.widget.CardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardOpenPage"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/cardBackground"
-                app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true">
+                android:background="@drawable/bg_card_shadow"
+                android:padding="20dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv1"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:text="打开界面传递数据"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/tv1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="打开界面传递数据"
-                        android:textStyle="bold"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="使用openActivity快速打开界面并传递任何可序列化数据 \n使用MyFragment().withArgument()可以传递数据给Fragment \n目标界面创建字段自动接受传递的数据"
+                    android:textColor="@color/textDescription"
+                    android:textSize="12dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv1" />
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="使用openActivity快速打开界面并传递任何可序列化数据, 使用MyFragment().withArgument()可以传递数据给Fragment, 目标界面创建字段自动接受传递的数据"
-                        android:textColor="@color/textDescription"
-                        android:textSize="12dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv1" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
 
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/cardConfig"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardBackgroundColor="@color/cardBackground"
-                app:cardCornerRadius="8dp"
-                app:cardUseCompatPadding="true">
+                android:layout_marginTop="10dp"
+                android:background="@drawable/bg_card_shadow"
+                android:padding="20dp">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
-                    android:layout_width="match_parent"
+                <TextView
+                    android:id="@+id/tv2"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="20dp">
+                    android:text="应用数据配置"
+                    android:textStyle="bold"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="4dp"
+                    android:text="创建一个单例对象可以直接操作本地字段(自动映射到本地磁盘), 就像全局变量一样简单!"
+                    android:textColor="@color/textDescription"
+                    android:textSize="12dp"
+                    app:layout_constraintLeft_toLeftOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/tv2" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                android:layout_marginTop="10dp">
+
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/cardBigRead"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_shadow"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/tv2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="应用数据配置"
-                        android:textStyle="bold"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:gravity="center"
+                        android:text="100W 次读取"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
 
                     <TextView
+                        android:id="@+id/tvBigReadTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="4dp"
-                        android:text="创建一个单例对象可以直接操作本地字段(自动映射到本地磁盘), 就像全局变量一样简单!"
-                        android:textColor="@color/textDescription"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
                         android:textSize="12dp"
-                        app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/tv2" />
+                        tools:text="300ms" />
 
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                </androidx.appcompat.widget.LinearLayoutCompat>
 
-            </androidx.cardview.widget.CardView>
+                <androidx.appcompat.widget.LinearLayoutCompat
+                    android:id="@+id/cardBigWrite"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_card_shadow"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="100W 次写入"
+                        android:textSize="16dp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tvBigWriteTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:gravity="center"
+                        android:textSize="12dp"
+                        tools:text="300ms" />
+
+                </androidx.appcompat.widget.LinearLayoutCompat>
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
 
         </androidx.appcompat.widget.LinearLayoutCompat>
 
