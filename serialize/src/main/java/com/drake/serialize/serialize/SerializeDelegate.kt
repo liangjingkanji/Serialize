@@ -32,10 +32,10 @@ inline fun <reified V> serial(
     default: V? = null,
     name: String? = null,
     kv: MMKV? = MMKV.defaultMMKV()
-) = SerialDelegate(default, V::class.java, name, kv)
+): ReadWriteProperty<Any?, V> = SerialDelegate(default, V::class.java, name, kv)
 
-@Deprecated("外部不应使用")
-class SerialDelegate<V>(
+@PublishedApi
+internal class SerialDelegate<V>(
     private val default: V?,
     private val clazz: Class<V>,
     private val name: String?,
@@ -75,10 +75,10 @@ inline fun <reified V> serialLazy(
     default: V? = null,
     name: String? = null,
     kv: MMKV? = MMKV.defaultMMKV()
-) = SerialLazyDelegate(default, V::class.java, name, kv)
+): ReadWriteProperty<Any?, V> = SerialLazyDelegate(default, V::class.java, name, kv)
 
-@Deprecated("外部不应使用")
-class SerialLazyDelegate<V>(
+@PublishedApi
+internal class SerialLazyDelegate<V>(
     private val default: V?,
     private val clazz: Class<V>,
     private val name: String?,
