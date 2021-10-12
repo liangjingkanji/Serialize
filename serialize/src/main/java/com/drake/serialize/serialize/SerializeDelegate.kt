@@ -31,8 +31,16 @@ import kotlin.reflect.KProperty
 inline fun <reified V> serial(
     default: V? = null,
     name: String? = null,
-    kv: MMKV? = null
-) = object : ReadWriteProperty<Any?, V> {
+    kv: MMKV? = MMKV.defaultMMKV()
+) = SerialDelegate(default, V::class.java, name, kv)
+
+@Deprecated("外部不应使用")
+class SerialDelegate<V>(
+    private val default: V?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV?
+) : ReadWriteProperty<Any?, V> {
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
         val className = thisRef?.javaClass?.name
@@ -46,9 +54,9 @@ inline fun <reified V> serial(
         var adjustKey = name ?: property.name
         if (className != null) adjustKey = "${className}.${adjustKey}"
         return if (default == null) {
-            kv.deserialize(adjustKey)
+            kv.deserialize(adjustKey, clazz)
         } else {
-            kv.deserialize<V>(adjustKey, default)
+            kv.deserialize(adjustKey, clazz, default)
         }
     }
 }
@@ -66,12 +74,20 @@ inline fun <reified V> serial(
 inline fun <reified V> serialLazy(
     default: V? = null,
     name: String? = null,
-    kv: MMKV? = null
-) = object : ReadWriteProperty<Any?, V> {
+    kv: MMKV? = MMKV.defaultMMKV()
+) = SerialLazyDelegate(default, V::class.java, name, kv)
+
+@Deprecated("外部不应使用")
+class SerialLazyDelegate<V>(
+    private val default: V?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV?
+) : ReadWriteProperty<Any?, V> {
     @Volatile
     private var value: V? = null
-    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
 
+    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
         return synchronized(this) {
             if (value == null) {
                 value = run {
@@ -79,9 +95,9 @@ inline fun <reified V> serialLazy(
                     var adjustKey = name ?: property.name
                     if (className != null) adjustKey = "${className}.${adjustKey}"
                     if (default == null) {
-                        kv.deserialize(adjustKey)
+                        kv.deserialize(adjustKey, clazz)
                     } else {
-                        kv.deserialize<V>(adjustKey, default)
+                        kv.deserialize(adjustKey, clazz, default)
                     }
                 }
                 value as V
@@ -90,10 +106,12 @@ inline fun <reified V> serialLazy(
     }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
-        this.value = value
-        val className = thisRef?.javaClass?.name
-        var adjustKey = name ?: property.name
-        if (className != null) adjustKey = "${className}.${adjustKey}"
-        kv.serialize(adjustKey to value)
+        synchronized(this) {
+            this.value = value
+            val className = thisRef?.javaClass?.name
+            var adjustKey = name ?: property.name
+            if (className != null) adjustKey = "${className}.${adjustKey}"
+            kv.serialize(adjustKey to value)
+        }
     }
 }
