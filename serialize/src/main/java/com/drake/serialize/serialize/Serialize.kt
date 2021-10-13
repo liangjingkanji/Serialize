@@ -24,16 +24,14 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 //<editor-fold desc="写入">
-fun serialize(vararg params: Pair<String, Any?>) = null.serialize(*params)
+fun serialize(vararg params: Pair<String, Any?>) = defaultMMKV().serialize(*params)
 
-fun MMKV?.serialize(vararg params: Pair<String, Any?>) {
-    val serialize =
-        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
+fun MMKV.serialize(vararg params: Pair<String, Any?>) {
     params.forEach {
         when (val value = it.second) {
-            null -> serialize.remove(it.first)
-            is Parcelable -> serialize.encode(it.first, value)
-            else -> serialize.encode(it.first, value)
+            null -> remove(it.first)
+            is Parcelable -> encode(it.first, value)
+            else -> encode(it.first, value)
         }
         return@forEach
     }
@@ -42,56 +40,68 @@ fun MMKV?.serialize(vararg params: Pair<String, Any?>) {
 
 //<editor-fold desc="读取">
 
-inline fun <reified T> deserialize(name: String): T = null.deserialize(name)
+inline fun <reified T> deserialize(name: String): T =
+    defaultMMKV().deserialize(name, T::class.java)
 
-inline fun <reified T> deserialize(name: String, defValue: T?): T = null.deserialize(name, defValue)
+inline fun <reified T> deserialize(name: String, defValue: T?): T =
+    defaultMMKV().deserialize(name, T::class.java, defValue)
 
-inline fun <reified T> MMKV?.deserialize(name: String): T {
-    val serialize =
-        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
+inline fun <reified T> MMKV.deserialize(name: String): T = deserialize(name, T::class.java)
+
+inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T =
+    deserialize(name, T::class.java, defValue)
+
+@PublishedApi
+internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>): T {
     return when {
-        Parcelable::class.java.isAssignableFrom(T::class.java) -> {
-            serialize.decodeParcelable(name, T::class.java as Class<Parcelable>) as? T
+        Parcelable::class.java.isAssignableFrom(clazz) -> {
+            decodeParcelable(name, clazz as Class<Parcelable>) as? T
         }
-        else -> serialize.decode<T>(name)
+        else -> decode<T>(name)
     } ?: null as T
 }
 
-inline fun <reified T> MMKV?.deserialize(name: String, defValue: T?): T {
-    val serialize =
-        this ?: MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.getDefaultMMKV(), handle == 0")
-
+@PublishedApi
+internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>, defValue: T?): T {
     return when {
-        Parcelable::class.java.isAssignableFrom(T::class.java) -> {
-            serialize.decodeParcelable(name, T::class.java as Class<Parcelable>, defValue as Parcelable) as? T
+        Parcelable::class.java.isAssignableFrom(clazz) -> {
+            decodeParcelable(
+                name, clazz as Class<Parcelable>,
+                defValue as Parcelable
+            ) as? T
         }
-        else -> serialize.decode(name, defValue)
+        else -> decode(name, defValue)
     } ?: null as T
 }
 //</editor-fold>
 
 //<editor-fold desc="对象">
-fun MMKV.encode(name: String, obj: Any?) {
+private fun MMKV.encode(name: String, obj: Any?) {
     if (obj == null) {
         remove(name)
         return
     }
     try {
-        val byteOutput = ByteArrayOutputStream()
-        val objOutput = ObjectOutputStream(byteOutput)
-        objOutput.writeObject(obj)
-        encode(name, byteOutput.toByteArray())
+        ByteArrayOutputStream().use { byteOutput ->
+            ObjectOutputStream(byteOutput).use { objOutput ->
+                objOutput.writeObject(obj)
+                encode(name, byteOutput.toByteArray())
+            }
+        }
     } catch (e: Exception) {
         e.printStackTrace()
     }
 }
 
-inline fun <reified T> MMKV.decode(name: String): T? {
+private fun <T> MMKV.decode(name: String): T? {
+    val bytes = decodeBytes(name) ?: return null
     return try {
-        val bytes = decodeBytes(name) ?: return null
-        val byteInput = ByteArrayInputStream(bytes)
-        val objInput = ObjectInputStream(byteInput)
-        val obj = objInput.readObject()
+        var obj: Any?
+        ByteArrayInputStream(bytes).use { byteInput ->
+            ObjectInputStream(byteInput).use { objInput ->
+                obj = objInput.readObject()
+            }
+        }
         obj as? T
     } catch (e: Exception) {
         e.printStackTrace()
@@ -99,15 +109,24 @@ inline fun <reified T> MMKV.decode(name: String): T? {
     }
 }
 
-inline fun <reified T> MMKV.decode(name: String, defValue: T): T {
+private fun <T> MMKV.decode(name: String, defValue: T): T {
+    val bytes = decodeBytes(name) ?: return defValue
     return try {
-        val bytes = decodeBytes(name) ?: return defValue
-        val byteInput = ByteArrayInputStream(bytes)
-        val objInput = ObjectInputStream(byteInput)
-        val obj = objInput.readObject()
+        var obj: Any?
+        ByteArrayInputStream(bytes).use { byteInput ->
+            ObjectInputStream(byteInput).use { objInput ->
+                obj = objInput.readObject()
+            }
+        }
         obj as T
     } catch (e: Exception) {
         defValue
     }
 }
 //</editor-fold>
+
+/**
+ * 框架已经自动初始化MMKV，一般不会抛出异常
+ */
+fun defaultMMKV(): MMKV =
+    MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
