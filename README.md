@@ -19,7 +19,8 @@
 简化项目中的序列化
 
 - 创建自动映射到本地磁盘的字段(内部使用[MMKV](https://github.com/Tencent/MMKV))
-- 使用懒加载读写, 速度完爆sqlite/sp/mmkv. 完美解决anr(主线程读写1亿次都不卡)
+- 创新式使用双通道读写磁盘, 速度完爆sqlite/sp/mmkv. 完美解决anr(主线程读写10w亿次)
+- 大数据对象磁盘读写就像内存读写一样快
 - 快速打开Activity
 - 创建自动注入Activity/Fragment参数的字段
 - 创建意外销毁自动保存/恢复的字段(ViewModel)
