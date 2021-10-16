@@ -24,7 +24,14 @@ import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
 //<editor-fold desc="写入">
-fun serialize(vararg params: Pair<String, Any?>) = defaultMMKV().serialize(*params)
+/**
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
+ */
+fun serialize(vararg params: Pair<String, Any?>) {
+    val mmkv = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+    mmkv.serialize(*params)
+}
 
 fun MMKV.serialize(vararg params: Pair<String, Any?>) {
     params.forEach {
@@ -39,17 +46,31 @@ fun MMKV.serialize(vararg params: Pair<String, Any?>) {
 //</editor-fold>
 
 //<editor-fold desc="读取">
+/**
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
+ */
+inline fun <reified T> deserialize(name: String): T {
+    val mmkv = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+    return mmkv.deserialize(name, T::class.java)
+}
 
-inline fun <reified T> deserialize(name: String): T =
-    defaultMMKV().deserialize(name, T::class.java)
+/**
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
+ */
+inline fun <reified T> deserialize(name: String, defValue: T?): T {
+    val mmkv = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+    return mmkv.deserialize(name, T::class.java, defValue)
+}
 
-inline fun <reified T> deserialize(name: String, defValue: T?): T =
-    defaultMMKV().deserialize(name, T::class.java, defValue)
+inline fun <reified T> MMKV.deserialize(name: String): T {
+    return this.deserialize(name, T::class.java)
+}
 
-inline fun <reified T> MMKV.deserialize(name: String): T = deserialize(name, T::class.java)
-
-inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T =
-    deserialize(name, T::class.java, defValue)
+inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T {
+    return this.deserialize(name, T::class.java, defValue)
+}
 
 @PublishedApi
 internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>): T {
@@ -124,9 +145,3 @@ private fun <T> MMKV.decode(name: String, defValue: T): T {
     }
 }
 //</editor-fold>
-
-/**
- * 框架已经自动初始化MMKV，一般不会抛出异常
- */
-fun defaultMMKV(): MMKV =
-    MMKV.defaultMMKV() ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")

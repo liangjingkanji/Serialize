@@ -26,22 +26,26 @@ import kotlin.reflect.KProperty
  * @param default 默认值
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified V> serial(
     default: V? = null,
     name: String? = null,
-    kv: MMKV = defaultMMKV()
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
 ): ReadWriteProperty<Any?, V> = SerialDelegate(default, V::class.java, name, kv)
 
 /**
  * @param default 默认值
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified V> serialLazy(
     default: V? = null,
     name: String? = null,
-    kv: MMKV = defaultMMKV()
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
 ): ReadWriteProperty<Any?, V> = SerialLazyDelegate(default, V::class.java, name, kv)
 
 /**
