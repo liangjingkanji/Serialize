@@ -17,22 +17,55 @@
 package com.drake.serialize.serialize
 
 import com.tencent.mmkv.MMKV
+import java.util.concurrent.Executors
+import java.util.concurrent.ThreadFactory
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
- * 自动写入和读取自本地
- * 线程安全
  * @param default 默认值
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
- * @param kv MMKV实例
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serial(
     default: V? = null,
     name: String? = null,
-    kv: MMKV? = null
-) = object : ReadWriteProperty<Any?, V> {
+    kv: MMKV = defaultMMKV()
+): ReadWriteProperty<Any?, V> = SerialDelegate(default, V::class.java, name, kv)
+
+/**
+ * @param default 默认值
+ * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
+ * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
+ */
+inline fun <reified V> serialLazy(
+    default: V? = null,
+    name: String? = null,
+    kv: MMKV = defaultMMKV()
+): ReadWriteProperty<Any?, V> = SerialLazyDelegate(default, V::class.java, name, kv)
+
+/**
+ * 自动写入和读取自本地  线程安全
+ * 精简了inline代码量
+ */
+@PublishedApi
+internal class SerialDelegate<V>(
+    private val default: V?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV
+) : ReadWriteProperty<Any?, V> {
+
+    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
+        val className = thisRef?.javaClass?.name
+        var adjustKey = name ?: property.name
+        if (className != null) adjustKey = "${className}.${adjustKey}"
+        return if (default == null) {
+            kv.deserialize(adjustKey, clazz)
+        } else {
+            kv.deserialize<V>(adjustKey, clazz, default)
+        }
+    }
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
         val className = thisRef?.javaClass?.name
@@ -41,37 +74,24 @@ inline fun <reified V> serial(
         kv.serialize(adjustKey to value)
     }
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
-        val className = thisRef?.javaClass?.name
-        var adjustKey = name ?: property.name
-        if (className != null) adjustKey = "${className}.${adjustKey}"
-        return if (default == null) {
-            kv.deserialize(adjustKey)
-        } else {
-            kv.deserialize<V>(adjustKey, default)
-        }
-    }
 }
 
 /**
- * 自动写入和读取自本地
- * 写入即时, 读取属于懒加载形式, 即不会每次读取都读取自本地, 当存在缓存值即返回不存在则读取本地数据
- * 线程安全
- * @param default 默认值
- * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
- * @param kv MMKV实例
- * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
+ * 自动写入和读取自本地  线程安全
+ * 多了一层memory cache，优化了读取速度，写入磁盘操作在子线程进行
+ * 精简了inline代码量
  */
-@Suppress("UNREACHABLE_CODE")
-inline fun <reified V> serialLazy(
-    default: V? = null,
-    name: String? = null,
-    kv: MMKV? = null
-) = object : ReadWriteProperty<Any?, V> {
+@PublishedApi
+internal class SerialLazyDelegate<V>(
+    private val default: V?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV
+) : ReadWriteProperty<Any?, V> {
     @Volatile
     private var value: V? = null
-    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
 
+    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
         return synchronized(this) {
             if (value == null) {
                 value = run {
@@ -79,9 +99,9 @@ inline fun <reified V> serialLazy(
                     var adjustKey = name ?: property.name
                     if (className != null) adjustKey = "${className}.${adjustKey}"
                     if (default == null) {
-                        kv.deserialize(adjustKey)
+                        kv.deserialize(adjustKey, clazz)
                     } else {
-                        kv.deserialize<V>(adjustKey, default)
+                        kv.deserialize(adjustKey, clazz, default)
                     }
                 }
                 value as V
@@ -91,9 +111,22 @@ inline fun <reified V> serialLazy(
 
     override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
         this.value = value
-        val className = thisRef?.javaClass?.name
-        var adjustKey = name ?: property.name
-        if (className != null) adjustKey = "${className}.${adjustKey}"
-        kv.serialize(adjustKey to value)
+        //写入本地在子线程处理，单一线程保证了写入顺序
+        taskExecutor.execute {
+            val className = thisRef?.javaClass?.name
+            var adjustKey = name ?: property.name
+            if (className != null) adjustKey = "${className}.${adjustKey}"
+            kv.serialize(adjustKey to value)
+        }
     }
+
+    companion object {
+        /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
+        private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
+            val thread = Thread(it)
+            thread.name = "Thread for MMKV encode()"
+            return@ThreadFactory thread
+        })
+    }
+
 }
