@@ -23,6 +23,9 @@ import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
 /**
+ * 其修饰的属性字段的读写都会自动映射到本地磁盘
+ * 线程安全
+ * 本函数属于阻塞函数, 同步读写磁盘
  * @param default 默认值
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
@@ -36,6 +39,13 @@ inline fun <reified V> serial(
 ): ReadWriteProperty<Any?, V> = SerialDelegate(default, V::class.java, name, kv)
 
 /**
+ * 其修饰的属性字段的读写都会自动映射到本地磁盘
+ * 和[serial]不同的是通过内存/磁盘双通道读写来优化读写性能
+ * 其修饰的属性字段第一次会读取磁盘数据, 然后拷贝到内存中, 后续都是直接读取内存中的拷贝
+ * 写入会优先写入到内存中的拷贝份, 然后通过子线程异步写入到磁盘
+ * 线程安全
+ * tip: 不支持跨进程使用
+ *
  * @param default 默认值
  * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
@@ -49,8 +59,8 @@ inline fun <reified V> serialLazy(
 ): ReadWriteProperty<Any?, V> = SerialLazyDelegate(default, V::class.java, name, kv)
 
 /**
- * 自动写入和读取自本地  线程安全
- * 精简了inline代码量
+ * 构建自动映射到本地磁盘的委托属性
+ * @see serial
  */
 @PublishedApi
 internal class SerialDelegate<V>(
@@ -81,9 +91,9 @@ internal class SerialDelegate<V>(
 }
 
 /**
- * 自动写入和读取自本地  线程安全
- * 多了一层memory cache，优化了读取速度，写入磁盘操作在子线程进行
- * 精简了inline代码量
+ * 构建自动映射到本地磁盘的委托属性
+ * 内存/磁盘双通道读写
+ * @see serialLazy
  */
 @PublishedApi
 internal class SerialLazyDelegate<V>(

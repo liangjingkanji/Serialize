@@ -25,6 +25,7 @@ import java.io.ObjectOutputStream
 
 //<editor-fold desc="写入">
 /**
+ * 将键值数据序列化存储到磁盘
  * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 fun serialize(vararg params: Pair<String, Any?>) {
@@ -33,6 +34,9 @@ fun serialize(vararg params: Pair<String, Any?>) {
     mmkv.serialize(*params)
 }
 
+/**
+ * 将键值数据序列化存储到磁盘
+ */
 fun MMKV.serialize(vararg params: Pair<String, Any?>) {
     params.forEach {
         when (val value = it.second) {
@@ -47,6 +51,7 @@ fun MMKV.serialize(vararg params: Pair<String, Any?>) {
 
 //<editor-fold desc="读取">
 /**
+ * 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null
  * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified T> deserialize(name: String): T {
@@ -56,6 +61,7 @@ inline fun <reified T> deserialize(name: String): T {
 }
 
 /**
+ * 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值
  * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified T> deserialize(name: String, defValue: T?): T {
@@ -64,10 +70,12 @@ inline fun <reified T> deserialize(name: String, defValue: T?): T {
     return mmkv.deserialize(name, T::class.java, defValue)
 }
 
+/** 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null */
 inline fun <reified T> MMKV.deserialize(name: String): T {
     return this.deserialize(name, T::class.java)
 }
 
+/** 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值 */
 inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T {
     return this.deserialize(name, T::class.java, defValue)
 }
@@ -96,7 +104,7 @@ internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>, defValue: T?): 
 }
 //</editor-fold>
 
-//<editor-fold desc="对象">
+//<editor-fold desc="序列化对象">
 private fun MMKV.encode(name: String, obj: Any?) {
     if (obj == null) {
         remove(name)
