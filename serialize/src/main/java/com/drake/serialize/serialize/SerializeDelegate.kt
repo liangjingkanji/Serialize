@@ -27,7 +27,7 @@ import kotlin.reflect.KProperty
  * 线程安全
  * 本函数属于阻塞函数, 同步读写磁盘
  * @param default 默认值
- * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
+ * @param name 键名, 默认使用 "当前全路径类名.字段名", 顶层字段没有类名. 全路径类名即: 包名+类名. 请注意重命名包名/类名/字段名都会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
@@ -47,7 +47,7 @@ inline fun <reified V> serial(
  * tip: 不支持跨进程使用
  *
  * @param default 默认值
- * @param name 键名, 默认使用 "当前类名.字段名", 顶层字段没有类名
+ * @param name 键名, 默认使用 "当前全路径类名.字段名", 顶层字段没有类名. 全路径类名即: 包名+类名. 请注意重命名包名/类名/字段名都会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
