@@ -19,4 +19,8 @@ package com.drake.serialize.sample.model
 import java.io.Serializable
 
 /** 使用Java自带的[Serializable]进行序列化传递 */
-data class SerializableModel(var name: String = "ModelSerializable") : Serializable
+data class SerializableModel(var name: String = "ModelSerializable") : Serializable {
+    companion object {
+        private const  val serialVersionUID = -7L // 保证新增字段依然可以读取到对象
+    }
+}

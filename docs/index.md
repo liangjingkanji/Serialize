@@ -3,6 +3,31 @@
 为什么字段只能存在于内存中而不是直接映射到本地磁盘呢? 这个时候就可以使用本库的序列化功能创建一个`存在于磁盘的字段`. <br>
 他的赋值和读值都会映射到磁盘中(这在程序编码中称为序列化)
 
+## 重要前言
+
+### 对象新增字段
+
+> 序列化对象到本地. 在类增删字段时候会导致无法读取上次打开应用存储的旧值. 指定`serialVersionUUID`字段设置对象唯一ID方可解决.<br>
+> 但是新增的字段为空值(比如String为null/Int为0) <br>
+> 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
+
+```kotlin
+data class SerializableModel(var name: String = "ModelSerializable", var age:Int = 11) : Serializable {
+    companion object {
+        private const  val serialVersionUID = -7L
+    }
+}
+```
+
+### 包名/类名/字段名变更
+包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
+
+```kotlin
+private var name: String by serial(name = "unique_name")
+```
+
+## 使用
+
 ### 创建序列化字段
 
 序列化字段即读写会自动映射到本地磁盘的字段(或者称为自动序列化字段)
