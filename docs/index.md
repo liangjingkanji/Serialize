@@ -3,28 +3,7 @@
 为什么字段只能存在于内存中而不是直接映射到本地磁盘呢? 这个时候就可以使用本库的序列化功能创建一个`存在于磁盘的字段`. <br>
 他的赋值和读值都会映射到磁盘中(这在程序编码中称为序列化)
 
-## 重要前言
-
-### 对象新增字段
-
-> 序列化对象到本地. 在类增删字段时候会导致无法读取上次打开应用存储的旧值. 指定`serialVersionUUID`字段设置对象唯一ID方可解决.<br>
-> 但是新增的字段为空值(比如String为null/Int为0) <br>
-> 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
-
-```kotlin
-data class SerializableModel(var name: String = "ModelSerializable", var age:Int = 11) : Serializable {
-    companion object {
-        private const  val serialVersionUID = -7L
-    }
-}
-```
-
-### 包名/类名/字段名变更
-包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
-
-```kotlin
-private var name: String by serial(name = "unique_name")
-```
+> 请一定要阅读文章最后一章: [字段增删](#_10). 以保证数据安全性
 
 ## 使用
 
@@ -172,3 +151,55 @@ AppConfig.isFirstLaunch
     MMKV.defaultMMKV()?.remove("指定删除的字段名")
     MMKV.defaultMMKV()?.clearAll()
     ```
+
+## 字段增删
+
+
+### 对象新增字段
+
+> 序列化对象到本地. 在类增删字段时候会导致无法读取上次打开应用存储的旧值. 指定`serialVersionUUID`字段设置对象唯一ID方可解决.<br>
+> 但是新增的字段为空值(比如String为null/Int为0) <br>
+> 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
+
+```kotlin
+data class SerializableModel(var name: String = "ModelSerializable", var age:Int = 11) : Serializable {
+    companion object {
+        private const  val serialVersionUID = -7L
+    }
+}
+```
+
+### 包名/类名/字段名变更
+包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
+
+```kotlin
+private var name: String by serial(name = "unique_name")
+```
+
+### 默认值
+如果Serializable新增字段如果有默认值. 实际上并不会生效. 这个时候建议实现Parcelable而不是Serializable. 其可以保证默认值效果
+```kotlin
+data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable {
+
+    constructor(parcel: Parcel) : this(parcel.readString() ?: "ModelParcelable") // 读取空则赋值默认值
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeString(name)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<ParcelableModel> {
+        override fun createFromParcel(parcel: Parcel): ParcelableModel {
+            return ParcelableModel(parcel)
+        }
+
+        override fun newArray(size: Int): Array<ParcelableModel?> {
+            return arrayOfNulls(size)
+        }
+    }
+}
+```
+将光标放到`Parcelable`类名上使用Alt+Enter可以快速实现(Add Parcelable Implementation)
