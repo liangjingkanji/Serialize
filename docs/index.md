@@ -152,14 +152,14 @@ AppConfig.isFirstLaunch
     MMKV.defaultMMKV()?.clearAll()
     ```
 
-## 字段增删
+## 对象新增字段
+如果你存储对象到磁盘中, 那么就需要注意如果对象后面新增或者删除某个字段可能会导致无法读取原有对象
 
+### Serializable
 
-### 对象新增字段
-
-> 序列化对象到本地. 在类增删字段时候会导致无法读取上次打开应用存储的旧值. 指定`serialVersionUUID`字段设置对象唯一ID方可解决.<br>
-> 但是新增的字段为空值(比如String为null/Int为0) <br>
-> 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
+- 创建一个伴生对象字段`serialVersionUUID`可解决该问题<br>
+- 但是新增的字段默认值将为零值而不是你声明的默认值(比如String为null/Int为0) <br>
+- 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
 
 ```kotlin
 data class SerializableModel(var name: String = "ModelSerializable", var age:Int = 11) : Serializable {
@@ -169,14 +169,7 @@ data class SerializableModel(var name: String = "ModelSerializable", var age:Int
 }
 ```
 
-### 包名/类名/字段名变更
-包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
-
-```kotlin
-private var name: String by serial(name = "unique_name")
-```
-
-### 默认值
+### Parcelable
 如果Serializable新增字段如果有默认值. 实际上并不会生效. 这个时候建议实现Parcelable而不是Serializable. 其可以保证默认值效果
 ```kotlin
 data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable {
@@ -203,3 +196,43 @@ data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable {
 }
 ```
 将光标放到`Parcelable`类名上使用Alt+Enter可以快速实现(Add Parcelable Implementation)
+
+
+### 包名/类名/字段名变更
+包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
+
+```kotlin
+private var name: String by serial(name = "unique_name")
+```
+
+## 覆盖值
+
+示例
+```kotlin
+object UserConfig {
+    var userData:UserData by serial()
+}
+```
+有时候你需要修改对象UserData里面的字段, 然后再次保存到本地.br
+
+你可能会这么写
+
+```kotlin
+UserConfig.userData.name = "new name"
+UserConfig.userData = UserConfig.userData
+```
+实际上这是无效的. 因为`UserConfig.userData.name = "new name"`并没有将对象里面的字段映射到本地.
+
+解决办法有两个
+
+1. 使用`serialLazy`
+```kotlin
+var userData:UserData by serialLazy() // 本身就使用内存作为桥接
+```
+
+2. 使用临时变量
+```kotlin
+val userData = UserConfig.userData
+userData.name = "new name"
+UserConfig.userData = userData
+```
