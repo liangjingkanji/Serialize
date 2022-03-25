@@ -4,7 +4,7 @@
 
     <application>
         <provider
-            android:name="com.drake.serialize.init.InitContentProvider"
+            android:name="com.drake.serialize.initialize.SerializerInitializer"
             android:authorities="${applicationId}.drake.serializeInit"
             android:enabled="true"
             android:exported="false"
