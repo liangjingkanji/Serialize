@@ -36,7 +36,7 @@ inline fun <reified V> serial(
     name: String? = null,
     kv: MMKV = MMKV.defaultMMKV()
         ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
-): ReadWriteProperty<Any?, V> = SerialDelegate(default, V::class.java, name, kv)
+): ReadWriteProperty<Any, V> = SerialDelegate(default, V::class.java, name, kv)
 
 /**
  * 其修饰的属性字段的读写都会自动映射到本地磁盘
@@ -56,7 +56,7 @@ inline fun <reified V> serialLazy(
     name: String? = null,
     kv: MMKV = MMKV.defaultMMKV()
         ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
-): ReadWriteProperty<Any?, V> = SerialLazyDelegate(default, V::class.java, name, kv)
+): ReadWriteProperty<Any, V> = SerialLazyDelegate(default, V::class.java, name, kv)
 
 /**
  * 构建自动映射到本地磁盘的委托属性
@@ -68,23 +68,23 @@ internal class SerialDelegate<V>(
     private val clazz: Class<V>,
     private val name: String?,
     private val kv: MMKV
-) : ReadWriteProperty<Any?, V> {
+) : ReadWriteProperty<Any, V> {
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
-        val className = thisRef?.javaClass?.name
+    override fun getValue(thisRef: Any, property: KProperty<*>): V {
+        val className = thisRef.javaClass.name
         var adjustKey = name ?: property.name
-        if (className != null) adjustKey = "${className}.${adjustKey}"
+        adjustKey = "${className}.${adjustKey}"
         return if (default == null) {
             kv.deserialize(adjustKey, clazz)
         } else {
-            kv.deserialize<V>(adjustKey, clazz, default)
+            kv.deserialize(adjustKey, clazz, default)
         }
     }
 
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
-        val className = thisRef?.javaClass?.name
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
+        val className = thisRef.javaClass.name
         var adjustKey = name ?: property.name
-        if (className != null) adjustKey = "${className}.${adjustKey}"
+        adjustKey = "${className}.${adjustKey}"
         kv.serialize(adjustKey to value)
     }
 
@@ -101,17 +101,17 @@ internal class SerialLazyDelegate<V>(
     private val clazz: Class<V>,
     private val name: String?,
     private val kv: MMKV
-) : ReadWriteProperty<Any?, V> {
+) : ReadWriteProperty<Any, V> {
     @Volatile
     private var value: V? = null
 
-    override fun getValue(thisRef: Any?, property: KProperty<*>): V {
+    override fun getValue(thisRef: Any, property: KProperty<*>): V {
         return synchronized(this) {
             if (value == null) {
                 value = run {
-                    val className = thisRef?.javaClass?.name
+                    val className = thisRef.javaClass.name
                     var adjustKey = name ?: property.name
-                    if (className != null) adjustKey = "${className}.${adjustKey}"
+                    adjustKey = "${className}.${adjustKey}"
                     if (default == null) {
                         kv.deserialize(adjustKey, clazz)
                     } else {
@@ -123,13 +123,13 @@ internal class SerialLazyDelegate<V>(
         }
     }
 
-    override fun setValue(thisRef: Any?, property: KProperty<*>, value: V) {
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
         this.value = value
         //写入本地在子线程处理，单一线程保证了写入顺序
         taskExecutor.execute {
-            val className = thisRef?.javaClass?.name
+            val className = thisRef.javaClass.name
             var adjustKey = name ?: property.name
-            if (className != null) adjustKey = "${className}.${adjustKey}"
+            adjustKey = "${className}.${adjustKey}"
             kv.serialize(adjustKey to value)
         }
     }
