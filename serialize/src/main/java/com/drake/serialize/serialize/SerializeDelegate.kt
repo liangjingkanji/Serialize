@@ -16,9 +16,11 @@
 
 package com.drake.serialize.serialize
 
+import androidx.lifecycle.MutableLiveData
 import com.tencent.mmkv.MMKV
 import java.util.concurrent.Executors
 import java.util.concurrent.ThreadFactory
+import kotlin.properties.ReadOnlyProperty
 import kotlin.properties.ReadWriteProperty
 import kotlin.reflect.KProperty
 
@@ -37,6 +39,27 @@ inline fun <reified V> serial(
     kv: MMKV = MMKV.defaultMMKV()
         ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
 ): ReadWriteProperty<Any, V> = SerialDelegate(default, V::class.java, name, kv)
+
+/**
+ * 可观察的数据来源[MutableLiveData]
+ * 其修饰的属性字段的读写都会自动映射到本地磁盘
+ * 和[serial]不同的是通过内存/磁盘双通道读写来优化读写性能
+ * 其修饰的属性字段第一次会读取磁盘数据, 然后拷贝到内存中, 后续都是直接读取内存中的拷贝
+ * 写入会优先写入到内存中的拷贝份, 然后通过子线程异步写入到磁盘
+ * 线程安全
+ * tip: 不支持跨进程使用
+ *
+ * @param default 默认值, 默认值会在订阅时触发一次
+ * @param name 键名, 默认使用 "当前全路径类名.字段名", 顶层字段没有类名. 全路径类名即: 包名+类名. 请注意重命名包名/类名/字段名都会导致无法读取旧值
+ * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
+ * @throws IllegalStateException MMKV.defaultMMKV() == null
+ */
+inline fun <reified V> serialLiveData(
+    default: V? = null,
+    name: String? = null,
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+): ReadOnlyProperty<Any, MutableLiveData<V>> = SerializeLiveDataDelegate(default, V::class.java, name, kv)
 
 /**
  * 其修饰的属性字段的读写都会自动映射到本地磁盘
@@ -88,6 +111,80 @@ internal class SerialDelegate<V>(
         kv.serialize(adjustKey to value)
     }
 
+}
+
+/**
+ * 构建自动映射到本地磁盘的可观察数据[MutableLiveData]委托属性
+ * 内存/磁盘双通道读写
+ * @see serialLazy
+ */
+@PublishedApi
+internal class SerializeLiveDataDelegate<V>(
+    private val default: V?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV,
+) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
+
+    private lateinit var thisRef: Any
+    private lateinit var property: KProperty<*>
+
+    override fun getValue(): V? = synchronized(this) {
+        var value = super.getValue()
+        if (value == null) {
+            val className = thisRef.javaClass.name
+            var adjustKey = name ?: property.name
+            adjustKey = "${className}.${adjustKey}"
+            value = if (default == null) {
+                kv.deserialize(adjustKey, clazz)
+            } else {
+                kv.deserialize(adjustKey, clazz, default)
+            }
+        }
+        value
+    }
+
+    override fun getValue(
+        thisRef: Any,
+        property: KProperty<*>
+    ): MutableLiveData<V> = synchronized(this) {
+        this.thisRef = thisRef
+        this.property = property
+        val value = value
+        if (super.getValue() == null && value != null) {
+            super.setValue(value)
+        }
+        this
+    }
+
+    override fun setValue(value: V) {
+        super.setValue(value)
+        serialize(value)
+    }
+
+    override fun postValue(value: V) {
+        super.postValue(value)
+        serialize(value)
+    }
+
+    private fun serialize(value: V) {
+        //写入本地在子线程处理，单一线程保证了写入顺序
+        taskExecutor.execute {
+            val className = thisRef.javaClass.name
+            var adjustKey = name ?: property.name
+            adjustKey = "${className}.${adjustKey}"
+            kv.serialize(adjustKey to value)
+        }
+    }
+
+    companion object {
+        /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
+        private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
+            val thread = Thread(it)
+            thread.name = "Thread for MMKV encode()"
+            return@ThreadFactory thread
+        })
+    }
 }
 
 /**
