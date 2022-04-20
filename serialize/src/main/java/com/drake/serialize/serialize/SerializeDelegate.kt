@@ -94,21 +94,17 @@ internal class SerialDelegate<V>(
 ) : ReadWriteProperty<Any, V> {
 
     override fun getValue(thisRef: Any, property: KProperty<*>): V {
-        val className = thisRef.javaClass.name
-        var adjustKey = name ?: property.name
-        adjustKey = "${className}.${adjustKey}"
+        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
         return if (default == null) {
-            kv.deserialize(adjustKey, clazz)
+            kv.deserialize(key, clazz)
         } else {
-            kv.deserialize(adjustKey, clazz, default)
+            kv.deserialize(key, clazz, default)
         }
     }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
-        val className = thisRef.javaClass.name
-        var adjustKey = name ?: property.name
-        adjustKey = "${className}.${adjustKey}"
-        kv.serialize(adjustKey to value)
+        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+        kv.serialize(key to value)
     }
 
 }
@@ -132,13 +128,11 @@ internal class SerializeLiveDataDelegate<V>(
     override fun getValue(): V? = synchronized(this) {
         var value = super.getValue()
         if (value == null) {
-            val className = thisRef.javaClass.name
-            var adjustKey = name ?: property.name
-            adjustKey = "${className}.${adjustKey}"
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
             value = if (default == null) {
-                kv.deserialize(adjustKey, clazz)
+                kv.deserialize(key, clazz)
             } else {
-                kv.deserialize(adjustKey, clazz, default)
+                kv.deserialize(key, clazz, default)
             }
         }
         value
@@ -159,21 +153,19 @@ internal class SerializeLiveDataDelegate<V>(
 
     override fun setValue(value: V) {
         super.setValue(value)
-        serialize(value)
+        asyncSerialize(value)
     }
 
     override fun postValue(value: V) {
         super.postValue(value)
-        serialize(value)
+        asyncSerialize(value)
     }
 
-    private fun serialize(value: V) {
-        //写入本地在子线程处理，单一线程保证了写入顺序
+    /** 写入本地在子线程处理，单一线程保证了写入顺序 */
+    private fun asyncSerialize(value: V) {
         taskExecutor.execute {
-            val className = thisRef.javaClass.name
-            var adjustKey = name ?: property.name
-            adjustKey = "${className}.${adjustKey}"
-            kv.serialize(adjustKey to value)
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+            kv.serialize(key to value)
         }
     }
 
@@ -181,7 +173,7 @@ internal class SerializeLiveDataDelegate<V>(
         /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
         private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
             val thread = Thread(it)
-            thread.name = "Thread for MMKV encode()"
+            thread.name = "SerializeLiveDataDelegate"
             return@ThreadFactory thread
         })
     }
@@ -202,32 +194,26 @@ internal class SerialLazyDelegate<V>(
     @Volatile
     private var value: V? = null
 
-    override fun getValue(thisRef: Any, property: KProperty<*>): V {
-        return synchronized(this) {
-            if (value == null) {
-                value = run {
-                    val className = thisRef.javaClass.name
-                    var adjustKey = name ?: property.name
-                    adjustKey = "${className}.${adjustKey}"
-                    if (default == null) {
-                        kv.deserialize(adjustKey, clazz)
-                    } else {
-                        kv.deserialize(adjustKey, clazz, default)
-                    }
+    override fun getValue(thisRef: Any, property: KProperty<*>): V = synchronized(this) {
+        if (value == null) {
+            value = run {
+                val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+                if (default == null) {
+                    kv.deserialize(key, clazz)
+                } else {
+                    kv.deserialize(key, clazz, default)
                 }
-                value as V
-            } else value as V
+            }
         }
+        value as V
     }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
         this.value = value
         //写入本地在子线程处理，单一线程保证了写入顺序
         taskExecutor.execute {
-            val className = thisRef.javaClass.name
-            var adjustKey = name ?: property.name
-            adjustKey = "${className}.${adjustKey}"
-            kv.serialize(adjustKey to value)
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+            kv.serialize(key to value)
         }
     }
 
@@ -235,7 +221,7 @@ internal class SerialLazyDelegate<V>(
         /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
         private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
             val thread = Thread(it)
-            thread.name = "Thread for MMKV encode()"
+            thread.name = "SerialLazyDelegate"
             return@ThreadFactory thread
         })
     }
