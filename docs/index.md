@@ -60,6 +60,19 @@ private var name: String? by serial()
 ```
 这时如果本地不存在`name`的话则返回`null`
 
+## LiveData
+通过创建一个可观察的字段. 对其读写也会自动映射到本地磁盘(同时使用异步写入保证性能)
+
+```kotlin
+private val liveData by serialLiveData("默认值")
+```
+
+每次写入都会回调观察者`observe`
+```kotlin
+liveData.observe(this) {
+    toast("观察到本地数据: $it")
+}
+```
 ## 懒加载
 懒加载即只在第一次读取字段的时候才会从本地磁盘读取, 后续都是从内存读取. 完美解决ANR. 主线程上亿次读写都没问题.
 
