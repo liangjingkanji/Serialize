@@ -60,7 +60,7 @@ dependencyResolutionManagement {
 然后在 module 的 build.gradle 添加依赖框架
 
 ```groovy
-implementation 'com.github.liangjingkanji:Serialize:1.2.3'
+implementation 'com.github.liangjingkanji:Serialize:1.3.0'
 ```
 
 <br>
