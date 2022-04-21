@@ -21,7 +21,6 @@ import android.os.SystemClock
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.databinding.DataBindingUtil
 import com.drake.serialize.intent.openActivity
 import com.drake.serialize.model.stateModels
 import com.drake.serialize.sample.databinding.ActivityMainBinding
@@ -31,6 +30,7 @@ import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialLazy
+import com.drake.serialize.serialize.serialLiveData
 import com.drake.tooltip.toast
 
 
@@ -41,15 +41,25 @@ class MainActivity : AppCompatActivity() {
     private var simple: String by serial("默认值", "自定义键名")
     private val stateModel: MyStateViewModel by stateModels()
     private val viewModel: MyViewModel by viewModels()
+    private val liveData by serialLiveData("默认值")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val binding =
-            DataBindingUtil.setContentView<ActivityMainBinding>(this, R.layout.activity_main)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        liveData.observe(this) {
+            toast("观察到本地数据: $it")
+        }
+
+        // 可观察数据
+        binding.llObserve.setOnClickListener {
+            liveData.value = SystemClock.elapsedRealtime().toString()
+        }
 
         binding.cardWriteField.setOnClickListener {
-            name = "吴彦祖"
-            toast("写入数据 [吴彦祖] 到磁盘")
+            name = "https://github.com/liangjingkanji/Serialize"
+            toast("写入数据: $name 到磁盘")
         }
         binding.cardReadField.setOnClickListener {
             toast("读取本地数据为: $name")
