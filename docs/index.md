@@ -13,6 +13,18 @@
 > 框架内部使用腾讯的[MMKV](https://github.com/Tencent/MMKV)实现, 因为其比SharePreference/SQLite速度快多, 可以有效解决ANR.
 > 关系型/列表数据/大体积数据还是推荐使用数据库完成
 
+使用MMKV请初始化
+```kotlin
+class App : Application() {
+
+    override fun onCreate() {
+        super.onCreate()
+        MMKV.initialize(this)
+        // MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 存储路径, [LevelNone] 即不输出日志
+    }
+}
+```
+
 ```kotlin
 private var name: String by serial()
 
