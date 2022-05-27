@@ -1,3 +1,6 @@
+## 1.3.1
+- fix: lazyField线程安全
+
 ## 1.3.0
 - 新增serialLiveData可观察序列化数据
 - 禁用本地变量使用serial
