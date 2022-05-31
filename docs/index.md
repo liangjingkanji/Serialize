@@ -1,4 +1,4 @@
-通常一般键值数据我们使用SharePreference存储, 但是这样很麻烦且性能低. 
+通常一般键值数据我们使用SharePreference存储, 但是这样很麻烦且性能低.
 
 为什么字段只能存在于内存中而不是直接映射到本地磁盘呢? 这个时候就可以使用本库的序列化功能创建一个`存在于磁盘的字段`. <br>
 他的赋值和读值都会映射到磁盘中(这在程序编码中称为序列化)
@@ -138,7 +138,7 @@ AppConfig.isFirstLaunch
 === "全局默认"
     ```kotlin
     class App : Application() {
-    
+
         override fun onCreate() {
             super.onCreate()
             MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1是设置路径路径字符串, [LevelNone] 即不输出日志
@@ -246,16 +246,10 @@ object UserConfig {
 UserConfig.userData.name = "new name"
 UserConfig.userData = UserConfig.userData
 ```
-实际上这是无效的. 因为`UserConfig.userData.name = "new name"`并没有将对象里面的字段映射到本地.
+实际上这是无效的, 因为`UserConfig.userData.name = "new name"`并没有将对象里面的字段映射到本地.
 
-解决办法有两个
+解决办法就是使用临时变量
 
-1. 使用`serialLazy`
-```kotlin
-var userData:UserData by serialLazy() // 本身就使用内存作为桥接
-```
-
-2. 使用临时变量
 ```kotlin
 val userData = UserConfig.userData
 userData.name = "new name"
