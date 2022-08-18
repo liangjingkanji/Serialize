@@ -25,8 +25,10 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.os.Parcelable
-import androidx.core.os.bundleOf
+import android.util.Size
+import android.util.SizeF
 import androidx.fragment.app.Fragment
 import java.io.Serializable
 
@@ -151,7 +153,7 @@ inline fun <reified T : Any> Context.intentFor(vararg params: Pair<String, Any?>
 
 inline fun <reified T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent {
     val intent = Intent(this, T::class.java)
-    if (params.isNotEmpty()) intent.withArguments(params)
+    if (params.isNotEmpty()) intent.withArguments(*params)
     return intent
 }
 
@@ -166,7 +168,7 @@ inline fun <reified T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>
 @Deprecated("规范命名", ReplaceWith("intentOf"))
 inline fun <reified T> Context.createIntent(vararg params: Pair<String, Any?>): Intent {
     val intent = Intent(this, T::class.java)
-    if (params.isNotEmpty()) intent.withArguments(params)
+    if (params.isNotEmpty()) intent.withArguments(*params)
     return intent
 }
 
@@ -178,42 +180,86 @@ fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T {
 /**
  * 意图添加数据
  */
-fun Intent.withArguments(params: Array<out Pair<String, Any?>>) {
-    params.forEach {
-        when (val value = it.second) {
-            null -> putExtra(it.first, null as Serializable?)
-            is Int -> putExtra(it.first, value)
-            is Long -> putExtra(it.first, value)
-            is CharSequence -> putExtra(it.first, value)
-            is String -> putExtra(it.first, value)
-            is Float -> putExtra(it.first, value)
-            is Double -> putExtra(it.first, value)
-            is Char -> putExtra(it.first, value)
-            is Short -> putExtra(it.first, value)
-            is Boolean -> putExtra(it.first, value)
-            is Bundle -> putExtra(it.first, value)
-            is Parcelable -> putExtra(it.first, value)
-            is Array<*> -> {
-                when {
-                    value.isArrayOf<CharSequence>() -> putExtra(it.first, value)
-                    value.isArrayOf<String>() -> putExtra(it.first, value)
-                    value.isArrayOf<Parcelable>() -> putExtra(it.first, value)
-                    else -> throw IllegalArgumentException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
-                }
-            }
-            is IntArray -> putExtra(it.first, value)
-            is LongArray -> putExtra(it.first, value)
-            is FloatArray -> putExtra(it.first, value)
-            is DoubleArray -> putExtra(it.first, value)
-            is CharArray -> putExtra(it.first, value)
-            is ShortArray -> putExtra(it.first, value)
-            is BooleanArray -> putExtra(it.first, value)
-            is Serializable -> putExtra(it.first, value)
-            else -> throw IllegalArgumentException("Intent extra ${it.first} has wrong type ${value.javaClass.name}")
-        }
-        return@forEach
-    }
+fun Intent.withArguments(vararg pairs: Pair<String, Any?>) = apply {
+    putExtras(bundleOf(*pairs))
 }
 
+/**
+ * 为避免和官方ktx方法重复而私有
+ */
+private fun bundleOf(vararg pairs: Pair<String, Any?>): Bundle = Bundle(pairs.size).apply {
+    for ((key, value) in pairs) {
+        when (value) {
+            null -> putString(key, null) // Any nullable type will suffice.
+
+            // Scalars
+            is Boolean -> putBoolean(key, value)
+            is Byte -> putByte(key, value)
+            is Char -> putChar(key, value)
+            is Double -> putDouble(key, value)
+            is Float -> putFloat(key, value)
+            is Int -> putInt(key, value)
+            is Long -> putLong(key, value)
+            is Short -> putShort(key, value)
+
+            // References
+            is Bundle -> putBundle(key, value)
+            is CharSequence -> putCharSequence(key, value)
+            is Parcelable -> putParcelable(key, value)
+
+            // Scalar arrays
+            is BooleanArray -> putBooleanArray(key, value)
+            is ByteArray -> putByteArray(key, value)
+            is CharArray -> putCharArray(key, value)
+            is DoubleArray -> putDoubleArray(key, value)
+            is FloatArray -> putFloatArray(key, value)
+            is IntArray -> putIntArray(key, value)
+            is LongArray -> putLongArray(key, value)
+            is ShortArray -> putShortArray(key, value)
+
+            // Reference arrays
+            is Array<*> -> {
+                val componentType = value::class.java.componentType!!
+                @Suppress("UNCHECKED_CAST") // Checked by reflection.
+                when {
+                    Parcelable::class.java.isAssignableFrom(componentType) -> {
+                        putParcelableArray(key, value as Array<Parcelable>)
+                    }
+                    String::class.java.isAssignableFrom(componentType) -> {
+                        putStringArray(key, value as Array<String>)
+                    }
+                    CharSequence::class.java.isAssignableFrom(componentType) -> {
+                        putCharSequenceArray(key, value as Array<CharSequence>)
+                    }
+                    Serializable::class.java.isAssignableFrom(componentType) -> {
+                        putSerializable(key, value)
+                    }
+                    else -> {
+                        val valueType = componentType.canonicalName
+                        throw IllegalArgumentException(
+                            "Illegal value array type $valueType for key \"$key\""
+                        )
+                    }
+                }
+            }
+
+            // Last resort. Also we must check this after Array<*> as all arrays are serializable.
+            is Serializable -> putSerializable(key, value)
+
+            else -> {
+                if (Build.VERSION.SDK_INT >= 18 && value is IBinder) {
+                    putBinder(key, value)
+                } else if (Build.VERSION.SDK_INT >= 21 && value is Size) {
+                    putSize(key, value)
+                } else if (Build.VERSION.SDK_INT >= 21 && value is SizeF) {
+                    putSizeF(key, value)
+                } else {
+                    val valueType = value.javaClass.canonicalName
+                    throw IllegalArgumentException("Illegal value type $valueType for key \"$key\"")
+                }
+            }
+        }
+    }
+}
 // </editor-fold>
 

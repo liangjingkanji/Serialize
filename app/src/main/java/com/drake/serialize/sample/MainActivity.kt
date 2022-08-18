@@ -22,9 +22,7 @@ import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.drake.serialize.intent.openActivity
-import com.drake.serialize.model.stateModels
 import com.drake.serialize.sample.databinding.ActivityMainBinding
-import com.drake.serialize.sample.model.MyStateViewModel
 import com.drake.serialize.sample.model.MyViewModel
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
@@ -39,7 +37,6 @@ class MainActivity : AppCompatActivity() {
     private var name: String by serial()
     private var model: SerializableModel? by serialLazy()
     private var simple: String by serial("默认值", "自定义键名")
-    private val stateModel: MyStateViewModel by stateModels()
     private val viewModel: MyViewModel by viewModels()
     private val liveData by serialLiveData("默认值")
 
