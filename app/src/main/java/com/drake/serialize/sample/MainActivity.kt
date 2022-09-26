@@ -40,6 +40,11 @@ class MainActivity : AppCompatActivity() {
     private val viewModel: MyViewModel by viewModels()
     private val liveData by serialLiveData("默认值")
 
+    private var test: Boolean by serialLazy(Boolean::class.java) {
+        // 让调用者在这里，可以有机会处理一下逻辑，例如从 Preferences 中读取存量数据
+        false
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val binding = ActivityMainBinding.inflate(layoutInflater)
@@ -55,8 +60,11 @@ class MainActivity : AppCompatActivity() {
         }
 
         binding.cardWriteField.setOnClickListener {
-            name = "https://github.com/liangjingkanji/Serialize"
-            toast("写入数据: $name 到磁盘")
+            //name = "https://github.com/liangjingkanji/Serialize"
+            //toast("写入数据: $name 到磁盘")
+            println("test $test")
+            test = true
+            println("test $test")
         }
         binding.cardReadField.setOnClickListener {
             toast("读取本地数据为: $name")

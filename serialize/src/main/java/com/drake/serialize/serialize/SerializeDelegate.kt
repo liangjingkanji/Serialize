@@ -37,8 +37,28 @@ inline fun <reified V> serial(
     default: V? = null,
     name: String? = null,
     kv: MMKV = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
 ): ReadWriteProperty<Any, V> = SerialDelegate(default, V::class.java, name, kv)
+
+/**
+ * 默认值采用函数传递进来，但是类型也需要外部传入
+ *
+ * @param V
+ * @param clazz
+ * @param name
+ * @param kv
+ * @param default
+ * @return
+ *
+ * @see serial
+ */
+fun <V> serial(
+    clazz: Class<V>,
+    name: String? = null,
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
+    default: (() -> V)? = null,
+): ReadWriteProperty<Any, V> = SerialDelegate2(default, clazz, name, kv)
 
 /**
  * 可观察的数据来源[MutableLiveData]
@@ -58,8 +78,28 @@ inline fun <reified V> serialLiveData(
     default: V? = null,
     name: String? = null,
     kv: MMKV = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
 ): ReadOnlyProperty<Any, MutableLiveData<V>> = SerializeLiveDataDelegate(default, V::class.java, name, kv)
+
+/**
+ * 默认值采用函数传递进来，但是类型也需要外部传入
+ *
+ * @param V
+ * @param clazz
+ * @param name
+ * @param kv
+ * @param default
+ * @return
+ *
+ * @see serialLiveData
+ */
+fun <V> serialLiveData(
+    clazz: Class<V>,
+    name: String? = null,
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
+    default: (() -> V)? = null,
+): ReadOnlyProperty<Any, MutableLiveData<V>> = SerializeLiveDataDelegate2(default, clazz, name, kv)
 
 /**
  * 其修饰的属性字段的读写都会自动映射到本地磁盘
@@ -78,8 +118,28 @@ inline fun <reified V> serialLazy(
     default: V? = null,
     name: String? = null,
     kv: MMKV = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
 ): ReadWriteProperty<Any, V> = SerialLazyDelegate(default, V::class.java, name, kv)
+
+/**
+ * 默认值采用函数传递进来，但是类型也需要外部传入
+ *
+ * @param V
+ * @param clazz
+ * @param name
+ * @param kv
+ * @param default
+ * @return
+ *
+ * @see serialLazy
+ */
+fun <V> serialLazy(
+    clazz: Class<V>,
+    name: String? = null,
+    kv: MMKV = MMKV.defaultMMKV()
+        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 "),
+    default: (() -> V)? = null,
+): ReadWriteProperty<Any, V> = SerialLazyDelegate2(default, clazz, name, kv)
 
 /**
  * 构建自动映射到本地磁盘的委托属性
@@ -90,7 +150,7 @@ internal class SerialDelegate<V>(
     private val default: V?,
     private val clazz: Class<V>,
     private val name: String?,
-    private val kv: MMKV
+    private val kv: MMKV,
 ) : ReadWriteProperty<Any, V> {
 
     override fun getValue(thisRef: Any, property: KProperty<*>): V {
@@ -106,7 +166,29 @@ internal class SerialDelegate<V>(
         val key = "${thisRef.javaClass.name}.${name ?: property.name}"
         kv.serialize(key to value)
     }
+}
 
+@PublishedApi
+internal class SerialDelegate2<V>(
+    private val default: (() -> V)?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV,
+) : ReadWriteProperty<Any, V> {
+
+    override fun getValue(thisRef: Any, property: KProperty<*>): V {
+        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+        return if (default == null) {
+            kv.deserialize(key, clazz)
+        } else {
+            kv.deserialize(key, clazz, default)
+        }
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
+        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+        kv.serialize(key to value)
+    }
 }
 
 /**
@@ -140,7 +222,72 @@ internal class SerializeLiveDataDelegate<V>(
 
     override fun getValue(
         thisRef: Any,
-        property: KProperty<*>
+        property: KProperty<*>,
+    ): MutableLiveData<V> = synchronized(this) {
+        this.thisRef = thisRef
+        this.property = property
+        val value = value
+        if (super.getValue() == null && value != null) {
+            super.setValue(value)
+        }
+        this
+    }
+
+    override fun setValue(value: V) {
+        super.setValue(value)
+        asyncSerialize(value)
+    }
+
+    override fun postValue(value: V) {
+        super.postValue(value)
+        asyncSerialize(value)
+    }
+
+    /** 写入本地在子线程处理，单一线程保证了写入顺序 */
+    private fun asyncSerialize(value: V) {
+        taskExecutor.execute {
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+            kv.serialize(key to value)
+        }
+    }
+
+    companion object {
+        /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
+        private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
+            val thread = Thread(it)
+            thread.name = "SerializeLiveDataDelegate"
+            return@ThreadFactory thread
+        })
+    }
+}
+
+@PublishedApi
+internal class SerializeLiveDataDelegate2<V>(
+    private val default: (() -> V)?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV,
+) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
+
+    private lateinit var thisRef: Any
+    private lateinit var property: KProperty<*>
+
+    override fun getValue(): V? = synchronized(this) {
+        var value = super.getValue()
+        if (value == null) {
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+            value = if (default == null) {
+                kv.deserialize(key, clazz)
+            } else {
+                kv.deserialize(key, clazz, default)
+            }
+        }
+        value
+    }
+
+    override fun getValue(
+        thisRef: Any,
+        property: KProperty<*>,
     ): MutableLiveData<V> = synchronized(this) {
         this.thisRef = thisRef
         this.property = property
@@ -189,7 +336,51 @@ internal class SerialLazyDelegate<V>(
     private val default: V?,
     private val clazz: Class<V>,
     private val name: String?,
-    private val kv: MMKV
+    private val kv: MMKV,
+) : ReadWriteProperty<Any, V> {
+    @Volatile
+    private var value: V? = null
+
+    override fun getValue(thisRef: Any, property: KProperty<*>): V = synchronized(this) {
+        if (value == null) {
+            value = run {
+                val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+                if (default == null) {
+                    kv.deserialize(key, clazz)
+                } else {
+                    kv.deserialize(key, clazz, default)
+                }
+            }
+        }
+        value as V
+    }
+
+    override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
+        this.value = value
+        //写入本地在子线程处理，单一线程保证了写入顺序
+        taskExecutor.execute {
+            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
+            kv.serialize(key to value)
+        }
+    }
+
+    companion object {
+        /** 单一线程 无界队列  保证任务按照提交顺序来执行 **/
+        private val taskExecutor = Executors.newSingleThreadExecutor(ThreadFactory {
+            val thread = Thread(it)
+            thread.name = "SerialLazyDelegate"
+            return@ThreadFactory thread
+        })
+    }
+
+}
+
+@PublishedApi
+internal class SerialLazyDelegate2<V>(
+    private val default: (() -> V)?,
+    private val clazz: Class<V>,
+    private val name: String?,
+    private val kv: MMKV,
 ) : ReadWriteProperty<Any, V> {
     @Volatile
     private var value: V? = null

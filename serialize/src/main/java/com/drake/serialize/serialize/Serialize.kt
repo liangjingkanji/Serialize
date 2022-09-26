@@ -86,6 +86,7 @@ internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>): T {
         Parcelable::class.java.isAssignableFrom(clazz) -> {
             decodeParcelable(name, clazz as Class<Parcelable>) as? T
         }
+
         else -> decode<T>(name)
     } ?: null as T
 }
@@ -99,6 +100,21 @@ internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>, defValue: T?): 
                 defValue as Parcelable
             ) as? T
         }
+
+        else -> decode(name, defValue)
+    } ?: null as T
+}
+
+@PublishedApi
+internal fun <T> MMKV.deserialize(name: String, clazz: Class<T>, defValue: (() -> T)?): T {
+    return when {
+        Parcelable::class.java.isAssignableFrom(clazz) -> {
+            (decodeParcelable(
+                name, clazz as Class<Parcelable>,
+                null
+            ) as? T) ?: defValue?.invoke()
+        }
+
         else -> decode(name, defValue)
     } ?: null as T
 }
@@ -150,6 +166,21 @@ private fun <T> MMKV.decode(name: String, defValue: T): T {
         obj as T
     } catch (e: Exception) {
         defValue
+    }
+}
+
+private fun <T> MMKV.decode(name: String, defValue: (() -> T)?): T? {
+    val bytes = decodeBytes(name) ?: return defValue?.invoke()
+    return try {
+        var obj: Any?
+        ByteArrayInputStream(bytes).use { byteInput ->
+            ObjectInputStream(byteInput).use { objInput ->
+                obj = objInput.readObject()
+            }
+        }
+        obj as T
+    } catch (e: Exception) {
+        defValue?.invoke()
     }
 }
 //</editor-fold>
