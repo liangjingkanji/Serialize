@@ -88,7 +88,7 @@ inline fun <reified V> serialLazy(
 @PublishedApi
 internal class SerialDelegate<V>(
     private val default: V?,
-    private val clazz: Class<V>,
+    private val type: Class<V>,
     private val name: String?,
     private val kv: MMKV
 ) : ReadWriteProperty<Any, V> {
@@ -96,9 +96,9 @@ internal class SerialDelegate<V>(
     override fun getValue(thisRef: Any, property: KProperty<*>): V {
         val key = "${thisRef.javaClass.name}.${name ?: property.name}"
         return if (default == null) {
-            kv.deserialize(key, clazz)
+            kv.deserialize(type, key)
         } else {
-            kv.deserialize(key, clazz, default)
+            kv.deserialize(type, key, default)
         }
     }
 
@@ -117,7 +117,7 @@ internal class SerialDelegate<V>(
 @PublishedApi
 internal class SerializeLiveDataDelegate<V>(
     private val default: V?,
-    private val clazz: Class<V>,
+    private val type: Class<V>,
     private val name: String?,
     private val kv: MMKV,
 ) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
@@ -130,9 +130,9 @@ internal class SerializeLiveDataDelegate<V>(
         if (value == null) {
             val key = "${thisRef.javaClass.name}.${name ?: property.name}"
             value = if (default == null) {
-                kv.deserialize(key, clazz)
+                kv.deserialize(type, key)
             } else {
-                kv.deserialize(key, clazz, default)
+                kv.deserialize(type, key, default)
             }
         }
         value
@@ -187,7 +187,7 @@ internal class SerializeLiveDataDelegate<V>(
 @PublishedApi
 internal class SerialLazyDelegate<V>(
     private val default: V?,
-    private val clazz: Class<V>,
+    private val type: Class<V>,
     private val name: String?,
     private val kv: MMKV
 ) : ReadWriteProperty<Any, V> {
@@ -199,9 +199,9 @@ internal class SerialLazyDelegate<V>(
             value = run {
                 val key = "${thisRef.javaClass.name}.${name ?: property.name}"
                 if (default == null) {
-                    kv.deserialize(key, clazz)
+                    kv.deserialize(type, key)
                 } else {
-                    kv.deserialize(key, clazz, default)
+                    kv.deserialize(type, key, default)
                 }
             }
         }

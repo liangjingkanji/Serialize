@@ -27,15 +27,15 @@ import com.drake.serialize.sample.model.MyViewModel
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.serial
-import com.drake.serialize.serialize.serialLazy
 import com.drake.serialize.serialize.serialLiveData
 import com.drake.tooltip.toast
+import kotlin.system.measureTimeMillis
 
 
 class MainActivity : AppCompatActivity() {
 
     private var name: String by serial()
-    private var model: SerializableModel? by serialLazy()
+    private var model: SerializableModel? by serial()
     private var simple: String by serial("默认值", "自定义键名")
     private val viewModel: MyViewModel by viewModels()
     private val liveData by serialLiveData("默认值")
@@ -79,19 +79,21 @@ class MainActivity : AppCompatActivity() {
 
         // 读取100w次
         binding.cardBigRead.setOnClickListener {
-            val startTime = SystemClock.elapsedRealtime()
-            repeat(1000000) {
-                val name = model?.name ?: toast("本地没有数据可读, 请先写入")
+            val measureTimeMillis = measureTimeMillis {
+                repeat(10000) {
+                    val name = model?.name ?: toast("本地没有数据可读, 请先写入")
+                }
             }
-            binding.tvBigReadTime.text = "${(SystemClock.elapsedRealtime() - startTime)}ms"
+            binding.tvBigReadTime.text = "${measureTimeMillis}ms"
         }
         // 写入100w次
         binding.cardBigWrite.setOnClickListener {
-            val startTime = SystemClock.elapsedRealtime()
-            repeat(1000000) {
-                model = SerializableModel("第${it}次")
+            val measureTimeMillis = measureTimeMillis {
+                repeat(10000) {
+                    model = SerializableModel("第${it}次")
+                }
             }
-            binding.tvBigWriteTime.text = "${(SystemClock.elapsedRealtime() - startTime)}ms"
+            binding.tvBigWriteTime.text = "${measureTimeMillis}ms"
         }
     }
 }

@@ -17,6 +17,8 @@
 package com.drake.serialize.sample.base
 
 import android.app.Application
+import com.drake.serialize.sample.hook.ProtobufSerializeHook
+import com.drake.serialize.serialize.Serialize
 import com.tencent.mmkv.MMKV
 
 class App : Application() {
@@ -26,5 +28,6 @@ class App : Application() {
         // 可选的初始化配置
         MMKV.initialize(this)
         // MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1: 存储路径, 参数2: 日志等级
+        Serialize.hook = ProtobufSerializeHook()
     }
 }
