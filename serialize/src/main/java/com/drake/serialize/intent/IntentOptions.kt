@@ -20,11 +20,11 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
-import androidx.fragment.app.Fragment
 
 
-fun Fragment.browse(url: String, newTask: Boolean = false) = activity?.browse(url, newTask)
-
+/**
+ * 打开浏览器
+ */
 fun Context.browse(url: String, newTask: Boolean = false): Boolean {
     return try {
         val intent = Intent(Intent.ACTION_VIEW)
@@ -40,10 +40,9 @@ fun Context.browse(url: String, newTask: Boolean = false): Boolean {
     }
 }
 
-
-fun Fragment.share(text: String, subject: String = "", title: String? = null) =
-    activity?.share(text, subject, title)
-
+/**
+ * 分享
+ */
 fun Context.share(text: String, subject: String = "", title: String? = null): Boolean {
     return try {
         val intent = Intent(Intent.ACTION_SEND)
@@ -59,9 +58,9 @@ fun Context.share(text: String, subject: String = "", title: String? = null): Bo
 }
 
 
-fun Fragment.email(email: String, subject: String = "", text: String = "") =
-    activity?.email(email, subject, text)
-
+/**
+ * 发送邮件
+ */
 fun Context.email(email: String, subject: String = "", text: String = ""): Boolean {
     val intent = Intent(Intent.ACTION_SENDTO)
     intent.data = Uri.parse("mailto:")
@@ -78,8 +77,9 @@ fun Context.email(email: String, subject: String = "", text: String = ""): Boole
 
 }
 
-fun Fragment.makeCall(number: String): Boolean = activity?.makeCall(number) ?: false
-
+/**
+ * 电话拨号
+ */
 fun Context.makeCall(number: String): Boolean {
     return try {
         val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:$number"))
@@ -91,9 +91,9 @@ fun Context.makeCall(number: String): Boolean {
     }
 }
 
-fun Fragment.sendSMS(number: String, text: String = ""): Boolean =
-    activity?.sendSMS(number, text) ?: false
-
+/**
+ * 发送短信
+ */
 fun Context.sendSMS(number: String, text: String = ""): Boolean {
     return try {
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse("sms:$number"))
