@@ -4,7 +4,6 @@ $dokka.location:com.drake.serialize.delegate////PointingToDeclaration/-serializ
 $dokka.location:com.drake.serialize.delegate//lazyField/TypeParam(bounds=[kotlin.Any?])#kotlin.Function2[TypeParam(bounds=[kotlin.Any?]),kotlin.reflect.KProperty[*],TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/-serialize/com.drake.serialize.delegate/lazy-field.html
 $dokka.location:com.drake.serialize.intent////PointingToDeclaration/-serialize/com.drake.serialize.intent/index.html
 $dokka.location:com.drake.serialize.intent//browse/android.content.Context#kotlin.String#kotlin.Boolean/PointingToDeclaration/-serialize/com.drake.serialize.intent/browse.html
-$dokka.location:com.drake.serialize.intent//browse/androidx.fragment.app.Fragment#kotlin.String#kotlin.Boolean/PointingToDeclaration/-serialize/com.drake.serialize.intent/browse.html
 $dokka.location:com.drake.serialize.intent//bundle/android.app.Activity?#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?/PointingToDeclaration/-serialize/com.drake.serialize.intent/bundle.html
 $dokka.location:com.drake.serialize.intent//bundle/androidx.fragment.app.Fragment?#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?/PointingToDeclaration/-serialize/com.drake.serialize.intent/bundle.html
 $dokka.location:com.drake.serialize.intent//bundleLazy/androidx.fragment.app.Fragment?#kotlin.String?#kotlin.Function0[TypeParam(bounds=[kotlin.Any?])]/PointingToDeclaration/-serialize/com.drake.serialize.intent/bundle-lazy.html
@@ -13,14 +12,12 @@ $dokka.location:com.drake.serialize.intent//clearTask/android.content.Intent#/Po
 $dokka.location:com.drake.serialize.intent//clearTop/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/clear-top.html
 $dokka.location:com.drake.serialize.intent//createIntent/android.content.Context#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/create-intent.html
 $dokka.location:com.drake.serialize.intent//email/android.content.Context#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/email.html
-$dokka.location:com.drake.serialize.intent//email/androidx.fragment.app.Fragment#kotlin.String#kotlin.String#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/email.html
 $dokka.location:com.drake.serialize.intent//excludeFromRecents/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/exclude-from-recents.html
 $dokka.location:com.drake.serialize.intent//intentFor/android.content.Context#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/intent-for.html
 $dokka.location:com.drake.serialize.intent//intentFor/androidx.fragment.app.Fragment#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/intent-for.html
 $dokka.location:com.drake.serialize.intent//intentOf/android.content.Context#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/intent-of.html
 $dokka.location:com.drake.serialize.intent//intentOf/androidx.fragment.app.Fragment#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/intent-of.html
 $dokka.location:com.drake.serialize.intent//makeCall/android.content.Context#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/make-call.html
-$dokka.location:com.drake.serialize.intent//makeCall/androidx.fragment.app.Fragment#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/make-call.html
 $dokka.location:com.drake.serialize.intent//multipleTask/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/multiple-task.html
 $dokka.location:com.drake.serialize.intent//newDocument/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/new-document.html
 $dokka.location:com.drake.serialize.intent//newTask/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/new-task.html
@@ -31,9 +28,7 @@ $dokka.location:com.drake.serialize.intent//openActivity/androidx.fragment.app.F
 $dokka.location:com.drake.serialize.intent//openActivityForResult/android.app.Activity#kotlin.Int#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/open-activity-for-result.html
 $dokka.location:com.drake.serialize.intent//openActivityForResult/androidx.fragment.app.Fragment#kotlin.Int#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/open-activity-for-result.html
 $dokka.location:com.drake.serialize.intent//sendSMS/android.content.Context#kotlin.String#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/send-s-m-s.html
-$dokka.location:com.drake.serialize.intent//sendSMS/androidx.fragment.app.Fragment#kotlin.String#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.intent/send-s-m-s.html
 $dokka.location:com.drake.serialize.intent//share/android.content.Context#kotlin.String#kotlin.String#kotlin.String?/PointingToDeclaration/-serialize/com.drake.serialize.intent/share.html
-$dokka.location:com.drake.serialize.intent//share/androidx.fragment.app.Fragment#kotlin.String#kotlin.String#kotlin.String?/PointingToDeclaration/-serialize/com.drake.serialize.intent/share.html
 $dokka.location:com.drake.serialize.intent//singleTop/android.content.Intent#/PointingToDeclaration/-serialize/com.drake.serialize.intent/single-top.html
 $dokka.location:com.drake.serialize.intent//startService/android.content.Context#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/start-service.html
 $dokka.location:com.drake.serialize.intent//startService/androidx.fragment.app.Fragment#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/start-service.html
@@ -41,29 +36,25 @@ $dokka.location:com.drake.serialize.intent//stopService/android.content.Context#
 $dokka.location:com.drake.serialize.intent//stopService/androidx.fragment.app.Fragment#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/stop-service.html
 $dokka.location:com.drake.serialize.intent//withArguments/TypeParam(bounds=[androidx.fragment.app.Fragment])#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/with-arguments.html
 $dokka.location:com.drake.serialize.intent//withArguments/android.content.Intent#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.intent/with-arguments.html
-$dokka.location:com.drake.serialize.model////PointingToDeclaration/-serialize/com.drake.serialize.model/index.html
-$dokka.location:com.drake.serialize.model//stateHandle/com.drake.serialize.model.StateViewModel?#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?/PointingToDeclaration/-serialize/com.drake.serialize.model/state-handle.html
-$dokka.location:com.drake.serialize.model//stateModels/androidx.fragment.app.Fragment?#/PointingToDeclaration/-serialize/com.drake.serialize.model/state-models.html
-$dokka.location:com.drake.serialize.model//stateModels/androidx.fragment.app.FragmentActivity?#/PointingToDeclaration/-serialize/com.drake.serialize.model/state-models.html
-$dokka.location:com.drake.serialize.model/StateViewModel///PointingToDeclaration/-serialize/com.drake.serialize.model/-state-view-model/index.html
-$dokka.location:com.drake.serialize.model/StateViewModel/StateViewModel/#androidx.lifecycle.SavedStateHandle/PointingToDeclaration/-serialize/com.drake.serialize.model/-state-view-model/-state-view-model.html
-$dokka.location:com.drake.serialize.model/StateViewModel/stateHandle/#/PointingToDeclaration/-serialize/com.drake.serialize.model/-state-view-model/state-handle.html
 $dokka.location:com.drake.serialize.serialize////PointingToDeclaration/-serialize/com.drake.serialize.serialize/index.html
 $dokka.location:com.drake.serialize.serialize//deserialize/#kotlin.String#TypeParam(bounds=[kotlin.Any?])?/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
 $dokka.location:com.drake.serialize.serialize//deserialize/#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
+$dokka.location:com.drake.serialize.serialize//deserialize/com.tencent.mmkv.MMKV#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#kotlin.String#TypeParam(bounds=[kotlin.Any?])?/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
+$dokka.location:com.drake.serialize.serialize//deserialize/com.tencent.mmkv.MMKV#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
 $dokka.location:com.drake.serialize.serialize//deserialize/com.tencent.mmkv.MMKV#kotlin.String#TypeParam(bounds=[kotlin.Any?])?/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
 $dokka.location:com.drake.serialize.serialize//deserialize/com.tencent.mmkv.MMKV#kotlin.String/PointingToDeclaration/-serialize/com.drake.serialize.serialize/deserialize.html
 $dokka.location:com.drake.serialize.serialize//serial/#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?#com.tencent.mmkv.MMKV/PointingToDeclaration/-serialize/com.drake.serialize.serialize/serial.html
 $dokka.location:com.drake.serialize.serialize//serialLazy/#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?#com.tencent.mmkv.MMKV/PointingToDeclaration/-serialize/com.drake.serialize.serialize/serial-lazy.html
+$dokka.location:com.drake.serialize.serialize//serialLiveData/#TypeParam(bounds=[kotlin.Any?])?#kotlin.String?#com.tencent.mmkv.MMKV/PointingToDeclaration/-serialize/com.drake.serialize.serialize/serial-live-data.html
 $dokka.location:com.drake.serialize.serialize//serialize/#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.serialize/serialize.html
 $dokka.location:com.drake.serialize.serialize//serialize/com.tencent.mmkv.MMKV#kotlin.Array[kotlin.Pair[kotlin.String,kotlin.Any?]]/PointingToDeclaration/-serialize/com.drake.serialize.serialize/serialize.html
-$dokka.location:com.drake.serialize.utils////PointingToDeclaration/-serialize/com.drake.serialize.utils/index.html
-$dokka.location:com.drake.serialize.utils//foreach/android.database.Cursor#kotlin.Function1[android.database.Cursor,kotlin.Unit]/PointingToDeclaration/-serialize/com.drake.serialize.utils/foreach.html
-$dokka.location:com.drake.serialize.utils//orNull/kotlin.String?#/PointingToDeclaration/-serialize/com.drake.serialize.utils/or-null.html
-$dokka.location:com.drake.serialize.utils//orNull/kotlin.collections.List[kotlin.Any?]?#/PointingToDeclaration/-serialize/com.drake.serialize.utils/or-null.html
+$dokka.location:com.drake.serialize.serialize/Serialize///PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize/index.html
+$dokka.location:com.drake.serialize.serialize/Serialize/hook/#/PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize/hook.html
+$dokka.location:com.drake.serialize.serialize/SerializeHook.DEFAULT///PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize-hook/-d-e-f-a-u-l-t/index.html
+$dokka.location:com.drake.serialize.serialize/SerializeHook///PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize-hook/index.html
+$dokka.location:com.drake.serialize.serialize/SerializeHook/deserialize/#kotlin.String#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#kotlin.ByteArray/PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize-hook/deserialize.html
+$dokka.location:com.drake.serialize.serialize/SerializeHook/serialize/#kotlin.String#java.lang.Class[TypeParam(bounds=[kotlin.Any?])]#kotlin.Any/PointingToDeclaration/-serialize/com.drake.serialize.serialize/-serialize-hook/serialize.html
 com.drake.serialize.delegate
 com.drake.serialize.intent
-com.drake.serialize.model
 com.drake.serialize.serialize
-com.drake.serialize.utils
 

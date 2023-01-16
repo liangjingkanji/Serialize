@@ -1,1 +1,512 @@
-[{"name":"fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T","description":"com.drake.serialize.intent.withArguments","location":"-serialize/com.drake.serialize.intent/with-arguments.html","searchKeys":["withArguments","fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T","com.drake.serialize.intent.withArguments"]},{"name":"fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V): ReadWriteProperty<T, V>","description":"com.drake.serialize.delegate.lazyField","location":"-serialize/com.drake.serialize.delegate/lazy-field.html","searchKeys":["lazyField","fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V): ReadWriteProperty<T, V>","com.drake.serialize.delegate.lazyField"]},{"name":"fun Context.browse(url: String, newTask: Boolean = false): Boolean","description":"com.drake.serialize.intent.browse","location":"-serialize/com.drake.serialize.intent/browse.html","searchKeys":["browse","fun Context.browse(url: String, newTask: Boolean = false): Boolean","com.drake.serialize.intent.browse"]},{"name":"fun Context.email(email: String, subject: String = \"\", text: String = \"\"): Boolean","description":"com.drake.serialize.intent.email","location":"-serialize/com.drake.serialize.intent/email.html","searchKeys":["email","fun Context.email(email: String, subject: String = \"\", text: String = \"\"): Boolean","com.drake.serialize.intent.email"]},{"name":"fun Context.makeCall(number: String): Boolean","description":"com.drake.serialize.intent.makeCall","location":"-serialize/com.drake.serialize.intent/make-call.html","searchKeys":["makeCall","fun Context.makeCall(number: String): Boolean","com.drake.serialize.intent.makeCall"]},{"name":"fun Context.sendSMS(number: String, text: String = \"\"): Boolean","description":"com.drake.serialize.intent.sendSMS","location":"-serialize/com.drake.serialize.intent/send-s-m-s.html","searchKeys":["sendSMS","fun Context.sendSMS(number: String, text: String = \"\"): Boolean","com.drake.serialize.intent.sendSMS"]},{"name":"fun Context.share(text: String, subject: String = \"\", title: String? = null): Boolean","description":"com.drake.serialize.intent.share","location":"-serialize/com.drake.serialize.intent/share.html","searchKeys":["share","fun Context.share(text: String, subject: String = \"\", title: String? = null): Boolean","com.drake.serialize.intent.share"]},{"name":"fun Cursor.foreach(block: Cursor.() -> Unit)","description":"com.drake.serialize.utils.foreach","location":"-serialize/com.drake.serialize.utils/foreach.html","searchKeys":["foreach","fun Cursor.foreach(block: Cursor.() -> Unit)","com.drake.serialize.utils.foreach"]},{"name":"fun Fragment.browse(url: String, newTask: Boolean = false): Boolean?","description":"com.drake.serialize.intent.browse","location":"-serialize/com.drake.serialize.intent/browse.html","searchKeys":["browse","fun Fragment.browse(url: String, newTask: Boolean = false): Boolean?","com.drake.serialize.intent.browse"]},{"name":"fun Fragment.email(email: String, subject: String = \"\", text: String = \"\"): Boolean?","description":"com.drake.serialize.intent.email","location":"-serialize/com.drake.serialize.intent/email.html","searchKeys":["email","fun Fragment.email(email: String, subject: String = \"\", text: String = \"\"): Boolean?","com.drake.serialize.intent.email"]},{"name":"fun Fragment.makeCall(number: String): Boolean","description":"com.drake.serialize.intent.makeCall","location":"-serialize/com.drake.serialize.intent/make-call.html","searchKeys":["makeCall","fun Fragment.makeCall(number: String): Boolean","com.drake.serialize.intent.makeCall"]},{"name":"fun Fragment.sendSMS(number: String, text: String = \"\"): Boolean","description":"com.drake.serialize.intent.sendSMS","location":"-serialize/com.drake.serialize.intent/send-s-m-s.html","searchKeys":["sendSMS","fun Fragment.sendSMS(number: String, text: String = \"\"): Boolean","com.drake.serialize.intent.sendSMS"]},{"name":"fun Fragment.share(text: String, subject: String = \"\", title: String? = null): Boolean?","description":"com.drake.serialize.intent.share","location":"-serialize/com.drake.serialize.intent/share.html","searchKeys":["share","fun Fragment.share(text: String, subject: String = \"\", title: String? = null): Boolean?","com.drake.serialize.intent.share"]},{"name":"fun Intent.clearTask(): Intent","description":"com.drake.serialize.intent.clearTask","location":"-serialize/com.drake.serialize.intent/clear-task.html","searchKeys":["clearTask","fun Intent.clearTask(): Intent","com.drake.serialize.intent.clearTask"]},{"name":"fun Intent.clearTop(): Intent","description":"com.drake.serialize.intent.clearTop","location":"-serialize/com.drake.serialize.intent/clear-top.html","searchKeys":["clearTop","fun Intent.clearTop(): Intent","com.drake.serialize.intent.clearTop"]},{"name":"fun Intent.excludeFromRecents(): Intent","description":"com.drake.serialize.intent.excludeFromRecents","location":"-serialize/com.drake.serialize.intent/exclude-from-recents.html","searchKeys":["excludeFromRecents","fun Intent.excludeFromRecents(): Intent","com.drake.serialize.intent.excludeFromRecents"]},{"name":"fun Intent.multipleTask(): Intent","description":"com.drake.serialize.intent.multipleTask","location":"-serialize/com.drake.serialize.intent/multiple-task.html","searchKeys":["multipleTask","fun Intent.multipleTask(): Intent","com.drake.serialize.intent.multipleTask"]},{"name":"fun Intent.newDocument(): Intent","description":"com.drake.serialize.intent.newDocument","location":"-serialize/com.drake.serialize.intent/new-document.html","searchKeys":["newDocument","fun Intent.newDocument(): Intent","com.drake.serialize.intent.newDocument"]},{"name":"fun Intent.newTask(): Intent","description":"com.drake.serialize.intent.newTask","location":"-serialize/com.drake.serialize.intent/new-task.html","searchKeys":["newTask","fun Intent.newTask(): Intent","com.drake.serialize.intent.newTask"]},{"name":"fun Intent.noAnimation(): Intent","description":"com.drake.serialize.intent.noAnimation","location":"-serialize/com.drake.serialize.intent/no-animation.html","searchKeys":["noAnimation","fun Intent.noAnimation(): Intent","com.drake.serialize.intent.noAnimation"]},{"name":"fun Intent.noHistory(): Intent","description":"com.drake.serialize.intent.noHistory","location":"-serialize/com.drake.serialize.intent/no-history.html","searchKeys":["noHistory","fun Intent.noHistory(): Intent","com.drake.serialize.intent.noHistory"]},{"name":"fun Intent.singleTop(): Intent","description":"com.drake.serialize.intent.singleTop","location":"-serialize/com.drake.serialize.intent/single-top.html","searchKeys":["singleTop","fun Intent.singleTop(): Intent","com.drake.serialize.intent.singleTop"]},{"name":"fun Intent.withArguments(params: Array<out Pair<String, Any?>>)","description":"com.drake.serialize.intent.withArguments","location":"-serialize/com.drake.serialize.intent/with-arguments.html","searchKeys":["withArguments","fun Intent.withArguments(params: Array<out Pair<String, Any?>>)","com.drake.serialize.intent.withArguments"]},{"name":"fun List<Any?>?.orNull(): List<Any?>?","description":"com.drake.serialize.utils.orNull","location":"-serialize/com.drake.serialize.utils/or-null.html","searchKeys":["orNull","fun List<Any?>?.orNull(): List<Any?>?","com.drake.serialize.utils.orNull"]},{"name":"fun MMKV.serialize(vararg params: Pair<String, Any?>)","description":"com.drake.serialize.serialize.serialize","location":"-serialize/com.drake.serialize.serialize/serialize.html","searchKeys":["serialize","fun MMKV.serialize(vararg params: Pair<String, Any?>)","com.drake.serialize.serialize.serialize"]},{"name":"fun StateViewModel(stateHandle: SavedStateHandle)","description":"com.drake.serialize.model.StateViewModel.StateViewModel","location":"-serialize/com.drake.serialize.model/-state-view-model/-state-view-model.html","searchKeys":["StateViewModel","fun StateViewModel(stateHandle: SavedStateHandle)","com.drake.serialize.model.StateViewModel.StateViewModel"]},{"name":"fun String?.orNull(): String?","description":"com.drake.serialize.utils.orNull","location":"-serialize/com.drake.serialize.utils/or-null.html","searchKeys":["orNull","fun String?.orNull(): String?","com.drake.serialize.utils.orNull"]},{"name":"fun serialize(vararg params: Pair<String, Any?>)","description":"com.drake.serialize.serialize.serialize","location":"-serialize/com.drake.serialize.serialize/serialize.html","searchKeys":["serialize","fun serialize(vararg params: Pair<String, Any?>)","com.drake.serialize.serialize.serialize"]},{"name":"inline fun <T : Activity> Activity.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)","description":"com.drake.serialize.intent.openActivityForResult","location":"-serialize/com.drake.serialize.intent/open-activity-for-result.html","searchKeys":["openActivityForResult","inline fun <T : Activity> Activity.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)","com.drake.serialize.intent.openActivityForResult"]},{"name":"inline fun <T : Activity> Context.openActivity(vararg params: Pair<String, Any?>)","description":"com.drake.serialize.intent.openActivity","location":"-serialize/com.drake.serialize.intent/open-activity.html","searchKeys":["openActivity","inline fun <T : Activity> Context.openActivity(vararg params: Pair<String, Any?>)","com.drake.serialize.intent.openActivity"]},{"name":"inline fun <T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>)","description":"com.drake.serialize.intent.openActivity","location":"-serialize/com.drake.serialize.intent/open-activity.html","searchKeys":["openActivity","inline fun <T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>)","com.drake.serialize.intent.openActivity"]},{"name":"inline fun <T : Activity> Fragment.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)","description":"com.drake.serialize.intent.openActivityForResult","location":"-serialize/com.drake.serialize.intent/open-activity-for-result.html","searchKeys":["openActivityForResult","inline fun <T : Activity> Fragment.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)","com.drake.serialize.intent.openActivityForResult"]},{"name":"inline fun <T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent","description":"com.drake.serialize.intent.intentFor","location":"-serialize/com.drake.serialize.intent/intent-for.html","searchKeys":["intentFor","inline fun <T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent","com.drake.serialize.intent.intentFor"]},{"name":"inline fun <T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent","description":"com.drake.serialize.intent.intentOf","location":"-serialize/com.drake.serialize.intent/intent-of.html","searchKeys":["intentOf","inline fun <T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent","com.drake.serialize.intent.intentOf"]},{"name":"inline fun <T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent","description":"com.drake.serialize.intent.intentFor","location":"-serialize/com.drake.serialize.intent/intent-for.html","searchKeys":["intentFor","inline fun <T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent","com.drake.serialize.intent.intentFor"]},{"name":"inline fun <T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent","description":"com.drake.serialize.intent.intentOf","location":"-serialize/com.drake.serialize.intent/intent-of.html","searchKeys":["intentOf","inline fun <T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent","com.drake.serialize.intent.intentOf"]},{"name":"inline fun <T : Service> Context.startService(vararg params: Pair<String, Any?>): ComponentName?","description":"com.drake.serialize.intent.startService","location":"-serialize/com.drake.serialize.intent/start-service.html","searchKeys":["startService","inline fun <T : Service> Context.startService(vararg params: Pair<String, Any?>): ComponentName?","com.drake.serialize.intent.startService"]},{"name":"inline fun <T : Service> Context.stopService(vararg params: Pair<String, Any?>): Boolean","description":"com.drake.serialize.intent.stopService","location":"-serialize/com.drake.serialize.intent/stop-service.html","searchKeys":["stopService","inline fun <T : Service> Context.stopService(vararg params: Pair<String, Any?>): Boolean","com.drake.serialize.intent.stopService"]},{"name":"inline fun <T : Service> Fragment.startService(vararg params: Pair<String, Any?>): ComponentName?","description":"com.drake.serialize.intent.startService","location":"-serialize/com.drake.serialize.intent/start-service.html","searchKeys":["startService","inline fun <T : Service> Fragment.startService(vararg params: Pair<String, Any?>): ComponentName?","com.drake.serialize.intent.startService"]},{"name":"inline fun <T : Service> Fragment.stopService(vararg params: Pair<String, Any?>): Boolean?","description":"com.drake.serialize.intent.stopService","location":"-serialize/com.drake.serialize.intent/stop-service.html","searchKeys":["stopService","inline fun <T : Service> Fragment.stopService(vararg params: Pair<String, Any?>): Boolean?","com.drake.serialize.intent.stopService"]},{"name":"inline fun <T> Activity?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Activity?, T>","description":"com.drake.serialize.intent.bundle","location":"-serialize/com.drake.serialize.intent/bundle.html","searchKeys":["bundle","inline fun <T> Activity?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Activity?, T>","com.drake.serialize.intent.bundle"]},{"name":"inline fun <T> Context.createIntent(vararg params: Pair<String, Any?>): Intent","description":"com.drake.serialize.intent.createIntent","location":"-serialize/com.drake.serialize.intent/create-intent.html","searchKeys":["createIntent","inline fun <T> Context.createIntent(vararg params: Pair<String, Any?>): Intent","com.drake.serialize.intent.createIntent"]},{"name":"inline fun <T> Fragment?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Fragment?, T>","description":"com.drake.serialize.intent.bundle","location":"-serialize/com.drake.serialize.intent/bundle.html","searchKeys":["bundle","inline fun <T> Fragment?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Fragment?, T>","com.drake.serialize.intent.bundle"]},{"name":"inline fun <T> Fragment?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<Fragment?, T>","description":"com.drake.serialize.intent.bundleLazy","location":"-serialize/com.drake.serialize.intent/bundle-lazy.html","searchKeys":["bundleLazy","inline fun <T> Fragment?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<Fragment?, T>","com.drake.serialize.intent.bundleLazy"]},{"name":"inline fun <T> FragmentActivity?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<FragmentActivity?, T>","description":"com.drake.serialize.intent.bundleLazy","location":"-serialize/com.drake.serialize.intent/bundle-lazy.html","searchKeys":["bundleLazy","inline fun <T> FragmentActivity?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<FragmentActivity?, T>","com.drake.serialize.intent.bundleLazy"]},{"name":"inline fun <T> MMKV.deserialize(name: String): T","description":"com.drake.serialize.serialize.deserialize","location":"-serialize/com.drake.serialize.serialize/deserialize.html","searchKeys":["deserialize","inline fun <T> MMKV.deserialize(name: String): T","com.drake.serialize.serialize.deserialize"]},{"name":"inline fun <T> MMKV.deserialize(name: String, defValue: T?): T","description":"com.drake.serialize.serialize.deserialize","location":"-serialize/com.drake.serialize.serialize/deserialize.html","searchKeys":["deserialize","inline fun <T> MMKV.deserialize(name: String, defValue: T?): T","com.drake.serialize.serialize.deserialize"]},{"name":"inline fun <T> deserialize(name: String): T","description":"com.drake.serialize.serialize.deserialize","location":"-serialize/com.drake.serialize.serialize/deserialize.html","searchKeys":["deserialize","inline fun <T> deserialize(name: String): T","com.drake.serialize.serialize.deserialize"]},{"name":"inline fun <T> deserialize(name: String, defValue: T?): T","description":"com.drake.serialize.serialize.deserialize","location":"-serialize/com.drake.serialize.serialize/deserialize.html","searchKeys":["deserialize","inline fun <T> deserialize(name: String, defValue: T?): T","com.drake.serialize.serialize.deserialize"]},{"name":"inline fun <V : StateViewModel> Fragment?.stateModels(): Lazy<V>","description":"com.drake.serialize.model.stateModels","location":"-serialize/com.drake.serialize.model/state-models.html","searchKeys":["stateModels","inline fun <V : StateViewModel> Fragment?.stateModels(): Lazy<V>","com.drake.serialize.model.stateModels"]},{"name":"inline fun <V : StateViewModel> FragmentActivity?.stateModels(): Lazy<V>","description":"com.drake.serialize.model.stateModels","location":"-serialize/com.drake.serialize.model/state-models.html","searchKeys":["stateModels","inline fun <V : StateViewModel> FragmentActivity?.stateModels(): Lazy<V>","com.drake.serialize.model.stateModels"]},{"name":"inline fun <V> StateViewModel?.stateHandle(defValue: V? = null, name: String? = null): ReadWriteProperty<StateViewModel, V>","description":"com.drake.serialize.model.stateHandle","location":"-serialize/com.drake.serialize.model/state-handle.html","searchKeys":["stateHandle","inline fun <V> StateViewModel?.stateHandle(defValue: V? = null, name: String? = null): ReadWriteProperty<StateViewModel, V>","com.drake.serialize.model.stateHandle"]},{"name":"inline fun <V> serial(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any?, V>","description":"com.drake.serialize.serialize.serial","location":"-serialize/com.drake.serialize.serialize/serial.html","searchKeys":["serial","inline fun <V> serial(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any?, V>","com.drake.serialize.serialize.serial"]},{"name":"inline fun <V> serialLazy(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any?, V>","description":"com.drake.serialize.serialize.serialLazy","location":"-serialize/com.drake.serialize.serialize/serial-lazy.html","searchKeys":["serialLazy","inline fun <V> serialLazy(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any?, V>","com.drake.serialize.serialize.serialLazy"]},{"name":"open class StateViewModel(stateHandle: SavedStateHandle) : ViewModel","description":"com.drake.serialize.model.StateViewModel","location":"-serialize/com.drake.serialize.model/-state-view-model/index.html","searchKeys":["StateViewModel","open class StateViewModel(stateHandle: SavedStateHandle) : ViewModel","com.drake.serialize.model.StateViewModel"]},{"name":"var stateHandle: SavedStateHandle","description":"com.drake.serialize.model.StateViewModel.stateHandle","location":"-serialize/com.drake.serialize.model/-state-view-model/state-handle.html","searchKeys":["stateHandle","var stateHandle: SavedStateHandle","com.drake.serialize.model.StateViewModel.stateHandle"]}]
+[
+  {
+    "name": "fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T",
+    "description": "com.drake.serialize.intent.withArguments",
+    "location": "-serialize/com.drake.serialize.intent/with-arguments.html",
+    "searchKeys": [
+      "withArguments",
+      "fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T",
+      "com.drake.serialize.intent.withArguments"
+    ]
+  },
+  {
+    "name": "fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V): ReadWriteProperty<T, V>",
+    "description": "com.drake.serialize.delegate.lazyField",
+    "location": "-serialize/com.drake.serialize.delegate/lazy-field.html",
+    "searchKeys": [
+      "lazyField",
+      "fun <T, V> T.lazyField(block: T.(KProperty<*>) -> V): ReadWriteProperty<T, V>",
+      "com.drake.serialize.delegate.lazyField"
+    ]
+  },
+  {
+    "name": "fun <T> MMKV.deserialize(type: Class<T>, name: String): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "fun <T> MMKV.deserialize(type: Class<T>, name: String): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "fun <T> MMKV.deserialize(type: Class<T>, name: String, defValue: T?): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "fun <T> MMKV.deserialize(type: Class<T>, name: String, defValue: T?): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "fun Context.browse(url: String, newTask: Boolean = false): Boolean",
+    "description": "com.drake.serialize.intent.browse",
+    "location": "-serialize/com.drake.serialize.intent/browse.html",
+    "searchKeys": [
+      "browse",
+      "fun Context.browse(url: String, newTask: Boolean = false): Boolean",
+      "com.drake.serialize.intent.browse"
+    ]
+  },
+  {
+    "name": "fun Context.email(email: String, subject: String = \"\", text: String = \"\"): Boolean",
+    "description": "com.drake.serialize.intent.email",
+    "location": "-serialize/com.drake.serialize.intent/email.html",
+    "searchKeys": [
+      "email",
+      "fun Context.email(email: String, subject: String = \"\", text: String = \"\"): Boolean",
+      "com.drake.serialize.intent.email"
+    ]
+  },
+  {
+    "name": "fun Context.makeCall(number: String): Boolean",
+    "description": "com.drake.serialize.intent.makeCall",
+    "location": "-serialize/com.drake.serialize.intent/make-call.html",
+    "searchKeys": [
+      "makeCall",
+      "fun Context.makeCall(number: String): Boolean",
+      "com.drake.serialize.intent.makeCall"
+    ]
+  },
+  {
+    "name": "fun Context.sendSMS(number: String, text: String = \"\"): Boolean",
+    "description": "com.drake.serialize.intent.sendSMS",
+    "location": "-serialize/com.drake.serialize.intent/send-s-m-s.html",
+    "searchKeys": [
+      "sendSMS",
+      "fun Context.sendSMS(number: String, text: String = \"\"): Boolean",
+      "com.drake.serialize.intent.sendSMS"
+    ]
+  },
+  {
+    "name": "fun Context.share(text: String, subject: String = \"\", title: String? = null): Boolean",
+    "description": "com.drake.serialize.intent.share",
+    "location": "-serialize/com.drake.serialize.intent/share.html",
+    "searchKeys": [
+      "share",
+      "fun Context.share(text: String, subject: String = \"\", title: String? = null): Boolean",
+      "com.drake.serialize.intent.share"
+    ]
+  },
+  {
+    "name": "fun Intent.clearTask(): Intent",
+    "description": "com.drake.serialize.intent.clearTask",
+    "location": "-serialize/com.drake.serialize.intent/clear-task.html",
+    "searchKeys": [
+      "clearTask",
+      "fun Intent.clearTask(): Intent",
+      "com.drake.serialize.intent.clearTask"
+    ]
+  },
+  {
+    "name": "fun Intent.clearTop(): Intent",
+    "description": "com.drake.serialize.intent.clearTop",
+    "location": "-serialize/com.drake.serialize.intent/clear-top.html",
+    "searchKeys": [
+      "clearTop",
+      "fun Intent.clearTop(): Intent",
+      "com.drake.serialize.intent.clearTop"
+    ]
+  },
+  {
+    "name": "fun Intent.excludeFromRecents(): Intent",
+    "description": "com.drake.serialize.intent.excludeFromRecents",
+    "location": "-serialize/com.drake.serialize.intent/exclude-from-recents.html",
+    "searchKeys": [
+      "excludeFromRecents",
+      "fun Intent.excludeFromRecents(): Intent",
+      "com.drake.serialize.intent.excludeFromRecents"
+    ]
+  },
+  {
+    "name": "fun Intent.multipleTask(): Intent",
+    "description": "com.drake.serialize.intent.multipleTask",
+    "location": "-serialize/com.drake.serialize.intent/multiple-task.html",
+    "searchKeys": [
+      "multipleTask",
+      "fun Intent.multipleTask(): Intent",
+      "com.drake.serialize.intent.multipleTask"
+    ]
+  },
+  {
+    "name": "fun Intent.newDocument(): Intent",
+    "description": "com.drake.serialize.intent.newDocument",
+    "location": "-serialize/com.drake.serialize.intent/new-document.html",
+    "searchKeys": [
+      "newDocument",
+      "fun Intent.newDocument(): Intent",
+      "com.drake.serialize.intent.newDocument"
+    ]
+  },
+  {
+    "name": "fun Intent.newTask(): Intent",
+    "description": "com.drake.serialize.intent.newTask",
+    "location": "-serialize/com.drake.serialize.intent/new-task.html",
+    "searchKeys": [
+      "newTask",
+      "fun Intent.newTask(): Intent",
+      "com.drake.serialize.intent.newTask"
+    ]
+  },
+  {
+    "name": "fun Intent.noAnimation(): Intent",
+    "description": "com.drake.serialize.intent.noAnimation",
+    "location": "-serialize/com.drake.serialize.intent/no-animation.html",
+    "searchKeys": [
+      "noAnimation",
+      "fun Intent.noAnimation(): Intent",
+      "com.drake.serialize.intent.noAnimation"
+    ]
+  },
+  {
+    "name": "fun Intent.noHistory(): Intent",
+    "description": "com.drake.serialize.intent.noHistory",
+    "location": "-serialize/com.drake.serialize.intent/no-history.html",
+    "searchKeys": [
+      "noHistory",
+      "fun Intent.noHistory(): Intent",
+      "com.drake.serialize.intent.noHistory"
+    ]
+  },
+  {
+    "name": "fun Intent.singleTop(): Intent",
+    "description": "com.drake.serialize.intent.singleTop",
+    "location": "-serialize/com.drake.serialize.intent/single-top.html",
+    "searchKeys": [
+      "singleTop",
+      "fun Intent.singleTop(): Intent",
+      "com.drake.serialize.intent.singleTop"
+    ]
+  },
+  {
+    "name": "fun Intent.withArguments(vararg pairs: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.withArguments",
+    "location": "-serialize/com.drake.serialize.intent/with-arguments.html",
+    "searchKeys": [
+      "withArguments",
+      "fun Intent.withArguments(vararg pairs: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.withArguments"
+    ]
+  },
+  {
+    "name": "fun MMKV.serialize(vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.serialize.serialize",
+    "location": "-serialize/com.drake.serialize.serialize/serialize.html",
+    "searchKeys": [
+      "serialize",
+      "fun MMKV.serialize(vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.serialize.serialize"
+    ]
+  },
+  {
+    "name": "fun serialize(vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.serialize.serialize",
+    "location": "-serialize/com.drake.serialize.serialize/serialize.html",
+    "searchKeys": [
+      "serialize",
+      "fun serialize(vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.serialize.serialize"
+    ]
+  },
+  {
+    "name": "inline fun <T : Activity> Activity.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.intent.openActivityForResult",
+    "location": "-serialize/com.drake.serialize.intent/open-activity-for-result.html",
+    "searchKeys": [
+      "openActivityForResult",
+      "inline fun <T : Activity> Activity.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.intent.openActivityForResult"
+    ]
+  },
+  {
+    "name": "inline fun <T : Activity> Context.openActivity(vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.intent.openActivity",
+    "location": "-serialize/com.drake.serialize.intent/open-activity.html",
+    "searchKeys": [
+      "openActivity",
+      "inline fun <T : Activity> Context.openActivity(vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.intent.openActivity"
+    ]
+  },
+  {
+    "name": "inline fun <T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.intent.openActivity",
+    "location": "-serialize/com.drake.serialize.intent/open-activity.html",
+    "searchKeys": [
+      "openActivity",
+      "inline fun <T : Activity> Fragment.openActivity(vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.intent.openActivity"
+    ]
+  },
+  {
+    "name": "inline fun <T : Activity> Fragment.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)",
+    "description": "com.drake.serialize.intent.openActivityForResult",
+    "location": "-serialize/com.drake.serialize.intent/open-activity-for-result.html",
+    "searchKeys": [
+      "openActivityForResult",
+      "inline fun <T : Activity> Fragment.openActivityForResult(requestCode: Int, vararg params: Pair<String, Any?>)",
+      "com.drake.serialize.intent.openActivityForResult"
+    ]
+  },
+  {
+    "name": "inline fun <T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.intentFor",
+    "location": "-serialize/com.drake.serialize.intent/intent-for.html",
+    "searchKeys": [
+      "intentFor",
+      "inline fun <T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.intentFor"
+    ]
+  },
+  {
+    "name": "inline fun <T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.intentOf",
+    "location": "-serialize/com.drake.serialize.intent/intent-of.html",
+    "searchKeys": [
+      "intentOf",
+      "inline fun <T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.intentOf"
+    ]
+  },
+  {
+    "name": "inline fun <T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.intentFor",
+    "location": "-serialize/com.drake.serialize.intent/intent-for.html",
+    "searchKeys": [
+      "intentFor",
+      "inline fun <T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.intentFor"
+    ]
+  },
+  {
+    "name": "inline fun <T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.intentOf",
+    "location": "-serialize/com.drake.serialize.intent/intent-of.html",
+    "searchKeys": [
+      "intentOf",
+      "inline fun <T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.intentOf"
+    ]
+  },
+  {
+    "name": "inline fun <T : Service> Context.startService(vararg params: Pair<String, Any?>): ComponentName?",
+    "description": "com.drake.serialize.intent.startService",
+    "location": "-serialize/com.drake.serialize.intent/start-service.html",
+    "searchKeys": [
+      "startService",
+      "inline fun <T : Service> Context.startService(vararg params: Pair<String, Any?>): ComponentName?",
+      "com.drake.serialize.intent.startService"
+    ]
+  },
+  {
+    "name": "inline fun <T : Service> Context.stopService(vararg params: Pair<String, Any?>): Boolean",
+    "description": "com.drake.serialize.intent.stopService",
+    "location": "-serialize/com.drake.serialize.intent/stop-service.html",
+    "searchKeys": [
+      "stopService",
+      "inline fun <T : Service> Context.stopService(vararg params: Pair<String, Any?>): Boolean",
+      "com.drake.serialize.intent.stopService"
+    ]
+  },
+  {
+    "name": "inline fun <T : Service> Fragment.startService(vararg params: Pair<String, Any?>): ComponentName?",
+    "description": "com.drake.serialize.intent.startService",
+    "location": "-serialize/com.drake.serialize.intent/start-service.html",
+    "searchKeys": [
+      "startService",
+      "inline fun <T : Service> Fragment.startService(vararg params: Pair<String, Any?>): ComponentName?",
+      "com.drake.serialize.intent.startService"
+    ]
+  },
+  {
+    "name": "inline fun <T : Service> Fragment.stopService(vararg params: Pair<String, Any?>): Boolean?",
+    "description": "com.drake.serialize.intent.stopService",
+    "location": "-serialize/com.drake.serialize.intent/stop-service.html",
+    "searchKeys": [
+      "stopService",
+      "inline fun <T : Service> Fragment.stopService(vararg params: Pair<String, Any?>): Boolean?",
+      "com.drake.serialize.intent.stopService"
+    ]
+  },
+  {
+    "name": "inline fun <T> Activity?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Activity?, T>",
+    "description": "com.drake.serialize.intent.bundle",
+    "location": "-serialize/com.drake.serialize.intent/bundle.html",
+    "searchKeys": [
+      "bundle",
+      "inline fun <T> Activity?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Activity?, T>",
+      "com.drake.serialize.intent.bundle"
+    ]
+  },
+  {
+    "name": "inline fun <T> Context.createIntent(vararg params: Pair<String, Any?>): Intent",
+    "description": "com.drake.serialize.intent.createIntent",
+    "location": "-serialize/com.drake.serialize.intent/create-intent.html",
+    "searchKeys": [
+      "createIntent",
+      "inline fun <T> Context.createIntent(vararg params: Pair<String, Any?>): Intent",
+      "com.drake.serialize.intent.createIntent"
+    ]
+  },
+  {
+    "name": "inline fun <T> Fragment?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Fragment?, T>",
+    "description": "com.drake.serialize.intent.bundle",
+    "location": "-serialize/com.drake.serialize.intent/bundle.html",
+    "searchKeys": [
+      "bundle",
+      "inline fun <T> Fragment?.bundle(defValue: T? = null, name: String? = null): ReadWriteProperty<Fragment?, T>",
+      "com.drake.serialize.intent.bundle"
+    ]
+  },
+  {
+    "name": "inline fun <T> Fragment?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<Fragment?, T>",
+    "description": "com.drake.serialize.intent.bundleLazy",
+    "location": "-serialize/com.drake.serialize.intent/bundle-lazy.html",
+    "searchKeys": [
+      "bundleLazy",
+      "inline fun <T> Fragment?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<Fragment?, T>",
+      "com.drake.serialize.intent.bundleLazy"
+    ]
+  },
+  {
+    "name": "inline fun <T> FragmentActivity?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<FragmentActivity?, T>",
+    "description": "com.drake.serialize.intent.bundleLazy",
+    "location": "-serialize/com.drake.serialize.intent/bundle-lazy.html",
+    "searchKeys": [
+      "bundleLazy",
+      "inline fun <T> FragmentActivity?.bundleLazy(name: String? = null, crossinline defValue: () -> T): ReadWriteProperty<FragmentActivity?, T>",
+      "com.drake.serialize.intent.bundleLazy"
+    ]
+  },
+  {
+    "name": "inline fun <T> MMKV.deserialize(name: String): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "inline fun <T> MMKV.deserialize(name: String): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "inline fun <T> MMKV.deserialize(name: String, defValue: T?): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "inline fun <T> MMKV.deserialize(name: String, defValue: T?): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "inline fun <T> deserialize(name: String): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "inline fun <T> deserialize(name: String): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "inline fun <T> deserialize(name: String, defValue: T?): T",
+    "description": "com.drake.serialize.serialize.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "inline fun <T> deserialize(name: String, defValue: T?): T",
+      "com.drake.serialize.serialize.deserialize"
+    ]
+  },
+  {
+    "name": "inline fun <V> serial(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any, V>",
+    "description": "com.drake.serialize.serialize.serial",
+    "location": "-serialize/com.drake.serialize.serialize/serial.html",
+    "searchKeys": [
+      "serial",
+      "inline fun <V> serial(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any, V>",
+      "com.drake.serialize.serialize.serial"
+    ]
+  },
+  {
+    "name": "inline fun <V> serialLazy(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any, V>",
+    "description": "com.drake.serialize.serialize.serialLazy",
+    "location": "-serialize/com.drake.serialize.serialize/serial-lazy.html",
+    "searchKeys": [
+      "serialLazy",
+      "inline fun <V> serialLazy(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadWriteProperty<Any, V>",
+      "com.drake.serialize.serialize.serialLazy"
+    ]
+  },
+  {
+    "name": "inline fun <V> serialLiveData(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadOnlyProperty<Any, MutableLiveData<V>>",
+    "description": "com.drake.serialize.serialize.serialLiveData",
+    "location": "-serialize/com.drake.serialize.serialize/serial-live-data.html",
+    "searchKeys": [
+      "serialLiveData",
+      "inline fun <V> serialLiveData(default: V? = null, name: String? = null, kv: MMKV = MMKV.defaultMMKV()\n        ?: throw IllegalStateException(\"MMKV.defaultMMKV() == null, handle == 0 \")): ReadOnlyProperty<Any, MutableLiveData<V>>",
+      "com.drake.serialize.serialize.serialLiveData"
+    ]
+  },
+  {
+    "name": "interface SerializeHook",
+    "description": "com.drake.serialize.serialize.SerializeHook",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize-hook/index.html",
+    "searchKeys": [
+      "SerializeHook",
+      "interface SerializeHook",
+      "com.drake.serialize.serialize.SerializeHook"
+    ]
+  },
+  {
+    "name": "object DEFAULT : SerializeHook",
+    "description": "com.drake.serialize.serialize.SerializeHook.DEFAULT",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize-hook/-d-e-f-a-u-l-t/index.html",
+    "searchKeys": [
+      "DEFAULT",
+      "object DEFAULT : SerializeHook",
+      "com.drake.serialize.serialize.SerializeHook.DEFAULT"
+    ]
+  },
+  {
+    "name": "object Serialize",
+    "description": "com.drake.serialize.serialize.Serialize",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize/index.html",
+    "searchKeys": [
+      "Serialize",
+      "object Serialize",
+      "com.drake.serialize.serialize.Serialize"
+    ]
+  },
+  {
+    "name": "open fun <T> deserialize(name: String, type: Class<T>, bytes: ByteArray): Any?",
+    "description": "com.drake.serialize.serialize.SerializeHook.deserialize",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize-hook/deserialize.html",
+    "searchKeys": [
+      "deserialize",
+      "open fun <T> deserialize(name: String, type: Class<T>, bytes: ByteArray): Any?",
+      "com.drake.serialize.serialize.SerializeHook.deserialize"
+    ]
+  },
+  {
+    "name": "open fun <T> serialize(name: String, type: Class<T>, data: Any): ByteArray?",
+    "description": "com.drake.serialize.serialize.SerializeHook.serialize",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize-hook/serialize.html",
+    "searchKeys": [
+      "serialize",
+      "open fun <T> serialize(name: String, type: Class<T>, data: Any): ByteArray?",
+      "com.drake.serialize.serialize.SerializeHook.serialize"
+    ]
+  },
+  {
+    "name": "var hook: SerializeHook",
+    "description": "com.drake.serialize.serialize.Serialize.hook",
+    "location": "-serialize/com.drake.serialize.serialize/-serialize/hook.html",
+    "searchKeys": [
+      "hook",
+      "var hook: SerializeHook",
+      "com.drake.serialize.serialize.Serialize.hook"
+    ]
+  }
+]
