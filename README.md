@@ -20,8 +20,8 @@
 
 - 创建自动存储本地的字段(内部使用[MMKV](https://github.com/Tencent/MMKV))
 - 创建自动存储本地的LiveData可观察字段
-- 创新式使用双通道读写磁盘, 速度完爆sqlite/sp/mmkv. 完美解决ANR(主线程读写10w次)
-- 大数据对象磁盘读写就像内存读写一样快
+- 存储读写对象
+- 创新式使用双通道读写磁盘, 耗时大幅度低于SQLite/sp/mmkv, 完美解决ANR
 - 快捷跳转Activity/Fragment和参数传递
 - 创建自动注入Activity/Fragment参数的字段(支持可空类型)
 
@@ -57,7 +57,7 @@ dependencyResolutionManagement {
 然后在 module 的 build.gradle 添加依赖框架
 
 ```groovy
-implementation 'com.github.liangjingkanji:Serialize:1.3.2'
+implementation 'com.github.liangjingkanji:Serialize:2.0.0'
 ```
 
 <br>
