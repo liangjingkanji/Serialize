@@ -28,8 +28,8 @@ interface SerializeHook {
      * @return 存储字节数组, 如果返回null则将删除该字段
      */
     fun <T> serialize(name: String, type: Class<T>, data: Any): ByteArray? {
-        when (type) {
-            Parcelable::class.java -> {
+        when {
+            Parcelable::class.java.isAssignableFrom(type) -> {
                 val source = Parcel.obtain()
                 (data as Parcelable).writeToParcel(source, 0)
                 val bytes = source.marshall()
@@ -57,8 +57,8 @@ interface SerializeHook {
      * @return 反序列化后的对象, 如果返回null则将使用默认值(存在的话)
      */
     fun <T> deserialize(name: String, type: Class<T>, bytes: ByteArray): Any? {
-        when (type) {
-            Parcelable::class.java -> {
+        when {
+            Parcelable::class.java.isAssignableFrom(type) -> {
                 val source = Parcel.obtain()
                 source.unmarshall(bytes, 0, bytes.size)
                 source.setDataPosition(0)

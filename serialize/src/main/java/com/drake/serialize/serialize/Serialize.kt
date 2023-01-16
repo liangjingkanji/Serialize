@@ -27,7 +27,6 @@ object Serialize {
 //<editor-fold desc="写入">
 /**
  * 将键值数据序列化存储到磁盘
- * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 fun serialize(vararg params: Pair<String, Any?>) {
     val mmkv = MMKV.defaultMMKV()
@@ -52,7 +51,6 @@ fun MMKV.serialize(vararg params: Pair<String, Any?>) {
 //<editor-fold desc="读取">
 /**
  * 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null
- * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified T> deserialize(name: String): T {
     val mmkv = MMKV.defaultMMKV()
@@ -62,7 +60,6 @@ inline fun <reified T> deserialize(name: String): T {
 
 /**
  * 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值
- * @throws IllegalStateException MMKV.defaultMMKV() == null
  */
 inline fun <reified T> deserialize(name: String, defValue: T?): T {
     val mmkv = MMKV.defaultMMKV()
@@ -72,25 +69,23 @@ inline fun <reified T> deserialize(name: String, defValue: T?): T {
 
 /** 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null */
 inline fun <reified T> MMKV.deserialize(name: String): T {
-    val byteArray = decodeBytes(name) ?: return null as T
-    return Serialize.hook.deserialize(name, T::class.java, byteArray) as T
+    return deserialize(T::class.java, name)
 }
 
 /** 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值 */
 inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T {
-    val byteArray = decodeBytes(name) ?: return defValue as T
-    return (Serialize.hook.deserialize<T>(name, T::class.java, byteArray) ?: defValue) as T
+    return deserialize(T::class.java, name, defValue)
 }
 
 /** 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null */
 fun <T> MMKV.deserialize(type: Class<T>, name: String): T {
     val byteArray = decodeBytes(name) ?: return null as T
-    return Serialize.hook.deserialize<T>(name, type, byteArray) as T
+    return Serialize.hook.deserialize(name, type, byteArray) as T
 }
 
 /** 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值 */
 fun <T> MMKV.deserialize(type: Class<T>, name: String, defValue: T?): T {
     val byteArray = decodeBytes(name) ?: return defValue as T
-    return (Serialize.hook.deserialize<T>(name, type, byteArray) ?: defValue) as T
+    return (Serialize.hook.deserialize(name, type, byteArray) ?: defValue) as T
 }
 //</editor-fold>
