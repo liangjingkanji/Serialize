@@ -206,7 +206,7 @@ UserConfig.userData = userData
 
 ## Hook
 
-所有数据的序列化/反序列化都会经过`SerializeHook`接口处理, 所以你可以实现该接口来自定义属于自己的数据方案
+`SerializeHook`即处理字节数组/对象之间转换的接口(本地存储的都是字节数组, 但是代码中需要的是对象), 所有数据的序列化/反序列化都会经过`SerializeHook`接口处理, 所以你可以实现该接口来自定义属于自己的数据方案
 
 ```kotlin
 Serialize.hook = ProtobufSerializeHook()

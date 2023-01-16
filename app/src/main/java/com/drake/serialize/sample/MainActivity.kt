@@ -27,6 +27,7 @@ import com.drake.serialize.sample.databinding.ActivityMainBinding
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.serial
+import com.drake.serialize.serialize.serialLazy
 import com.drake.serialize.serialize.serialLiveData
 import com.drake.tooltip.toast
 import kotlin.system.measureTimeMillis
@@ -35,7 +36,7 @@ import kotlin.system.measureTimeMillis
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private var name: String by serial()
-    private var data: SerializableModel? by serial()
+    private var data: SerializableModel? by serialLazy()
     private var amount: String by serial("默认值", "自定义键名")
     private val liveData: MutableLiveData<String> by serialLiveData("默认值")
 
@@ -85,7 +86,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             // 读取100w次
             binding.cardBigRead -> {
                 val measureTimeMillis = measureTimeMillis {
-                    repeat(1000000) {
+                    repeat(100000) {
                         val name = data?.name ?: toast("本地没有数据可读, 请先写入")
                     }
                 }
@@ -94,7 +95,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             // 写入100w次
             binding.cardBigWrite -> {
                 val measureTimeMillis = measureTimeMillis {
-                    repeat(1000000) {
+                    repeat(100000) {
                         data = SerializableModel("第${it}次")
                     }
                 }

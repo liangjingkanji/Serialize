@@ -172,7 +172,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="100W 次读取"
+                            android:text="10W 次读取"
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
@@ -202,7 +202,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:gravity="center"
-                            android:text="100W 次写入"
+                            android:text="10W 次写入"
                             android:textSize="16dp"
                             android:textStyle="bold" />
 
