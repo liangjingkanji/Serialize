@@ -16,14 +16,14 @@
 
 package com.drake.serialize.sample
 
-import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import androidx.activity.viewModels
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import androidx.lifecycle.MutableLiveData
+import com.drake.engine.base.EngineActivity
 import com.drake.serialize.intent.openActivity
+import com.drake.serialize.sample.constant.AppConfig
 import com.drake.serialize.sample.databinding.ActivityMainBinding
-import com.drake.serialize.sample.model.MyViewModel
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.serial
@@ -32,68 +32,74 @@ import com.drake.tooltip.toast
 import kotlin.system.measureTimeMillis
 
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private var name: String by serial()
-    private var model: SerializableModel? by serial()
-    private var simple: String by serial("默认值", "自定义键名")
-    private val viewModel: MyViewModel by viewModels()
-    private val liveData by serialLiveData("默认值")
+    private var data: SerializableModel? by serial()
+    private var amount: String by serial("默认值", "自定义键名")
+    private val liveData: MutableLiveData<String> by serialLiveData("默认值")
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+    override fun initView() {
+        binding.v = this
+    }
 
+    override fun initData() {
+        // 监听本地数据变化
         liveData.observe(this) {
             toast("观察到本地数据: $it")
         }
+    }
 
-        // 可观察数据
-        binding.llObserve.setOnClickListener {
-            liveData.value = SystemClock.elapsedRealtime().toString()
-        }
-
-        binding.cardWriteField.setOnClickListener {
-            name = "https://github.com/liangjingkanji/Serialize"
-            toast("写入数据: $name 到磁盘")
-        }
-        binding.cardReadField.setOnClickListener {
-            toast("读取本地数据为: $name")
-        }
-        binding.cardOpenPage.setOnClickListener {
-            openActivity<TestActivity>(
-                "parcelize" to ParcelableModel(),
-                "parcelizeList" to listOf(ParcelableModel()),
-                "serialize" to SerializableModel(),
-                "serializeList" to listOf(SerializableModel()),
-                "intArray" to intArrayOf(1, 3, 4),
-            )
-            // MyFragment().withArguments("parcelize" to ParcelableModel()) // Fragment传递数据
-        }
-
-        binding.cardConfig.setOnClickListener {
-            Log.d("日志", "isFirstLaunch = ${AppConfig.isFirstLaunch}")
-            AppConfig.isFirstLaunch = false
-        }
-
-        // 读取100w次
-        binding.cardBigRead.setOnClickListener {
-            val measureTimeMillis = measureTimeMillis {
-                repeat(10000) {
-                    val name = model?.name ?: toast("本地没有数据可读, 请先写入")
-                }
+    override fun onClick(v: View) {
+        when (v) {
+            // 可观察本地数据
+            binding.llObserve -> {
+                liveData.value = SystemClock.elapsedRealtime().toString()
             }
-            binding.tvBigReadTime.text = "${measureTimeMillis}ms"
-        }
-        // 写入100w次
-        binding.cardBigWrite.setOnClickListener {
-            val measureTimeMillis = measureTimeMillis {
-                repeat(10000) {
-                    model = SerializableModel("第${it}次")
-                }
+            // 写入
+            binding.cardWriteField -> {
+                name = "https://github.com/liangjingkanji/Serialize"
+                toast("写入数据: $name 到磁盘")
             }
-            binding.tvBigWriteTime.text = "${measureTimeMillis}ms"
+            // 读取
+            binding.cardReadField -> {
+                toast("读取本地数据为: $name")
+            }
+            // 打开页面
+            binding.cardOpenPage -> {
+                // startActivity 同样可以传递数据
+                openActivity<ReceiveArgumentsActivity>(
+                    "serialize" to SerializableModel(),
+                    "serializeList" to listOf(SerializableModel(), SerializableModel()),
+                    "parcelize" to ParcelableModel(),
+                    "parcelizeList" to listOf(ParcelableModel(), ParcelableModel()),
+                    "intArray" to intArrayOf(1, 3, 4),
+                )
+                // ReceiveArgumentsFragment().withArguments("parcelize" to ParcelableModel()) // Fragment传递数据
+            }
+            // 应用配置数据
+            binding.cardConfig -> {
+                Log.d("日志", "isFirstLaunch = ${AppConfig.isFirstLaunch}")
+                AppConfig.isFirstLaunch = false
+            }
+            // 读取100w次
+            binding.cardBigRead -> {
+                val measureTimeMillis = measureTimeMillis {
+                    repeat(1000000) {
+                        val name = data?.name ?: toast("本地没有数据可读, 请先写入")
+                    }
+                }
+                binding.tvBigReadTime.text = "${measureTimeMillis}ms"
+            }
+            // 写入100w次
+            binding.cardBigWrite -> {
+                val measureTimeMillis = measureTimeMillis {
+                    repeat(1000000) {
+                        data = SerializableModel("第${it}次")
+                    }
+                }
+                binding.tvBigWriteTime.text = "${measureTimeMillis}ms"
+            }
         }
     }
 }

@@ -1,7 +1,9 @@
 快速在Activity/Fragment中传递和获取参数
 
 可以解决Java中存在的默认值问题. <br> 
-譬如Intent中传递一个Int值. 即使你没有传递该Int值也是0(这在Kotlin中是错误的行为). 没有传递值应当默认为null 
+譬如Intent中传递一个Int值. 即使你没有传递该Int值也是0(这在Kotlin中是错误的行为). 没有传递值应当默认为null
+
+> 前一章介绍的`SerializeHook`并不支持bundle()等方法
 
 ### 传递参数
 

@@ -11,7 +11,8 @@ import java.lang.reflect.Field
 /**
  * 序列化接口
  *
- * 实现该接口可以自定义序列化方式, 例如Json/ProtoBuf等数据协议存储, 亦或加密存储数据
+ * 接口默认实现支持读写实现[Serializable][Parcelable]接口对象或基础类型, 并支持其类型的集合/数组
+ * 实现该接口可以自定义序列化方式支持更多数据类型, 例如Json/ProtoBuf等数据协议存储, 亦或加密存储数据
  */
 interface SerializeHook {
 

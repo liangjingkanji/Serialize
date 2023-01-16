@@ -16,35 +16,34 @@
 
 package com.drake.serialize.sample
 
-import android.os.Bundle
-import android.util.Log
-import androidx.appcompat.app.AppCompatActivity
+import android.os.Parcelable
+import com.drake.engine.base.EngineActivity
 import com.drake.serialize.intent.bundle
-import com.drake.serialize.intent.bundleLazy
-import com.drake.serialize.sample.model.Model
+import com.drake.serialize.sample.databinding.ActivityReceiveArgumentsBinding
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 
-class TestActivity : AppCompatActivity(R.layout.activity_test) {
+class ReceiveArgumentsActivity : EngineActivity<ActivityReceiveArgumentsBinding>(R.layout.activity_receive_arguments) {
 
-    /** Fragment也是这样接受数据 */
+    /**
+     * Fragment使用方法一样
+     * bundle等方法仅[com.drake.serialize.serialize.SerializeHook]自定义序列化
+     * 仅支持实现[Serializable][Parcelable]接口对象或基础类型, 并支持其类型的集合/数组
+     */
     private val parcelize: ParcelableModel? by bundle()
     private val parcelizeList: ArrayList<ParcelableModel>? by bundle()
     private val serialize: SerializableModel? by bundle()
     private val serializeList: ArrayList<SerializableModel>? by bundle()
     private val intArray: IntArray? by bundle()
-    private val modelList: List<Model>? by bundle()
-    private val model: Model? by bundleLazy { Model("延迟初始化默认值") }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        val serialize: SerializableModel? by bundle()
-        Log.d("日志", "parcelize = $parcelize")
-        Log.d("日志", "parcelizeList = $parcelizeList")
-        Log.d("日志", "serialize = $serialize")
-        Log.d("日志", "serializeList = $serializeList")
-        Log.d("日志", "intArrayOf = ${intArray?.get(0)}")
-        Log.d("日志", "modelList = ${modelList?.get(0)}")
-        Log.d("日志", "model = $model")
+    override fun initView() {
+    }
+
+    override fun initData() {
+        binding.tvReceiveArguments.text = "parcelize = $parcelize" +
+                "\nparcelizeList = $parcelizeList" +
+                "\nserialize = $serialize" +
+                "\nserializeList = $serializeList" +
+                "\nintArrayOf = ${intArray?.get(0)}"
     }
 }

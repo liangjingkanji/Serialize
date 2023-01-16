@@ -18,6 +18,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <data>
+
+        <variable
+            name="v"
+            type="com.drake.serialize.sample.MainActivity" />
+
+    </data>
 
     <ScrollView
         android:layout_width="match_parent"
@@ -32,6 +39,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/cardWriteField"
+                click="@{v}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:background="@drawable/bg_card_shadow"
@@ -53,6 +61,7 @@
 
             <androidx.appcompat.widget.LinearLayoutCompat
                 android:id="@+id/cardReadField"
+                click="@{v}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginLeft="20dp"
@@ -85,6 +94,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardOpenPage"
+                    click="@{v}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_card_shadow"
@@ -103,7 +113,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="使用openActivity快速打开界面并传递任何可序列化数据 \n使用MyFragment().withArgument()可以传递数据给Fragment \n目标界面创建字段自动接受传递的数据"
+                        android:text="简化页面数据传递\nval flag: Int by bundle() 自动注入数据"
                         android:textColor="@color/textDescription"
                         android:textSize="12dp"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -114,6 +124,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/cardConfig"
+                    click="@{v}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -124,7 +135,7 @@
                         android:id="@+id/tv2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="应用数据配置"
+                        android:text="应用配置数据"
                         android:textStyle="bold"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -133,7 +144,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="4dp"
-                        android:text="创建一个单例对象可以直接操作本地字段(自动映射到本地磁盘), 就像全局变量一样简单!"
+                        android:text="创建单例对象直接读写(自动映射到本地磁盘), \n就像全局变量字段一样简单!"
                         android:textColor="@color/textDescription"
                         android:textSize="12dp"
                         app:layout_constraintLeft_toLeftOf="parent"
@@ -149,6 +160,7 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/cardBigRead"
+                        click="@{v}"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_weight="1"
@@ -177,6 +189,7 @@
 
                     <androidx.appcompat.widget.LinearLayoutCompat
                         android:id="@+id/cardBigWrite"
+                        click="@{v}"
                         android:layout_width="0dp"
                         android:layout_height="match_parent"
                         android:layout_marginLeft="10dp"
@@ -208,6 +221,7 @@
 
                 <androidx.appcompat.widget.LinearLayoutCompat
                     android:id="@+id/llObserve"
+                    click="@{v}"
                     android:layout_width="match_parent"
                     android:layout_height="100dp"
                     android:layout_marginTop="10dp"

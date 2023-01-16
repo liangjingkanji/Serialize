@@ -1,9 +1,9 @@
-通常一般键值数据我们使用SharePreference存储, 但是这样很麻烦且性能低.
+通常一般键值数据我们使用SharePreference存储, 但是无法存储对象, 且麻烦和耗时性能低下
 
 为什么字段只能存在于内存中而不是直接映射到本地磁盘呢? 这个时候就可以使用本库的序列化功能创建一个`存在于磁盘的字段`. <br>
 他的赋值和读值都会映射到磁盘中(这在程序编码中称为序列化)
 
-> 请一定要阅读文章最后一章: [字段增删](#_10). 以保证数据安全性
+> 请一定要阅读文章最后一章: [字段增删迁移](#_10). 以保证数据安全性
 
 ## 使用
 
@@ -51,16 +51,28 @@ private var newMessage :Boolean by serial(name = "new_message_$userId")
 > 比如`com.drake.serialize.sample.MainActivity.name`
 
 
+### 使用函数读写
+直接通过函数手动存储键值. 无需创建字段.
+
+```kotlin
+serialize("name" to "吴彦祖") // 写
+
+val name:String = deserialize("name") // 读
+val nameB:String = deserialize("name", "默认值") // 假设读取失败返回默认值
+```
+
 
 ## 支持类型
 基本上支持任何类型, 故非关系型数据推荐直接使用Serialize而不是数据库存储
 
 | 类型 | 描述 |
 |-|-|
-| 任何集合 | 集合的泛型自己注意匹配正确, 否则会get时抛出`ClassCastException`类型转换异常, 官方也是如此 |
 | 任何基础类型 | 基础类型如果在不指定默认值情况下读取不到会返回Null(如果你字段不是可空类型(即`?`)则会引发崩溃), 为符合Kotlin而设计 |
 | Serializable | 实现Serializable的类 |
 | Parcelable |  实现Parcelable的类 |
+| 以上类型的集合/数组 | 集合的泛型自己注意匹配正确, 否则会get时抛出`ClassCastException`类型转换异常, 官方也是如此 |
+
+> 如果想支持更多类型请实现`SerializeHook`接口自定义, 可以参考项目中的`JsonSerializeHook/ProtobufSerializeHook`
 
 ## 可空字段
 
@@ -95,17 +107,6 @@ private var model: ModelSerializable by serialLazy() // 懒加载
 ```
 > 重新赋值字段还是会同时更新内存和磁盘中的值
 
-
-
-## 使用函数读写
-直接通过函数手动存储键值. 无需创建字段.
-
-```kotlin
-serialize("name" to "吴彦祖") // 写
-
-val name:String = deserialize("name") // 读
-val nameB:String = deserialize("name", "默认值") // 假设读取失败返回默认值
-```
 
 ## 数据类
 
@@ -177,59 +178,6 @@ AppConfig.isFirstLaunch
     MMKV.defaultMMKV()?.clearAll()
     ```
 
-## 对象新增字段
-如果你存储对象到磁盘中, 那么就需要注意如果对象后面新增或者删除某个字段可能会导致无法读取原有对象
-
-### Serializable
-
-- 创建一个伴生对象字段`serialVersionUUID`可解决该问题<br>
-- 但是新增的字段默认值将为零值而不是你声明的默认值(比如String为null/Int为0) <br>
-- 可以在IDE的Plugins搜索 `Kotlin serialVersionUID generator` 安装插件快捷键自动生成唯一的UUID
-
-```kotlin
-data class SerializableModel(var name: String = "ModelSerializable", var age:Int = 11) : Serializable {
-    companion object {
-        private const  val serialVersionUID = -7L
-    }
-}
-```
-
-### Parcelable
-如果Serializable新增字段如果有默认值. 实际上并不会生效. 这个时候建议实现Parcelable而不是Serializable. 其可以保证默认值效果
-```kotlin
-data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable {
-
-    constructor(parcel: Parcel) : this(parcel.readString() ?: "ModelParcelable") // 读取空则赋值默认值
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<ParcelableModel> {
-        override fun createFromParcel(parcel: Parcel): ParcelableModel {
-            return ParcelableModel(parcel)
-        }
-
-        override fun newArray(size: Int): Array<ParcelableModel?> {
-            return arrayOfNulls(size)
-        }
-    }
-}
-```
-将光标放到`Parcelable`类名上使用Alt+Enter可以快速实现(Add Parcelable Implementation)
-
-
-### 包名/类名/字段名变更
-包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名). 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
-
-```kotlin
-private var name: String by serial(name = "unique_name")
-```
-
 ## 覆盖值
 
 示例
@@ -254,4 +202,31 @@ UserConfig.userData = UserConfig.userData
 val userData = UserConfig.userData
 userData.name = "new name"
 UserConfig.userData = userData
+```
+
+## 字段增删迁移
+Q: 如果你存储对象到磁盘中, 那么就需要注意如果对象后面增删某个字段可能会导致无法读取原有对象(这是官方问题非本框架限制)
+<br>
+A: 解决办法就是自定义实现`SerializeHook`, 使用Json/Protobuf等序列化框架实现数据存储
+
+<br>
+下面如果没有自定义实现`SerializeHook`导致的`Serializable/Parcelable`问题
+
+### Serializable
+
+1. 创建一个伴生对象字段`serialVersionUUID`(可以安装插件自动生成)可解决该问题
+2. 但是新增的字段默认值将为零值而不是你声明的默认值(比如String为null/Int为0)
+
+### Parcelable
+
+1. 新增字段读取旧数据时如果字段非可空?会导致崩溃
+2. 字段顺序被打乱会导致读取
+3. 将光标放到`Parcelable`类名上使用Alt+Enter可以快速实现(Add Parcelable Implementation)
+
+
+### 包名/类名/字段名变更
+包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名), 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
+
+```kotlin
+private var name: String by serial(name = "unique_name")
 ```

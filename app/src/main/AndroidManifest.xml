@@ -26,7 +26,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Store">
-        <activity android:name="com.drake.serialize.sample.TestActivity" />
+        <activity android:name="com.drake.serialize.sample.ReceiveArgumentsActivity" />
         <activity android:name="com.drake.serialize.sample.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

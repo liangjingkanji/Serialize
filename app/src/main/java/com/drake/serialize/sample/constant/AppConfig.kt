@@ -1,4 +1,4 @@
-package com.drake.serialize.sample
+package com.drake.serialize.sample.constant
 
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.serial

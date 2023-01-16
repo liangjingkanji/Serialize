@@ -16,5 +16,8 @@
 
 package com.drake.serialize.sample.model
 
-/** 数据模型 */
-data class Model(var name: String = "Model")
+/**
+ * 数据模型, 演示Fragment/Activity间传递数据
+ */
+@kotlinx.serialization.Serializable
+data class BundleModel(var name: String = "Model")
