@@ -147,30 +147,14 @@ fun Intent.singleTop(): Intent = apply { addFlags(Intent.FLAG_ACTIVITY_SINGLE_TO
 
 // <editor-fold desc="意图">
 
-@Deprecated("规范命名", ReplaceWith("intentOf"))
-inline fun <reified T : Any> Context.intentFor(vararg params: Pair<String, Any?>): Intent =
-    intentOf<T>(*params)
-
 inline fun <reified T : Any> Context.intentOf(vararg params: Pair<String, Any?>): Intent {
     val intent = Intent(this, T::class.java)
     if (params.isNotEmpty()) intent.withArguments(*params)
     return intent
 }
 
-@Deprecated("规范命名", ReplaceWith("intentOf"))
-inline fun <reified T : Any> Fragment.intentFor(vararg params: Pair<String, Any?>): Intent =
-    context?.intentOf<T>(*params) ?: Intent()
-
 inline fun <reified T : Any> Fragment.intentOf(vararg params: Pair<String, Any?>): Intent =
     context?.intentOf<T>(*params) ?: Intent()
-
-
-@Deprecated("规范命名", ReplaceWith("intentOf"))
-inline fun <reified T> Context.createIntent(vararg params: Pair<String, Any?>): Intent {
-    val intent = Intent(this, T::class.java)
-    if (params.isNotEmpty()) intent.withArguments(*params)
-    return intent
-}
 
 fun <T : Fragment> T.withArguments(vararg params: Pair<String, Any?>): T {
     arguments = bundleOf(*params)

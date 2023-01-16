@@ -38,6 +38,5 @@ markdown_extensions:
 nav:
   - 序列化: index.md
   - 页面传递参数: arguments.md
-  - 常用Intent: intent.md
   - 更新日志: updates.md
   - 1.x文档: api/index.html

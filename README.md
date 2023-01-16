@@ -24,9 +24,6 @@
 - 大数据对象磁盘读写就像内存读写一样快
 - 快捷跳转Activity/Fragment和参数传递
 - 创建自动注入Activity/Fragment参数的字段(支持可空类型)
-- 创建意外销毁自动保存/恢复的字段(ViewModel)
-- 快捷打开意图
-
 
 
 <br>
