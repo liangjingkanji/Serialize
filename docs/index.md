@@ -72,7 +72,7 @@ val nameB:String = deserialize("name", "默认值") // 假设读取失败返回�
 | Parcelable |  实现Parcelable的类 |
 | 以上类型的集合/数组 | 集合的泛型自己注意匹配正确, 否则会get时抛出`ClassCastException`类型转换异常, 官方也是如此 |
 
-> 如果想支持更多类型请实现`SerializeHook`接口自定义, 可以参考项目中的`JsonSerializeHook/ProtobufSerializeHook`
+> 如果想支持更多类型请实现`SerializeHook`接口自定义
 
 ## 可空字段
 
@@ -204,6 +204,22 @@ userData.name = "new name"
 UserConfig.userData = userData
 ```
 
+## Hook
+
+所有数据的序列化/反序列化都会经过`SerializeHook`接口处理, 所以你可以实现该接口来自定义属于自己的数据方案
+
+```kotlin
+Serialize.hook = ProtobufSerializeHook()
+```
+
+例如以下处理
+
+1. 使用Json等方式序列化数据
+1. 支持读写更多数据类型
+1. 加密数据
+
+> 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/tree/f8d41ea47edd8ea64700a3d709a870791ac50489/app/src/main/java/com/drake/serialize/sample/hook)
+
 ## 字段增删迁移
 Q: 如果你存储对象到磁盘中, 那么就需要注意如果对象后面增删某个字段可能会导致无法读取原有对象(这是官方问题非本框架限制)
 <br>
@@ -230,3 +246,15 @@ A: 解决办法就是自定义实现`SerializeHook`, 使用Json/Protobuf等序�
 ```kotlin
 private var name: String by serial(name = "unique_name")
 ```
+
+## 迁移旧数据
+
+1. 本框架基于MMKV封装, 所以不存在迁移问题
+
+2. 如果你以前使用的SharedPreferences, 你可以使用MMKV迁移方法即可
+
+    ```kotlin
+    MMKV.defaultMMKV().importFromSharedPreferences(getSharedPreferences("sp", MODE_PRIVATE))
+    ```
+
+更多数据迁移需求请实现`SerializeHook`接口来自定义
