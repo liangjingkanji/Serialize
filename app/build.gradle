@@ -24,13 +24,21 @@ plugins {
 android {
     compileSdkVersion 30
 
+    signingConfigs {
+        signed {
+            storeFile file("../signed")
+            storePassword "s73dfyUxkjuq"
+            keyAlias "key0"
+            keyPassword "s73dfyUxkjuq"
+        }
+    }
     defaultConfig {
         applicationId "com.drake.serialize.sample"
         minSdkVersion 19
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
-
+        signingConfig signingConfigs.signed
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
