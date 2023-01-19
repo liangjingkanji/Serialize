@@ -1,5 +1,7 @@
 package com.drake.serialize.serialize.delegate
 
+import com.drake.serialize.serialize.Serialize
+import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.deserialize
 import com.drake.serialize.serialize.serialize
 import com.tencent.mmkv.MMKV
@@ -17,21 +19,30 @@ internal class SerialLazyDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
     private val name: String?,
-    private val kv: MMKV
+    private val kv: MMKV?
 ) : ReadWriteProperty<Any, V> {
     @Volatile
     private var value: V? = null
 
+    private fun mmkvWithConfig(thisRef: Any): MMKV {
+        val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
+        return if (config != null) {
+            val cryptKey = config.cryptKey.ifEmpty { null }
+            MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
+        } else {
+            kv ?: Serialize.mmkv
+        }
+    }
+
     override fun getValue(thisRef: Any, property: KProperty<*>): V = synchronized(this) {
         if (value == null) {
-            value = run {
-                val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-                if (default == null) {
-                    kv.deserialize(type, key)
-                } else {
-                    kv.deserialize(type, key, default)
-                }
+            val mmkv = mmkvWithConfig(thisRef)
+            val name = if (mmkv == Serialize.mmkv) {
+                name ?: property.name
+            } else {
+                thisRef::class.java.name + "." + (name ?: property.name)
             }
+            value = mmkv.deserialize(type, name, default)
         }
         value as V
     }
@@ -40,8 +51,13 @@ internal class SerialLazyDelegate<V>(
         this.value = value
         //写入本地在子线程处理，单一线程保证了写入顺序
         taskExecutor.execute {
-            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-            kv.serialize(key to value)
+            val mmkv = mmkvWithConfig(thisRef)
+            val name = if (mmkv == Serialize.mmkv) {
+                name ?: property.name
+            } else {
+                thisRef::class.java.name + "." + (name ?: property.name)
+            }
+            mmkv.serialize(name to value)
         }
     }
 

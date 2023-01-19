@@ -26,6 +26,7 @@ import com.drake.serialize.sample.constant.AppConfig
 import com.drake.serialize.sample.databinding.ActivityMainBinding
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
+import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialLazy
 import com.drake.serialize.serialize.serialLiveData
@@ -33,6 +34,7 @@ import com.drake.tooltip.toast
 import kotlin.system.measureTimeMillis
 
 
+@SerializeConfig(mmapID = "main")
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private var name: String by serial()

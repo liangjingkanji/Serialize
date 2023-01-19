@@ -20,8 +20,11 @@ import com.tencent.mmkv.MMKV
 
 
 object Serialize {
-    /** 序列化接口 */
+    /** 全局序列化/反序列化接口 */
     var hook: SerializeHook = SerializeHook
+
+    /** 全局mmkv实例 */
+    var mmkv: MMKV = MMKV.defaultMMKV()
 }
 
 //<editor-fold desc="写入">
@@ -29,9 +32,7 @@ object Serialize {
  * 将键值数据序列化存储到磁盘
  */
 fun serialize(vararg params: Pair<String, Any?>) {
-    val mmkv = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
-    mmkv.serialize(*params)
+    Serialize.mmkv.serialize(*params)
 }
 
 /**
@@ -50,41 +51,19 @@ fun MMKV.serialize(vararg params: Pair<String, Any?>) {
 
 //<editor-fold desc="读取">
 /**
- * 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null
- */
-inline fun <reified T> deserialize(name: String): T {
-    val mmkv = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
-    return mmkv.deserialize(name)
-}
-
-/**
  * 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值
  */
-inline fun <reified T> deserialize(name: String, defValue: T?): T {
-    val mmkv = MMKV.defaultMMKV()
-        ?: throw IllegalStateException("MMKV.defaultMMKV() == null, handle == 0 ")
-    return mmkv.deserialize(name, defValue)
-}
-
-/** 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null */
-inline fun <reified T> MMKV.deserialize(name: String): T {
-    return deserialize(T::class.java, name)
+inline fun <reified T> deserialize(name: String, defValue: T? = null): T {
+    return Serialize.mmkv.deserialize(name, defValue)
 }
 
 /** 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值 */
-inline fun <reified T> MMKV.deserialize(name: String, defValue: T?): T {
-    return deserialize(T::class.java, name, defValue)
+inline fun <reified T> MMKV.deserialize(name: String, defValue: T? = null): T {
+    return (deserialize(T::class.java, name) ?: defValue) as T
 }
 
 /** 根据[name]读取磁盘数据, 即使读取的是基础类型磁盘不存在的话也会返回null */
-fun <T> MMKV.deserialize(type: Class<T>, name: String): T {
-    val byteArray = decodeBytes(name) ?: return null as T
-    return Serialize.hook.deserialize(name, type, byteArray) as T
-}
-
-/** 根据[name]读取磁盘数据, 假设磁盘没有则返回[defValue]指定的默认值 */
-fun <T> MMKV.deserialize(type: Class<T>, name: String, defValue: T?): T {
+fun <T> MMKV.deserialize(type: Class<T>, name: String, defValue: T? = null): T {
     val byteArray = decodeBytes(name) ?: return defValue as T
     return (Serialize.hook.deserialize(name, type, byteArray) ?: defValue) as T
 }

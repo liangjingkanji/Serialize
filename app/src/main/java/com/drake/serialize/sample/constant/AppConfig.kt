@@ -1,6 +1,7 @@
 package com.drake.serialize.sample.constant
 
 import com.drake.serialize.sample.model.SerializableModel
+import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.serial
 import com.drake.serialize.serialize.serialLazy
 
@@ -9,6 +10,7 @@ import com.drake.serialize.serialize.serialLazy
  * 在某些场景下比数据库更方便(支持集合/主线程读取)
  * 比SharePreference更快速(内部使用MMKV开源库)
  */
+@SerializeConfig(mmapID = "app_config") // 指定mmapID可以避免重命名当前类名或者改变包名导致无法读取旧值
 object AppConfig {
 
     /** 懒读取, 每次写入都会更新内存/磁盘, 但是读取仅第一次会读取磁盘, 后续一直使用内存中, 有效减少ANR */

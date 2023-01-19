@@ -3,7 +3,7 @@
 为什么字段只能存在于内存中而不是直接映射到本地磁盘呢? 这个时候就可以使用本库的序列化功能创建一个`存在于磁盘的字段`. <br>
 他的赋值和读值都会映射到磁盘中(这在程序编码中称为序列化)
 
-> 请一定要阅读文章最后一章: [字段增删迁移](#_10). 以保证数据安全性
+> 请一定要阅读文章最后一章: [无法读取旧值](#_10). 以保证数据安全性
 
 ## 使用
 
@@ -26,18 +26,23 @@ class App : Application() {
 ```
 
 ```kotlin
-private var name: String by serial()
+@SerializeConfig(mmapID = "app_config") // 指定name可以避免重命名当前类名或者改变包名导致无法读取旧值
+object AppConfig {
+    private var name: String by serial()
 
-// 第一个参数是默认值, 第二个是键名(默认使用的是字段名称作为存储时的键名)
-private var simple: String by serial("默认值", "自定义键名")
+    // 第一个参数是默认值, 第二个是键名(默认使用的是字段名称作为存储时的键名)
+    private var simple: String by serial("默认值", "自定义键名")
+
+    private var name: String by serial(kv = MMKV.mmkvWithID("User"))
+}
 ```
 
 之后这个字段读写都会自动读取和写入到本地磁盘
 
 ```kotlin
-name = "吴彦祖" // 写入到本地磁盘
+AppConfig.name = "吴彦祖" // 写入到本地磁盘
 
-Log.d("日志", "name = ${name}") // 读取自本地磁盘
+Log.d("日志", "name = ${AppConfig.name}") // 读取自本地磁盘
 ```
 
 动态键名, 即键名包含变量
@@ -47,23 +52,25 @@ private var userId :String by serialLazy()
 private var newMessage :Boolean by serial(name = "new_message_$userId")
 ```
 
-> 不同类创建同名的序列化字段在本地磁盘中属于不同数据, 实际存储使用的名称为: `"${全类名}.${你指定的键名}"` <br>
-> 比如`com.drake.serialize.sample.MainActivity.name`
+> 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field` <br>
+> 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值 <br>
 
 
 ### 使用函数读写
-直接通过函数手动存储键值. 无需创建字段.
+直接通过函数手动存储键值, 无需创建字段
 
 ```kotlin
 serialize("name" to "吴彦祖") // 写
 
 val name:String = deserialize("name") // 读
 val nameB:String = deserialize("name", "默认值") // 假设读取失败返回默认值
+val nameC:String = MMKV.mmkvWithID("User").deserialize("name") // 指定mmapID/数据隔离
 ```
 
 
-## 支持类型
-基本上支持任何类型, 故非关系型数据推荐直接使用Serialize而不是数据库存储
+## 数据类型
+
+支持存储类型取决于`SerializeHook`, 如果你没有自定义SerializeHook那么仅支持以下类型(建议自定义实现)
 
 | 类型 | 描述 |
 |-|-|
@@ -72,7 +79,6 @@ val nameB:String = deserialize("name", "默认值") // 假设读取失败返回�
 | Parcelable |  实现Parcelable的类 |
 | 以上类型的集合/数组 | 集合的泛型自己注意匹配正确, 否则会get时抛出`ClassCastException`类型转换异常, 官方也是如此 |
 
-> 如果想支持更多类型请实现`SerializeHook`接口自定义
 
 ## 可空字段
 
@@ -98,43 +104,20 @@ liveData.observe(this) {
 }
 ```
 ## 懒加载
-懒加载即只在第一次读取字段的时候才会从本地磁盘读取, 后续都是从内存读取. 完美解决ANR. 主线程上亿次读写都没问题.
+懒加载即只在第一次读取字段的时候才会从本地磁盘读取, 后续都是从内存读取. 但不支持跨进程(以及手动读写)
 
-这是为了避免反复从磁盘读取造成性能耗时. 使用场景譬如是否第一次启动应用/频繁读取的用户Id.
+这是为了避免反复从磁盘读取造成性能耗时. 使用场景譬如是否第一次启动应用/频繁读取的用户ID
 
 ```kotlin
 private var model: ModelSerializable by serialLazy() // 懒加载
 ```
-> 重新赋值字段还是会同时更新内存和磁盘中的值
-
-
-## 数据类
-
-每个应用可能都存在存储应用配置的本地数据, 这里非常推荐使用Serialize. 关系型数据/列表数据/大体积数据还是推荐使用数据库完成
-
-由于每个类拥有的`序列化字段`并不是共用同一份数据. 那么当我们想要在任何地方访问本地同一数据则应当使用以下方式
-
-1. 创建`object`单例类
-2. 使用函数序列化(上面已介绍)
-
-<br>
-创建单例类
-
-```kotlin
-object AppConfig {
-   var isFirstLaunch:String? by serial()
-}
-```
-
-使用
-
-```kotlin
-AppConfig.isFirstLaunch
-```
+> 重新赋值字段会同时更新内存和磁盘中的值
 
 ## 指定存储目录/日志等级
 
-如果需要自定义所有序列化字段默认的存储目录或者日志输出等级, 使用MMKV进行初始化(可选操作).
+默认情况下，MMKV 将文件存储在`$(FilesDir)/mmkv/`. App启动时可以自定义MMKV的根目录
+
+如果需要自定义所有序列化字段默认的存储目录或者日志输出等级, 使用MMKV方法来指定
 
 === "全局默认"
     ```kotlin
@@ -145,17 +128,6 @@ AppConfig.isFirstLaunch
             MMKV.initialize(cacheDir.absolutePath, MMKVLogLevel.LevelInfo) // 参数1是设置路径路径字符串, [LevelNone] 即不输出日志
         }
     }
-    ```
-
-=== "指定字段"
-    ```kotlin
-    private var name: String by serial(kv = MMKV.mmkvWithID("User"))
-    ```
-
-=== "手动序列化"
-    ```kotlin
-    MMKV.mmkvWithID("User").serialize("name" to "吴彦祖")
-    MMKV.mmkvWithID("User").deserialize("name")
     ```
 
 ## 清除数据
@@ -178,7 +150,38 @@ AppConfig.isFirstLaunch
     MMKV.defaultMMKV()?.clearAll()
     ```
 
-## 覆盖值
+## 自定义序列化
+
+`SerializeHook`即处理字节数组/对象之间转换的接口(本地存储的都是字节数组, 但是代码中需要的是对象), 所有数据的序列化/反序列化都会经过`SerializeHook`接口处理, 所以你可以实现该接口来自定义属于自己的数据方案
+
+```kotlin
+Serialize.hook = ProtobufSerializeHook()
+```
+
+例如以下处理
+
+1. 使用Json等方式序列化数据
+1. 支持读写更多数据类型
+
+> 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/tree/f8d41ea47edd8ea64700a3d709a870791ac50489/app/src/main/java/com/drake/serialize/sample/hook)
+> mmkv默认支持加密, 请自行搜索
+
+## 单例配置
+
+前面介绍的AppConfig即为类注解`@SerializeConfig`来实现其所有`serial**()`字段的[MMKV实例配置](https://github.com/Tencent/MMKV/wiki/android_advance)
+
+配置该注解可以避免包/类名称发生变化后导致读不到旧值, 因为mmapID会隔离数据, 也不会存在使用默认mmkv实例情况下的使用`全路径类名.字段名`这种规则来存储数据
+
+```kotlin
+@SerializeConfig(mmapID = "app_config")
+object AppConfig {
+    var isFirstLaunch: Boolean by serial()
+}
+```
+
+## 无法读取旧值
+
+### 赋值无效
 
 示例
 ```kotlin
@@ -204,50 +207,39 @@ userData.name = "new name"
 UserConfig.userData = userData
 ```
 
-## Hook
+### Serializable/Parcelable
 
-`SerializeHook`即处理字节数组/对象之间转换的接口(本地存储的都是字节数组, 但是代码中需要的是对象), 所有数据的序列化/反序列化都会经过`SerializeHook`接口处理, 所以你可以实现该接口来自定义属于自己的数据方案
-
-```kotlin
-Serialize.hook = ProtobufSerializeHook()
-```
-
-例如以下处理
-
-1. 使用Json等方式序列化数据
-1. 支持读写更多数据类型
-1. 加密数据
-
-> 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/tree/f8d41ea47edd8ea64700a3d709a870791ac50489/app/src/main/java/com/drake/serialize/sample/hook)
-
-## 字段增删迁移
 Q: 如果你存储对象到磁盘中, 那么就需要注意如果对象后面增删某个字段可能会导致无法读取原有对象(这是官方问题非本框架限制)
 <br>
 A: 解决办法就是自定义实现`SerializeHook`, 使用Json/Protobuf等序列化框架实现数据存储
 
 <br>
-下面如果没有自定义实现`SerializeHook`导致的`Serializable/Parcelable`问题
+但如果没有自定义实现`SerializeHook`默认只支持`Serializable/Parcelable`对象存储, 就会存在以下问题
 
-### Serializable
 
-1. 创建一个伴生对象字段`serialVersionUUID`(可以安装插件自动生成)可解决该问题
-2. 但是新增的字段默认值将为零值而不是你声明的默认值(比如String为null/Int为0)
+Serializable 问题
 
-### Parcelable
+1. 增删字段导致读取失败(伴生对象字段`serialVersionUUID`(可以安装插件自动生成)可解决该问题)
+2. 但是新增的字段默认值将为零值或null而不是你声明的默认值(比如String为null/Int为0)
+
+Parcelable 问题
 
 1. 新增字段读取旧数据时如果字段非可空?会导致崩溃
-2. 字段顺序被打乱会导致读取
-3. 将光标放到`Parcelable`类名上使用Alt+Enter可以快速实现(Add Parcelable Implementation)
+2. 字段顺序被打乱会导致读取失败
 
+### 包/类/字段名变更
 
-### 包名/类名/字段名变更
-包名/类名/字段名变更都会导致本地序列化对象的字段key变更(因为默认key名称生成原则就是全路径类名+字段名), 导致无法读取上次打开应用存储的旧值, 除非手动指定字段key
+默认情况下最终存储key为`全路径类名.字段名`, 例如 `com.example.Class.field`, 但使用`@SerializeConfig`注解指定mmapID后会隔离数据,
+最终存储key会直接使用name或字段名`, 所以请注意如果不指定配置mmapID或字段名情况下重命名包/类/字段名称可能会导致无法读取旧值
 
 ```kotlin
-private var name: String by serial(name = "unique_name")
+@SerializeConfig(mmapID = "app_config") // 指定mmapID可以避免重命名当前类名或者改变包名导致无法读取旧值
+object AppConfig {
+    var userId: String by serialLazy(name="user_id") // 指定name可以避免重命名当前字段导致无法读取旧值
+}
 ```
 
-## 迁移旧数据
+### 迁移旧数据
 
 1. 本框架基于MMKV封装, 所以不存在迁移问题
 

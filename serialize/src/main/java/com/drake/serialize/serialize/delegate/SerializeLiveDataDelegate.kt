@@ -1,6 +1,8 @@
 package com.drake.serialize.serialize.delegate
 
 import androidx.lifecycle.MutableLiveData
+import com.drake.serialize.serialize.Serialize
+import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.deserialize
 import com.drake.serialize.serialize.serialize
 import com.tencent.mmkv.MMKV
@@ -18,21 +20,32 @@ internal class SerializeLiveDataDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
     private val name: String?,
-    private val kv: MMKV,
+    private val kv: MMKV?,
 ) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
 
     private lateinit var thisRef: Any
     private lateinit var property: KProperty<*>
 
+    private fun mmkvWithConfig(thisRef: Any): MMKV {
+        val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
+        return if (config != null) {
+            val cryptKey = config.cryptKey.ifEmpty { null }
+            MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
+        } else {
+            kv ?: Serialize.mmkv
+        }
+    }
+
     override fun getValue(): V? = synchronized(this) {
         var value = super.getValue()
         if (value == null) {
-            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-            value = if (default == null) {
-                kv.deserialize(type, key)
+            val mmkv = mmkvWithConfig(thisRef)
+            val name = if (mmkv == Serialize.mmkv) {
+                name ?: property.name
             } else {
-                kv.deserialize(type, key, default)
+                thisRef::class.java.name + "." + (name ?: property.name)
             }
+            value = mmkv.deserialize(type, name, default)
         }
         value
     }
@@ -63,8 +76,13 @@ internal class SerializeLiveDataDelegate<V>(
     /** 写入本地在子线程处理，单一线程保证了写入顺序 */
     private fun asyncSerialize(value: V) {
         taskExecutor.execute {
-            val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-            kv.serialize(key to value)
+            val mmkv = mmkvWithConfig(thisRef)
+            val name = if (mmkv == Serialize.mmkv) {
+                name ?: property.name
+            } else {
+                thisRef::class.java.name + "." + (name ?: property.name)
+            }
+            mmkv.serialize(name to value)
         }
     }
 

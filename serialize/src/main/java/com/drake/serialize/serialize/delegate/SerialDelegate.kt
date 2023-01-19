@@ -1,5 +1,7 @@
 package com.drake.serialize.serialize.delegate
 
+import com.drake.serialize.serialize.Serialize
+import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.deserialize
 import com.drake.serialize.serialize.serialize
 import com.tencent.mmkv.MMKV
@@ -14,21 +16,37 @@ internal class SerialDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
     private val name: String?,
-    private val kv: MMKV
+    private val kv: MMKV?
 ) : ReadWriteProperty<Any, V> {
 
-    override fun getValue(thisRef: Any, property: KProperty<*>): V {
-        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-        return if (default == null) {
-            kv.deserialize(type, key)
+    private fun mmkvWithConfig(thisRef: Any): MMKV {
+        val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
+        return if (config != null) {
+            val cryptKey = config.cryptKey.ifEmpty { null }
+            MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
         } else {
-            kv.deserialize(type, key, default)
+            kv ?: Serialize.mmkv
         }
     }
 
+    override fun getValue(thisRef: Any, property: KProperty<*>): V {
+        val mmkv = mmkvWithConfig(thisRef)
+        val name = if (mmkv == Serialize.mmkv) {
+            name ?: property.name
+        } else {
+            thisRef::class.java.name + "." + (name ?: property.name)
+        }
+        return mmkv.deserialize(type, name, default)
+    }
+
     override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
-        val key = "${thisRef.javaClass.name}.${name ?: property.name}"
-        kv.serialize(key to value)
+        val mmkv = mmkvWithConfig(thisRef)
+        val name = if (mmkv == Serialize.mmkv) {
+            name ?: property.name
+        } else {
+            thisRef::class.java.name + "." + (name ?: property.name)
+        }
+        mmkv.serialize(name to value)
     }
 
 }
