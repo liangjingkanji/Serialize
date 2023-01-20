@@ -146,8 +146,9 @@ private var model: ModelSerializable by serialLazy() // 懒加载
 
 2. 使用你指定的MMKV实例删除, 假设你未指定过MMKV实例即为`MMKV.defaultMMKV()`
     ```kotlin
-    MMKV.defaultMMKV()?.remove("指定删除的字段名")
-    MMKV.defaultMMKV()?.clearAll()
+    MMKV.defaultMMKV().remove("指定删除的字段名")
+    MMKV.defaultMMKV().clearAll()
+    MMKV.mmkvWithID("app_config").clearAll()
     ```
 
 ## 自定义序列化
@@ -178,6 +179,13 @@ object AppConfig {
     var isFirstLaunch: Boolean by serial()
 }
 ```
+
+全局配置
+
+```kotlin
+Serialize.mmkv = MMKV.mmkvWithID("app_config")
+```
+
 
 ## 无法读取旧值
 
