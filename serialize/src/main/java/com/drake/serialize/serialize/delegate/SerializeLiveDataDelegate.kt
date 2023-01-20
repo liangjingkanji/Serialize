@@ -20,19 +20,23 @@ internal class SerializeLiveDataDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
     private val name: String?,
-    private val kv: MMKV?,
+    private var kv: MMKV?,
 ) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
 
     private lateinit var thisRef: Any
     private lateinit var property: KProperty<*>
 
     private fun mmkvWithConfig(thisRef: Any): MMKV {
-        val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
-        return if (config != null) {
-            val cryptKey = config.cryptKey.ifEmpty { null }
-            MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
-        } else {
-            kv ?: Serialize.mmkv
+        return kv ?: kotlin.run {
+            val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
+            val mmkv = if (config != null) {
+                val cryptKey = config.cryptKey.ifEmpty { null }
+                MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
+            } else {
+                Serialize.mmkv
+            }
+            this.kv = mmkv
+            mmkv
         }
     }
 
