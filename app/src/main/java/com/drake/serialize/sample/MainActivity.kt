@@ -24,6 +24,7 @@ import com.drake.engine.base.EngineActivity
 import com.drake.serialize.intent.openActivity
 import com.drake.serialize.sample.constant.AppConfig
 import com.drake.serialize.sample.databinding.ActivityMainBinding
+import com.drake.serialize.sample.model.KotlinSerializableModel
 import com.drake.serialize.sample.model.ParcelableModel
 import com.drake.serialize.sample.model.SerializableModel
 import com.drake.serialize.serialize.annotation.SerializeConfig
@@ -38,7 +39,7 @@ import kotlin.system.measureTimeMillis
 class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main) {
 
     private var name: String by serial()
-    private var data: SerializableModel? by serialLazy()
+    private var data: KotlinSerializableModel? by serialLazy()
     private var amount: String by serial("默认值", "自定义键名")
     private val liveData: MutableLiveData<String> by serialLiveData("默认值")
 
@@ -89,7 +90,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             binding.cardBigRead -> {
                 val measureTimeMillis = measureTimeMillis {
                     repeat(100000) {
-                        val name = data?.name ?: toast("本地没有数据可读, 请先写入")
+                        val name = data?.name
                     }
                 }
                 binding.tvBigReadTime.text = "${measureTimeMillis}ms"
@@ -98,7 +99,7 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
             binding.cardBigWrite -> {
                 val measureTimeMillis = measureTimeMillis {
                     repeat(100000) {
-                        data = SerializableModel("第${it}次")
+                        data = KotlinSerializableModel("第${it}次")
                     }
                 }
                 binding.tvBigWriteTime.text = "${measureTimeMillis}ms"

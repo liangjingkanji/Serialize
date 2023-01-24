@@ -27,7 +27,7 @@ import android.os.Parcelable
  *
  * 最佳方案请使用[KotlinSerializableModel]
  */
-data class ParcelableModel(var name: String = "ModelParcelable") : Parcelable {
+data class ParcelableModel(var name: String = "默认值") : Parcelable {
 
     constructor(parcel: Parcel) : this(parcel.readString() ?: "ModelParcelable") // 读取空则赋值默认值
 

@@ -27,7 +27,7 @@ import java.io.Serializable
  * 最佳方案请使用[KotlinSerializableModel]
  */
 @kotlinx.serialization.Serializable
-data class SerializableModel(var name: String = "ModelSerializable") : Serializable {
+data class SerializableModel(var name: String = "默认值") : Serializable {
     companion object {
         /**
          * 1. 保证新增字段依然可以读取到对象
