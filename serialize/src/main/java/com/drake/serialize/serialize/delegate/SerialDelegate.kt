@@ -24,7 +24,7 @@ internal class SerialDelegate<V>(
             val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
             val mmkv = if (config != null) {
                 val cryptKey = config.cryptKey.ifEmpty { null }
-                MMKV.mmkvWithID(config.mmapID, config.mode, cryptKey, null)
+                Serialize.hook.mmkvWithID(config.mmapID, config.mode, cryptKey)
             } else {
                 Serialize.mmkv
             }

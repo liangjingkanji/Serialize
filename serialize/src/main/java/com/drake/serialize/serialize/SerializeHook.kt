@@ -2,6 +2,7 @@ package com.drake.serialize.serialize
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.tencent.mmkv.MMKV
 import java.io.ByteArrayInputStream
 import java.io.ByteArrayOutputStream
 import java.io.ObjectInputStream
@@ -81,5 +82,12 @@ interface SerializeHook {
                 }
             }
         }
+    }
+
+    /**
+     * 根据mmapID获取mmkv实例
+     */
+    fun mmkvWithID(mmapID: String, mode: Int, cryptKey: String?): MMKV {
+        return MMKV.mmkvWithID(mmapID, mode, cryptKey, null)
     }
 }
