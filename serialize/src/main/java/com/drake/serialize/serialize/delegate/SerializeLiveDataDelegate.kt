@@ -25,18 +25,24 @@ internal class SerializeLiveDataDelegate<V>(
 
     private lateinit var thisRef: Any
     private lateinit var property: KProperty<*>
+    private var hasAnnotation: Boolean = true
+    private var config: SerializeConfig? = null
 
     private fun mmkvWithConfig(thisRef: Any): MMKV {
         return kv ?: kotlin.run {
-            val config = thisRef::class.java.getAnnotation(SerializeConfig::class.java)
-            val mmkv = if (config != null) {
-                val cryptKey = config.cryptKey.ifEmpty { null }
-                Serialize.hook.mmkvWithID(config.mmapID, config.mode, cryptKey)
+            if (hasAnnotation) {
+                val config = config ?: thisRef::class.java.getAnnotation(SerializeConfig::class.java)
+                if (config != null) {
+                    this.config = config
+                    val cryptKey = config.cryptKey.ifEmpty { null }
+                    Serialize.hook.mmkvWithID(config.mmapID, config.mode, cryptKey)
+                } else {
+                    hasAnnotation = false
+                    Serialize.mmkv
+                }
             } else {
                 Serialize.mmkv
             }
-            this.kv = mmkv
-            mmkv
         }
     }
 
