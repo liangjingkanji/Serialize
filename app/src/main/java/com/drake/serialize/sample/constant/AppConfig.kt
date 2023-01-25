@@ -17,11 +17,11 @@ object AppConfig {
     var userId: String by serialLazy()
 
     /** 每次都读写磁盘 */
-    var isFirstLaunch: Boolean by serial()
+    var isFirstLaunch: Boolean by serial(false)
 
     /** 保存集合 */
-    var host: List<String> by serial()
+    var host: List<String> by serial(emptyList())
 
     /** 只要集合元素属于可序列化对象 Serializable/Parcelable 即可保存到本地 */
-    var users: List<SerializableModel> by serial()
+    var users: List<SerializableModel> by serial(emptyList())
 }
