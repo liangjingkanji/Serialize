@@ -167,6 +167,34 @@ Serialize.hook = ProtobufSerializeHook()
 > 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/tree/f8d41ea47edd8ea64700a3d709a870791ac50489/app/src/main/java/com/drake/serialize/sample/hook)
 > mmkv默认支持加密, 请自行搜索
 
+## 多账户存储
+
+根据变量来动态创建存储实例, 常见场景为多账户应用根据账户不同而需要进行数据隔离
+
+创建用户数据类
+```kotlin
+@SerializeConfig(mmapID = "user_config") // 指定mmapID可以避免重命名当前类名或者改变包名导致无法读取旧值
+object UserConfig {
+    var userId: String by serialLazy()
+}
+```
+
+实现`SerializeHook`
+```kotlin
+class ProtobufSerializeHook : SerializeHook {
+
+    // ...
+
+    override fun mmkvWithID(mmapID: String, mode: Int, cryptKey: String?): MMKV {
+        // 当存储为用户数据时, 添加当前账户到mmapID中, 请注意不要循环调用
+        if (mmapID == "user_config") {
+            return super.mmkvWithID(mmapID + "_" + AppConfig.currentAccount, mode, cryptKey)
+        }
+        return super.mmkvWithID(mmapID, mode, cryptKey)
+    }
+}
+```
+
 ## 单例配置
 
 前面介绍的AppConfig即为类注解`@SerializeConfig`来实现其所有`serial**()`字段的[MMKV实例配置](https://github.com/Tencent/MMKV/wiki/android_advance)
