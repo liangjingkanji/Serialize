@@ -5,7 +5,6 @@ package com.drake.serialize.sample.hook
 import com.drake.serialize.serialize.SerializeHook
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.protobuf.ProtoBuf
 import kotlinx.serialization.serializer
 
 /**
@@ -19,10 +18,10 @@ class JsonSerializeHook : SerializeHook {
     }
 
     override fun <T> serialize(name: String, type: Class<T>, data: Any): ByteArray {
-        return json.encodeToString(ProtoBuf.serializersModule.serializer(type), data).toByteArray()
+        return json.encodeToString(Json.serializersModule.serializer(type), data).toByteArray()
     }
 
     override fun <T> deserialize(name: String, type: Class<T>, bytes: ByteArray): Any {
-        return json.decodeFromString(ProtoBuf.serializersModule.serializer(type), bytes.decodeToString())
+        return json.decodeFromString(Json.serializersModule.serializer(type), bytes.decodeToString())
     }
 }
