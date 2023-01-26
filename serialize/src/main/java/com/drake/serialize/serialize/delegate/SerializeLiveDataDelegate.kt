@@ -68,7 +68,7 @@ internal class SerializeLiveDataDelegate<V>(
         this.property = property
         val value = value
         if (super.getValue() == null && value != null) {
-            super.setValue(value)
+            super.postValue(value)
         }
         this
     }
