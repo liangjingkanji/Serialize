@@ -47,11 +47,7 @@ internal class SerialLazyDelegate<V>(
     override fun getValue(thisRef: Any, property: KProperty<*>): V = synchronized(this) {
         if (value == null) {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = if (mmkv == Serialize.mmkv) {
-                name ?: property.name
-            } else {
-                thisRef::class.java.name + "." + (name ?: property.name)
-            }
+            val name = name ?: property.name
             value = mmkv.deserialize(type, name, default)
         }
         value as V
@@ -62,11 +58,7 @@ internal class SerialLazyDelegate<V>(
         //写入本地在子线程处理，单一线程保证了写入顺序
         taskExecutor.execute {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = if (mmkv == Serialize.mmkv) {
-                name ?: property.name
-            } else {
-                thisRef::class.java.name + "." + (name ?: property.name)
-            }
+            val name = name ?: property.name
             mmkv.serialize(name to value)
         }
     }

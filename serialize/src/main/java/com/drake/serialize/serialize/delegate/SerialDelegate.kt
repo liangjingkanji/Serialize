@@ -42,21 +42,13 @@ internal class SerialDelegate<V>(
 
     override fun getValue(thisRef: Any, property: KProperty<*>): V {
         val mmkv = mmkvWithConfig(thisRef)
-        val name = if (mmkv == Serialize.mmkv) {
-            name ?: property.name
-        } else {
-            thisRef::class.java.name + "." + (name ?: property.name)
-        }
+        val name = name ?: property.name
         return mmkv.deserialize(type, name, default)
     }
 
     override fun setValue(thisRef: Any, property: KProperty<*>, value: V) {
         val mmkv = mmkvWithConfig(thisRef)
-        val name = if (mmkv == Serialize.mmkv) {
-            name ?: property.name
-        } else {
-            thisRef::class.java.name + "." + (name ?: property.name)
-        }
+        val name = name ?: property.name
         mmkv.serialize(name to value)
     }
 

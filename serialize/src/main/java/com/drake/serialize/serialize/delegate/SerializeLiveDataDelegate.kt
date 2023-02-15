@@ -50,11 +50,7 @@ internal class SerializeLiveDataDelegate<V>(
         var value = super.getValue()
         if (value == null) {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = if (mmkv == Serialize.mmkv) {
-                name ?: property.name
-            } else {
-                thisRef::class.java.name + "." + (name ?: property.name)
-            }
+            val name = name ?: property.name
             value = mmkv.deserialize(type, name, default)
         }
         value
@@ -87,11 +83,7 @@ internal class SerializeLiveDataDelegate<V>(
     private fun asyncSerialize(value: V) {
         taskExecutor.execute {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = if (mmkv == Serialize.mmkv) {
-                name ?: property.name
-            } else {
-                thisRef::class.java.name + "." + (name ?: property.name)
-            }
+            val name = name ?: property.name
             mmkv.serialize(name to value)
         }
     }

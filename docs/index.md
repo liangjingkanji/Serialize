@@ -26,7 +26,7 @@ class App : Application() {
 ```
 
 ```kotlin
-@SerializeConfig(mmapID = "app_config") // 指定name可以避免重命名当前类名或者改变包名导致无法读取旧值
+@SerializeConfig(mmapID = "app_config") // 指定mmapID可以避免字段名重复情况下导致的错误
 object AppConfig {
     private var name: String by serial()
 
@@ -51,10 +51,6 @@ Log.d("日志", "name = ${AppConfig.name}") // 读取自本地磁盘
 private var userId :String by serialLazy()
 private var newMessage :Boolean by serial(name = "new_message_$userId")
 ```
-
-> 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field` <br>
-> 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值 <br>
-
 
 ### 使用函数读写
 直接通过函数手动存储键值, 无需创建字段
@@ -173,7 +169,7 @@ Serialize.hook = ProtobufSerializeHook()
 
 创建用户数据类
 ```kotlin
-@SerializeConfig(mmapID = "user_config") // 指定mmapID可以避免重命名当前类名或者改变包名导致无法读取旧值
+@SerializeConfig(mmapID = "user_config") // 指定mmapID可以避免字段名重复情况下导致的错误
 object UserConfig {
     var userId: String by serialLazy()
 }
@@ -199,7 +195,7 @@ class ProtobufSerializeHook : SerializeHook {
 
 前面介绍的AppConfig即为类注解`@SerializeConfig`来实现其所有`serial**()`字段的[MMKV实例配置](https://github.com/Tencent/MMKV/wiki/android_advance)
 
-配置该注解可以避免包/类名称发生变化后导致读不到旧值, 因为mmapID会隔离数据, 也不会存在使用默认mmkv实例情况下的使用`全路径类名.字段名`这种规则来存储数据
+配置该注解可以避字段名称重复导致读取数据异常, 因为mmapID会隔离数据
 
 ```kotlin
 @SerializeConfig(mmapID = "app_config")
@@ -263,13 +259,12 @@ Parcelable 问题
 1. 新增字段读取旧数据时如果字段非可空?会导致崩溃
 2. 字段顺序被打乱会导致读取失败
 
-### 包/类/字段名变更
+### 多个字段名重复
 
-默认情况下最终存储key为`全路径类名.字段名`, 例如 `com.example.Class.field`, 但使用`@SerializeConfig`注解指定mmapID后会隔离数据,
-最终存储key会直接使用name或字段名`, 所以请注意如果不指定配置mmapID或字段名情况下重命名包/类/字段名称可能会导致无法读取旧值
+如果你两个字段的数据名称存在重复会导致读取异常, 但使用`@SerializeConfig`注解指定mmapID后会隔离数据能解决此问题
 
 ```kotlin
-@SerializeConfig(mmapID = "app_config") // 指定mmapID可以避免重命名当前类名或者改变包名导致无法读取旧值
+@SerializeConfig(mmapID = "app_config") // 指定mmapID可以避免字段名重复情况下导致的错误
 object AppConfig {
     var userId: String by serialLazy(name="user_id") // 指定name可以避免重命名当前字段导致无法读取旧值
 }
