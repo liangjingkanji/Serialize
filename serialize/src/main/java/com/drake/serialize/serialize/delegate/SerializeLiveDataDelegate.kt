@@ -19,7 +19,7 @@ import kotlin.reflect.KProperty
 internal class SerializeLiveDataDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
-    private val name: String?,
+    private val name: () -> String?,
     private var kv: MMKV?,
 ) : ReadOnlyProperty<Any, MutableLiveData<V>>, MutableLiveData<V>() {
 
@@ -50,7 +50,7 @@ internal class SerializeLiveDataDelegate<V>(
         var value = super.getValue()
         if (value == null) {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = name ?: property.name
+            val name = name() ?: property.name
             value = mmkv.deserialize(type, name, default)
         }
         value
@@ -83,7 +83,7 @@ internal class SerializeLiveDataDelegate<V>(
     private fun asyncSerialize(value: V) {
         taskExecutor.execute {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = name ?: property.name
+            val name = name() ?: property.name
             mmkv.serialize(name to value)
         }
     }

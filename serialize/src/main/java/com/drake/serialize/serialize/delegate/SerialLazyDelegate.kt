@@ -18,13 +18,14 @@ import kotlin.reflect.KProperty
 internal class SerialLazyDelegate<V>(
     private val default: V?,
     private val type: Class<V>,
-    private val name: String?,
+    private val name: () -> String?,
     private var kv: MMKV?
 ) : ReadWriteProperty<Any, V> {
     @Volatile
     private var value: V? = null
     private var hasAnnotation: Boolean = true
     private var config: SerializeConfig? = null
+    private var lastName: String? = null
 
     private fun mmkvWithConfig(thisRef: Any): MMKV {
         return kv ?: kotlin.run {
@@ -45,10 +46,11 @@ internal class SerialLazyDelegate<V>(
     }
 
     override fun getValue(thisRef: Any, property: KProperty<*>): V = synchronized(this) {
-        if (value == null) {
+        val name = name() ?: property.name
+        if (value == null || name != lastName) {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = name ?: property.name
             value = mmkv.deserialize(type, name, default)
+            lastName = name
         }
         value as V
     }
@@ -58,7 +60,7 @@ internal class SerialLazyDelegate<V>(
         //写入本地在子线程处理，单一线程保证了写入顺序
         taskExecutor.execute {
             val mmkv = mmkvWithConfig(thisRef)
-            val name = name ?: property.name
+            val name = name() ?: property.name
             mmkv.serialize(name to value)
         }
     }
