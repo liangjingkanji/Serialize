@@ -17,7 +17,6 @@
 package com.drake.serialize.serialize
 
 import androidx.lifecycle.MutableLiveData
-import com.drake.serialize.serialize.annotation.SerializeConfig
 import com.drake.serialize.serialize.delegate.SerialDelegate
 import com.drake.serialize.serialize.delegate.SerialLazyDelegate
 import com.drake.serialize.serialize.delegate.SerializeLiveDataDelegate
@@ -30,8 +29,8 @@ import kotlin.properties.ReadWriteProperty
  * 线程安全
  * 本函数属于阻塞函数, 同步读写磁盘
  * @param default 默认值
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serial(
@@ -46,8 +45,8 @@ inline fun <reified V> serial(
  * 线程安全
  * 本函数属于阻塞函数, 同步读写磁盘
  * @param default 默认值
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serial(
@@ -65,8 +64,8 @@ inline fun <reified V> serial(
  * 线程安全
  *
  * @param default 默认值, 默认值会在订阅时触发一次
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serialLiveData(
@@ -84,8 +83,8 @@ inline fun <reified V> serialLiveData(
  * 线程安全
  *
  * @param default 默认值, 默认值会在订阅时触发一次
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serialLiveData(
@@ -102,8 +101,8 @@ inline fun <reified V> serialLiveData(
  * 线程安全
  *
  * @param default 默认值
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serialLazy(
@@ -120,8 +119,8 @@ inline fun <reified V> serialLazy(
  * 线程安全
  *
  * @param default 默认值
- * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
- * 请注意如果完全不指定配置名称或字段名情况下重命名包/类/字段名称会导致无法读取旧值
+ * @param name 指定存储键名
+ * 请注意如果不指定键名重命名字段名称会导致无法读取旧值
  * @throws NullPointerException 字段如果属于不可空, 但是读取本地失败会导致抛出异常
  */
 inline fun <reified V> serialLazy(
