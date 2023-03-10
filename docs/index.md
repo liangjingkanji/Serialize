@@ -191,6 +191,15 @@ class ProtobufSerializeHook : SerializeHook {
 }
 ```
 
+## 动态键名
+
+如果你想支持动态键名请使用`{}`函数参数来设置键名
+
+```kotlin
+private var userId: String = "0123"
+private var balance: String by serial("0.0", { "balance-$userId" })
+```
+
 ## 单例配置
 
 前面介绍的AppConfig即为类注解`@SerializeConfig`来实现其所有`serial**()`字段的[MMKV实例配置](https://github.com/Tencent/MMKV/wiki/android_advance)

@@ -42,6 +42,8 @@ class MainActivity : EngineActivity<ActivityMainBinding>(R.layout.activity_main)
     private var data: KotlinSerializableModel? by serialLazy()
     private var amount: String by serial("默认值", "自定义键名")
     private val liveData: MutableLiveData<String> by serialLiveData("默认值")
+    private var userId: String = "0123"
+    private var balance: String by serial("0.0", { "balance-$userId" })
 
     override fun initView() {
         binding.v = this
