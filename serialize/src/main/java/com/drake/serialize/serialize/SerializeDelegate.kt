@@ -47,7 +47,6 @@ inline fun <reified V> serial(
  * 其修饰的属性字段第一次会读取磁盘数据, 然后拷贝到内存中, 后续都是直接读取内存中的拷贝
  * 写入会优先写入到内存中的拷贝份, 然后通过子线程异步写入到磁盘
  * 线程安全
- * tip: 不支持跨进程使用
  *
  * @param default 默认值, 默认值会在订阅时触发一次
  * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
@@ -66,7 +65,6 @@ inline fun <reified V> serialLiveData(
  * 其修饰的属性字段第一次会读取磁盘数据, 然后拷贝到内存中, 后续都是直接读取内存中的拷贝
  * 写入会优先写入到内存中的拷贝份, 然后通过子线程异步写入到磁盘
  * 线程安全
- * tip: 不支持跨进程使用
  *
  * @param default 默认值
  * @param name 指定字段名, 最终存储key为`配置名称.字段名`, 配置名称默认为当前全路径类名([SerializeConfig]注解可以指定配置名称), 例如 `com.example.Class.field`
