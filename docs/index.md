@@ -160,7 +160,7 @@ Serialize.hook = ProtobufSerializeHook()
 1. 使用Json等方式序列化数据
 1. 支持读写更多数据类型
 
-> 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/tree/f8d41ea47edd8ea64700a3d709a870791ac50489/app/src/main/java/com/drake/serialize/sample/hook)
+> 代码示例[JsonSerializeHook/ProtobufSerializeHook](https://github.com/liangjingkanji/Serialize/blob/master/app/src/main/java/com/drake/serialize/sample/hook/JsonSerializeHook.kt)
 > mmkv默认支持加密, 请自行搜索
 
 ## 多账户存储
