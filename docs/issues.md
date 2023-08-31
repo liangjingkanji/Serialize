@@ -45,6 +45,15 @@ UserConfig.userData = userData
 1. 读取新增的非空类型字段会崩溃(如果不存在)
 2. 字段顺序被打乱会导致读取失败
 
+## 序列化函数类型
+
+一些序列化框架不支持包含函数类型, 例如`kotlin-serialization`, 添加`@Transient`即可
+
+```kotlin
+@Serializable
+class Data(var name: String, @Transient var unit: () -> Unit)
+```
+
 ## 迁移旧数据
 
 1. 以前使用MMKV, 由于本项目基于MMKV所以不需要迁移
